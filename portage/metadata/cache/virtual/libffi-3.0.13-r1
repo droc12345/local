@@ -1,0 +1,22 @@
+
+>=dev-libs/libffi-3.0.13-r1[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?]
+0
+
+
+
+
+A virtual for the Foreign Function Interface implementation
+alpha amd64 arm arm64 hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~ppc-aix ~x64-cygwin ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris
+desktop edos2unix epatch estack eutils l10n ltprune multibuild multilib multilib-build preserve-libs toolchain-funcs vcs-clean wrapper
+abi_x86_32 abi_x86_64 abi_x86_x32 abi_mips_n32 abi_mips_n64 abi_mips_o32 abi_s390_32 abi_s390_64
+
+
+
+5
+
+-
+
+
+
+
+

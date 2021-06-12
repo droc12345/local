@@ -1,0 +1,33 @@
+--- a/src/libudev/libudev.h	2019-04-28 08:19:00.082657063 -0500
++++ b/src/libudev/libudev.h	2019-04-28 08:19:30.002004088 -0500
+@@ -21,6 +21,7 @@
+ #define _LIBUDEV_H_
+ 
+ #include <stdarg.h>
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ 
+--- a/src/udev/udev.h	2019-04-28 08:19:47.388205745 -0500
++++ b/src/udev/udev.h	2019-04-28 08:20:14.562520933 -0500
+@@ -18,6 +18,7 @@
+ 
+ #pragma once
+ 
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <sys/param.h>
+ #include <signal.h>
+
+diff -u src/mtd_probe/mtd_probe1.h src/mtd_probe/mtd_probe.h
+--- a/src/mtd_probe/mtd_probe.h	2018-07-20 15:46:29.274512252 -0500
++++ b/src/mtd_probe/mtd_probe.h	2018-07-20 15:46:55.001815935 -0500
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include <mtd/mtd-user.h>
++#include <stdint.h>
+ 
+ /* Full oob structure as written on the flash */
+ struct sm_oob {
+

@@ -1,0 +1,22 @@
+=dev-lang/python-2*
+
+0
+http://us.download.nvidia.com/XFree86/Linux-x86/340.32/NVIDIA-Linux-x86-340.32.run https://raw.github.com/imirkin/re-vp2/96641bfebb2547402b2145fcf0e3116410f0da87/extract_firmware.py -> nvidia_extract_firmware-340.32.py
+bindist mirror
+http://nouveau.freedesktop.org/wiki/VideoAcceleration/
+MIT NVIDIA-r2
+Kernel and mesa firmware for nouveau (video accel and pgraph)
+~x86 amd64
+multilib toolchain-funcs unpacker
+
+
+
+
+5
+
+compile install unpack
+
+
+
+
+

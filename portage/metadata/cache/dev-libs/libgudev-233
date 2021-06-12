@@ -1,0 +1,22 @@
+>=dev-libs/glib-2.38.0:2[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?,static-libs?] >=virtual/libudev-199:=[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?,static-libs?] introspection? ( >=dev-libs/gobject-introspection-1.31.1 ) dev-util/glib-utils >=dev-util/gtk-doc-am-1.18 virtual/pkgconfig[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?] >=app-portage/elt-patches-20170815 app-arch/xz-utils dev-util/desktop-file-utils x11-misc/shared-mime-info
+>=dev-libs/glib-2.38.0:2[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?,static-libs?] >=virtual/libudev-199:=[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?,static-libs?] introspection? ( >=dev-libs/gobject-introspection-1.31.1 ) !sys-fs/eudev[gudev(-)] !sys-fs/udev[gudev(-)] !sys-apps/systemd[gudev(-)]
+0/0
+mirror://gnome/sources/libgudev/233/libgudev-233.tar.xz
+test
+https://wiki.gnome.org/Projects/libgudev
+LGPL-2.1+
+GObject bindings for libudev
+alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 s390 sparc x86
+desktop eapi7-ver edos2unix epatch estack eutils gnome.org gnome2 gnome2-utils l10n libtool ltprune multibuild multilib multilib-build multilib-minimal preserve-libs toolchain-funcs vcs-clean versionator wrapper xdg xdg-utils
+introspection static-libs abi_x86_32 abi_x86_64 abi_x86_x32 abi_mips_n32 abi_mips_n64 abi_mips_o32 abi_s390_32 abi_s390_64
+
+
+
+6
+
+compile configure install postinst postrm preinst prepare test
+
+
+
+
+

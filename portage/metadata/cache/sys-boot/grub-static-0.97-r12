@@ -1,0 +1,22 @@
+!<sys-boot/grub-2
+!<sys-boot/grub-2
+0
+mirror://gentoo/grub-static-0.97-r12.tar.bz2
+
+https://www.gnu.org/software/grub/
+GPL-2
+GNU GRUB Legacy boot loader (static build)
+-* amd64 ~x86
+desktop eapi7-ver epatch estack eutils linux-info ltprune mount-boot multilib preserve-libs toolchain-funcs vcs-clean
+kernel_linux
+
+
+
+0
+
+config install postinst postrm preinst prerm setup
+
+
+
+
+

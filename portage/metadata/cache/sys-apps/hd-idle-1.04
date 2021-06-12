@@ -1,0 +1,22 @@
+
+
+0
+mirror://sourceforge/hd-idle/hd-idle-1.04.tgz
+
+http://hd-idle.sourceforge.net/
+GPL-2
+A utility to spin-down disks after specified period of time. (when hdparm -B/J is not enough)
+~amd64 ~x86
+
+
+
+
+
+5
+
+-
+
+
+
+
+

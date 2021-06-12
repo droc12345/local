@@ -1,0 +1,22 @@
+virtual/perl-ExtUtils-MakeMaker dev-lang/perl
+dev-lang/perl
+0
+https://github.com/jpoliv/wakeonlan/archive/wakeonlan-0.41.tar.gz
+
+https://github.com/jpoliv/wakeonlan/
+Artistic GPL-2
+Client for Wake-On-LAN
+amd64 ~arm ppc sparc x86 ~amd64-linux ~x86-linux
+multiprocessing perl-functions perl-module
+
+
+
+dev-lang/perl
+7
+
+compile configure install prepare test
+
+
+
+
+

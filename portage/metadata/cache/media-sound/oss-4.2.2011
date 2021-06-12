@@ -1,0 +1,22 @@
+!media-sound/oss-devel alsa? ( media-libs/alsa-lib ) gtk? ( x11-libs/gtk+:2 ) ogg? ( media-libs/libvorbis ) sys-apps/gawk sys-kernel/linux-headers kernel_linux? ( sys-apps/kmod[tools] dist-kernel? ( virtual/dist-kernel:= ) ) sys-apps/sed kernel_linux? ( virtual/linux-sources virtual/libelf )
+!media-sound/oss-devel alsa? ( media-libs/alsa-lib ) gtk? ( x11-libs/gtk+:2 ) ogg? ( media-libs/libvorbis ) sys-apps/gawk sys-kernel/linux-headers kernel_linux? ( sys-apps/kmod[tools] dist-kernel? ( virtual/dist-kernel:= ) )
+0
+http://www.4front-tech.com/developer/sources/stable/gpl/oss-v4.2-build2011-src-gpl.tar.bz2
+mirror
+http://developer.opensound.com
+GPL-2
+Open Sound System - portable, mixing-capable, high quality sound system for Unix
+~*
+desktop eapi7-ver edos2unix epatch estack eutils flag-o-matic l10n linux-info linux-mod ltprune multilib preserve-libs toolchain-funcs vcs-clean versionator wrapper
+alsa gtk midi ogg pax_kernel vmix_fixedpoint oss_cards_ali5455 oss_cards_atiaudio oss_cards_audigyls oss_cards_audiocs oss_cards_audioloop oss_cards_audiopci oss_cards_cmi878x oss_cards_cmpci oss_cards_cs4281 oss_cards_cs461x oss_cards_digi96 oss_cards_emu10k1x oss_cards_envy24 oss_cards_envy24ht oss_cards_fmedia oss_cards_geode oss_cards_hdaudio oss_cards_ich oss_cards_imux oss_cards_madi oss_cards_midiloop oss_cards_midimix oss_cards_sblive oss_cards_sbpci oss_cards_sbxfi oss_cards_solo oss_cards_trident oss_cards_usb oss_cards_userdev oss_cards_via823x oss_cards_via97 oss_cards_ymf7xx oss_cards_allegro oss_cards_als3xx oss_cards_als4k oss_cards_digi32 oss_cards_maestro oss_cards_neomagic oss_cards_s3vibes oss_cards_vortex kernel_linux kernel_linux dist-kernel
+
+
+
+5
+
+compile configure install postinst postrm preinst prepare setup
+
+
+
+
+

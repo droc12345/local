@@ -1,0 +1,22 @@
+app-arch/xz-utils
+
+0
+mirror://gentoo/net-tools-1.60_p20110409135728.tar.xz mirror://gentoo/net-tools-1.60_p20110409135728-patches-1.tar.xz
+
+http://net-tools.berlios.de/
+GPL-2
+Standard Linux networking tools
+alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~x86-linux
+desktop edos2unix epatch estack eutils flag-o-matic l10n ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper
+nls static
+
+
+
+3
+
+configure install postinst prepare setup
+
+
+
+
+

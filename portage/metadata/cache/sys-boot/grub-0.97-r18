@@ -1,0 +1,22 @@
+!static? ( ncurses? ( >=sys-libs/ncurses-5.9-r3:0=[abi_x86_32(-)] ) ) virtual/pkgconfig static? ( ncurses? ( >=sys-libs/ncurses-5.9-r3:0[static-libs(+),abi_x86_32(-)] ) ) >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4
+!static? ( ncurses? ( >=sys-libs/ncurses-5.9-r3:0=[abi_x86_32(-)] ) ) !sys-boot/grub:2[-multislot]
+0
+mirror://gentoo/grub-0.97.tar.gz mirror://gnu-alpha/grub/grub-0.97.tar.gz mirror://gentoo/splash.xpm.gz mirror://gentoo/grub-0.97-patches-1.15.tar.bz2 https://dev.gentoo.org/~whissi/dist/grub/grub-0.97-patches-1.15.tar.bz2
+
+https://www.gnu.org/software/grub/
+GPL-2
+GNU GRUB Legacy boot loader
+amd64 x86 ~x86-fbsd
+autotools desktop eapi7-ver edos2unix epatch estack eutils flag-o-matic l10n libtool linux-info ltprune mount-boot multilib pax-utils preserve-libs toolchain-funcs vcs-clean wrapper
+custom-cflags ncurses netboot static kernel_linux
+
+
+
+6
+
+compile config configure install postinst postrm preinst prepare prerm pretend setup test
+
+
+
+
+

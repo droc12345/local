@@ -1,0 +1,22 @@
+sys-apps/util-linux app-arch/xz-utils app-text/docbook-xsl-stylesheets dev-libs/libxslt >=sys-boot/gnu-efi-3.0.2
+sys-apps/util-linux
+0
+http://dev.gentoo.org/~mgorny/dist/gummiboot-45.tar.xz
+
+http://freedesktop.org/wiki/Software/gummiboot/
+LGPL-2.1+
+Minimalistic UEFI bootloader
+~amd64
+desktop eapi7-ver edos2unix epatch estack eutils l10n linux-info ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper
+kernel_linux
+
+
+
+5
+
+prepare pretend setup
+
+
+
+
+

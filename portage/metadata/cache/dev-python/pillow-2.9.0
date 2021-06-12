@@ -1,0 +1,22 @@
+jpeg? ( virtual/jpeg:0 ) jpeg2k? ( media-libs/openjpeg:2= ) lcms? ( media-libs/lcms:2= ) tiff? ( media-libs/tiff:0= ) truetype? ( media-libs/freetype:2= ) webp? ( media-libs/libwebp:0= ) zlib? ( sys-libs/zlib:0= ) app-arch/unzip dev-python/setuptools[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] doc? ( dev-python/sphinx[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] dev-python/sphinx-better-theme[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] >=dev-python/sphinx_rtd_theme-0.1[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] <dev-python/sphinx_rtd_theme-0.2[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] ) test? ( dev-python/nose[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] ) python_targets_python2_7? ( >=dev-lang/python-2.7.5-r2:2.7[tk?,threads(+)] ) >=dev-lang/python-exec-2:=[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] >=dev-python/setuptools-42.0.2[python_targets_python2_7(-)?,-python_single_target_python2_7(-)]
+jpeg? ( virtual/jpeg:0 ) jpeg2k? ( media-libs/openjpeg:2= ) lcms? ( media-libs/lcms:2= ) tiff? ( media-libs/tiff:0= ) truetype? ( media-libs/freetype:2= ) webp? ( media-libs/libwebp:0= ) zlib? ( sys-libs/zlib:0= ) !dev-python/imaging python_targets_python2_7? ( >=dev-lang/python-2.7.5-r2:2.7[tk?,threads(+)] ) >=dev-lang/python-exec-2:=[python_targets_python2_7(-)?,-python_single_target_python2_7(-)]
+0
+mirror://pypi/P/Pillow/Pillow-2.9.0.zip
+
+https://github.com/python-imaging/Pillow https://pypi.python.org/pypi/Pillow
+HPND
+Python Imaging Library (fork)
+~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x86-solaris
+desktop distutils-r1 edos2unix epatch estack eutils l10n ltprune multibuild multilib multiprocessing preserve-libs python-r1 python-utils-r1 toolchain-funcs vcs-clean wrapper xdg-utils
+doc examples jpeg jpeg2k lcms test tiff tk truetype webp zlib python_targets_python2_7
+test? ( jpeg tiff ) || ( python_targets_python2_7 )
+
+
+5
+
+compile configure install prepare test
+
+
+
+
+

@@ -1,0 +1,22 @@
+>=x11-libs/gtk+-2:2 virtual/pkgconfig
+>=x11-libs/gtk+-2:2
+0
+http://www.kroah.com/linux-usb/usbview-2.0.tar.gz
+
+http://www.kroah.com/linux-usb/
+GPL-2
+Display the topology of devices on the USB bus
+alpha amd64 hppa ppc ppc64 sparc x86
+desktop eapi7-ver edos2unix epatch estack eutils l10n linux-info ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper
+kernel_linux
+
+
+
+4
+
+install prepare setup
+
+
+
+
+

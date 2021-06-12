@@ -1,0 +1,22 @@
+python_targets_python3_7? ( dev-lang/python:3.7 ) python_targets_python3_8? ( dev-lang/python:3.8 ) >=dev-lang/python-exec-2:=[python_targets_python3_7(-)?,python_targets_python3_8(-)?,-python_single_target_python3_7(-),-python_single_target_python3_8(-)] dev-python/cython dev-libs/hidapi
+python_targets_python3_7? ( dev-lang/python:3.7 ) python_targets_python3_8? ( dev-lang/python:3.8 ) >=dev-lang/python-exec-2:=[python_targets_python3_7(-)?,python_targets_python3_8(-)?,-python_single_target_python3_7(-),-python_single_target_python3_8(-)] dev-python/cython dev-libs/hidapi python_targets_python3_7? ( dev-lang/python:3.7 ) python_targets_python3_8? ( dev-lang/python:3.8 ) >=dev-lang/python-exec-2:=[python_targets_python3_7(-)?,python_targets_python3_8(-)?,-python_single_target_python3_7(-),-python_single_target_python3_8(-)]
+0
+https://github.com/trezor/cython-hidapi/archive/0.7.99.post21.tar.gz -> cython-hidapi-0.7.99_p21.tar.gz
+
+https://github.com/trezor/cython-hidapi
+|| ( GPL-3 BSD )
+Python bindings to the hidapi library
+~amd64 ~x86
+distutils-r1 github-pkg multibuild multilib multiprocessing python-r1 python-utils-r1 toolchain-funcs
+python_targets_python3_7 python_targets_python3_8
+|| ( python_targets_python3_7 python_targets_python3_8 ) || ( python_targets_python3_7 python_targets_python3_8 )
+
+python_targets_python3_7? ( dev-lang/python:3.7 ) python_targets_python3_8? ( dev-lang/python:3.8 ) >=dev-lang/python-exec-2:=[python_targets_python3_7(-)?,python_targets_python3_8(-)?,-python_single_target_python3_7(-),-python_single_target_python3_8(-)] >=dev-python/setuptools-42.0.2[python_targets_python3_7(-)?,python_targets_python3_8(-)?,-python_single_target_python3_7(-),-python_single_target_python3_8(-)]
+7
+
+compile configure install prepare test
+
+
+
+
+

@@ -1,0 +1,297 @@
+--- ./mgeops-psp-3.0.8/src/AboutView_glade.cc	2008-10-01 14:18:19.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/AboutView_glade.cc	2009-12-13 01:42:18.000000000 +0200
+@@ -35,7 +35,7 @@
+ #  define N_(String) (String)
+ #endif
+ #include <gtkmmconfig.h>
+-#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION>2
++#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION<2
+ #include <sigc++/compatibility.h>
+ #define GMM_GTKMM_22_24(a,b) b
+ #else //gtkmm 2.2
+--- ./mgeops-psp-3.0.8/src/ConfigView_glade.cc	2008-10-01 14:18:19.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/ConfigView_glade.cc	2009-12-13 01:51:56.000000000 +0200
+@@ -35,7 +35,7 @@
+ #  define N_(String) (String)
+ #endif
+ #include <gtkmmconfig.h>
+-#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION>2
++#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION<2
+ #include <sigc++/compatibility.h>
+ #define GMM_GTKMM_22_24(a,b) b
+ #else //gtkmm 2.2
+@@ -492,20 +492,20 @@
+    fxStatus->show();
+    vpContent->show();
+    scrolledwindow6->show();
+-   sdTimerValue->signal_changed().connect(SigC::slot(*this, &ConfigView_glade::on_sdTimerValue_changed), false);
+-   sdTimerValue->signal_editing_done().connect(SigC::slot(*this, &ConfigView_glade::on_sdTimerValue_editing_done), false);
+-   sdBattLevelValue->signal_changed().connect(SigC::slot(*this, &ConfigView_glade::on_sdBattLevelValue_changed), false);
+-   sdRuntimeValue->signal_changed().connect(SigC::slot(*this, &ConfigView_glade::on_sdRuntimeValue_changed), false);
+-   ckbtSdTimer->signal_toggled().connect(SigC::slot(*this, &ConfigView_glade::on_ckbtSdTimer_toggled), false);
+-   ckbtBattLevel->signal_toggled().connect(SigC::slot(*this, &ConfigView_glade::on_ckbtBattLevel_toggled), false);
+-   ckbtSdRuntime->signal_toggled().connect(SigC::slot(*this, &ConfigView_glade::on_ckbtSdRuntime_toggled), false);
+-   customSdCommand->signal_changed().connect(SigC::slot(*this, &ConfigView_glade::on_customSdCommand_changed), false);
+-   rbNoShutdown->signal_toggled().connect(SigC::slot(*this, &ConfigView_glade::on_rbShutdown_toggled), false);
+-   rbShutdown->signal_toggled().connect(SigC::slot(*this, &ConfigView_glade::on_rbShutdown_toggled), false);
+-   rbCustomShutdown->signal_toggled().connect(SigC::slot(*this, &ConfigView_glade::on_rbCustomShutdown_toggled), false);
+-   ckbtIconDisplay->signal_toggled().connect(SigC::slot(*this, &ConfigView_glade::on_ckbtIconDisplay_toggled), false);
+-   btAdminMode->signal_released().connect(SigC::slot(*this, &ConfigView_glade::on_btAdminMode_released), false);
+-   btSaveCfg->signal_released().connect(SigC::slot(*this, &ConfigView_glade::on_btSaveCfg_released), false);
++   sdTimerValue->signal_changed().connect(sigc::mem_fun(*this, &ConfigView_glade::on_sdTimerValue_changed), false);
++   sdTimerValue->signal_editing_done().connect(sigc::mem_fun(*this, &ConfigView_glade::on_sdTimerValue_editing_done), false);
++   sdBattLevelValue->signal_changed().connect(sigc::mem_fun(*this, &ConfigView_glade::on_sdBattLevelValue_changed), false);
++   sdRuntimeValue->signal_changed().connect(sigc::mem_fun(*this, &ConfigView_glade::on_sdRuntimeValue_changed), false);
++   ckbtSdTimer->signal_toggled().connect(sigc::mem_fun(*this, &ConfigView_glade::on_ckbtSdTimer_toggled), false);
++   ckbtBattLevel->signal_toggled().connect(sigc::mem_fun(*this, &ConfigView_glade::on_ckbtBattLevel_toggled), false);
++   ckbtSdRuntime->signal_toggled().connect(sigc::mem_fun(*this, &ConfigView_glade::on_ckbtSdRuntime_toggled), false);
++   customSdCommand->signal_changed().connect(sigc::mem_fun(*this, &ConfigView_glade::on_customSdCommand_changed), false);
++   rbNoShutdown->signal_toggled().connect(sigc::mem_fun(*this, &ConfigView_glade::on_rbShutdown_toggled), false);
++   rbShutdown->signal_toggled().connect(sigc::mem_fun(*this, &ConfigView_glade::on_rbShutdown_toggled), false);
++   rbCustomShutdown->signal_toggled().connect(sigc::mem_fun(*this, &ConfigView_glade::on_rbCustomShutdown_toggled), false);
++   ckbtIconDisplay->signal_toggled().connect(sigc::mem_fun(*this, &ConfigView_glade::on_ckbtIconDisplay_toggled), false);
++   btAdminMode->signal_released().connect(sigc::mem_fun(*this, &ConfigView_glade::on_btAdminMode_released), false);
++   btSaveCfg->signal_released().connect(sigc::mem_fun(*this, &ConfigView_glade::on_btSaveCfg_released), false);
+ }
+ 
+ ConfigView_glade::~ConfigView_glade()
+--- ./mgeops-psp-3.0.8/src/dlgInfo_glade.cc	2008-10-01 14:18:19.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/dlgInfo_glade.cc	2009-12-13 01:47:26.000000000 +0200
+@@ -35,7 +35,7 @@
+ #  define N_(String) (String)
+ #endif
+ #include <gtkmmconfig.h>
+-#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION>2
++#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION<2
+ #include <sigc++/compatibility.h>
+ #define GMM_GTKMM_22_24(a,b) b
+ #else //gtkmm 2.2
+@@ -93,7 +93,7 @@
+    imgContent->show();
+    lblContent->show();
+    hbox24->show();
+-   closebutton1->signal_released().connect(SigC::slot(*this, &dlgInfo_glade::on_closebutton1_released), false);
++   closebutton1->signal_released().connect(sigc::mem_fun(*this, &dlgInfo_glade::on_closebutton1_released), false);
+ }
+ 
+ dlgInfo_glade::~dlgInfo_glade()
+--- ./mgeops-psp-3.0.8/src/dlgInfoOPS_glade.cc	2008-10-01 14:18:19.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/dlgInfoOPS_glade.cc	2009-12-13 01:58:55.000000000 +0200
+@@ -35,7 +35,7 @@
+ #  define N_(String) (String)
+ #endif
+ #include <gtkmmconfig.h>
+-#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION>2
++#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION<2
+ #include <sigc++/compatibility.h>
+ #define GMM_GTKMM_22_24(a,b) b
+ #else //gtkmm 2.2
+@@ -266,8 +266,8 @@
+    ckbtRemindOPS->show();
+    vbox25->show();
+    hbox27->show();
+-   button1->signal_released().connect(SigC::slot(*this, &dlgInfoOPS_glade::on_closebutton1_released), false);
+-   ckbtRemindOPS->signal_toggled().connect(SigC::slot(*this, &dlgInfoOPS_glade::on_ckbtRemindOPS_toggled), false);
++   button1->signal_released().connect(sigc::mem_fun(*this, &dlgInfoOPS_glade::on_closebutton1_released), false);
++   ckbtRemindOPS->signal_toggled().connect(sigc::mem_fun(*this, &dlgInfoOPS_glade::on_ckbtRemindOPS_toggled), false);
+ }
+ 
+ dlgInfoOPS_glade::~dlgInfoOPS_glade()
+--- ./mgeops-psp-3.0.8/src/EventWin.cc	2007-10-17 17:09:01.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/EventWin.cc	2009-12-13 02:17:28.000000000 +0200
+@@ -9,6 +9,10 @@
+ #include "gettext.h"
+ 
+ #  include <gdkmm.h>
++#include <string.h>
++#include <time.h>
++#include <locale.h>
++#include <langinfo.h>
+ 
+ #include "EventWin.hh"
+ // FIXME: a supprimer??
+@@ -73,23 +77,16 @@
+ 
+ void EventWin::addEvent(Glib::ustring eventName, int evtSeverity)
+ {
+-  time_t		currentTime = time(NULL);
+   Glib::ustring	newEvent;
+-  char			i18nTime[32];
+-  char			*tmp;
+-
+-  // FIXME: ?buggy? Glib::Date *timeStamp = new class Glib::Date ();
+-  // seems not to manage H:M:S (limitation to be bugged upstream!)
+-  //   Glib::Date *i18nTimeNew = new class Glib::Date ();
+-  //   i18nTimeNew->set_time(time(NULL));
+-  //   std::cout << "TEST TIME = " << i18nTimeNew->format_string ("%c").c_str() << std::endl;
+-  
+-  // Create the timestamp
+-  strftime (&i18nTime[0], 32, "%c", localtime(&currentTime));
+-  if ((tmp=strstr(i18nTime, "CEST")) != NULL)
+-	*(tmp--) = '\0';
+-
+-  std::cout << "Event: " << Glib::locale_to_utf8(i18nTime) << std::endl;
++  struct tm *gmt;
++  char timebuf[64];
++  time_t AnnoDomini;
++
++  setlocale(LC_ALL,"");
++  time(&AnnoDomini);
++  gmt=localtime(&AnnoDomini);
++  strftime(timebuf, sizeof(timebuf), nl_langinfo (D_T_FMT), gmt);
++  timebuf[sizeof(timebuf)-1] = '\0';
+ 
+   // FIXME: make a table for event transition
+   // No status change
+@@ -124,7 +121,7 @@
+   // Create the new row
+   Gtk::TreeModel::Row row = *(refListModel->append());
+   row[eventColumns.eventText] = newEvent.c_str();
+-  row[eventColumns.eventDate] = Glib::ustring(Glib::locale_to_utf8(i18nTime));
++  row[eventColumns.eventDate] = Glib::ustring(timebuf);
+   row[eventColumns.eventIcon] = Gtk::Image(getSeverityIcon(evtSeverity)).get_pixbuf();
+ 
+   // Set focus on the last event
+--- ./mgeops-psp-3.0.8/src/EventWin_glade.cc	2008-10-01 14:18:19.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/EventWin_glade.cc	2009-12-13 01:59:46.000000000 +0200
+@@ -35,7 +35,7 @@
+ #  define N_(String) (String)
+ #endif
+ #include <gtkmmconfig.h>
+-#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION>2
++#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION<2
+ #include <sigc++/compatibility.h>
+ #define GMM_GTKMM_22_24(a,b) b
+ #else //gtkmm 2.2
+--- ./mgeops-psp-3.0.8/src/MainWindow_glade.cc	2008-10-22 11:43:26.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/MainWindow_glade.cc	2009-12-13 01:53:53.000000000 +0200
+@@ -35,7 +35,7 @@
+ #  define N_(String) (String)
+ #endif
+ #include <gtkmmconfig.h>
+-#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION>2
++#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION<2
+ #include <sigc++/compatibility.h>
+ #define GMM_GTKMM_22_24(a,b) b
+ #else //gtkmm 2.2
+@@ -1253,17 +1253,17 @@
+    eventbox9->show();
+    vbox4->show();
+    hbox7->show();
+-   btStatus->signal_enter().connect(SigC::slot(*this, &MainWindow_glade::on_btStatus_enter), false);
+-   btStatus->signal_released().connect(SigC::slot(*this, &MainWindow_glade::on_btStatus_released), false);
+-   btHistory->signal_enter().connect(SigC::slot(*this, &MainWindow_glade::on_btHistory_enter), false);
+-   btHistory->signal_released().connect(SigC::slot(*this, &MainWindow_glade::on_btHistory_released), false);
+-   btConfig->signal_enter().connect(SigC::slot(*this, &MainWindow_glade::on_btConfig_enter), false);
+-   btConfig->signal_released().connect(SigC::slot(*this, &MainWindow_glade::on_btConfig_released), false);
+-   btHelp->signal_enter().connect(SigC::slot(*this, &MainWindow_glade::on_btHelp_enter), false);
+-   btHelp->signal_released().connect(SigC::slot(*this, &MainWindow_glade::on_btHelp_released), false);
+-   btAbout->signal_enter().connect(SigC::slot(*this, &MainWindow_glade::on_btAbout_enter), false);
+-   btAbout->signal_released().connect(SigC::slot(*this, &MainWindow_glade::on_btAbout_released), false);
+-   btExit->signal_released().connect(SigC::slot(*this, &MainWindow_glade::gtk_main_quit), true);
++   btStatus->signal_enter().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btStatus_enter), false);
++   btStatus->signal_released().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btStatus_released), false);
++   btHistory->signal_enter().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btHistory_enter), false);
++   btHistory->signal_released().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btHistory_released), false);
++   btConfig->signal_enter().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btConfig_enter), false);
++   btConfig->signal_released().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btConfig_released), false);
++   btHelp->signal_enter().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btHelp_enter), false);
++   btHelp->signal_released().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btHelp_released), false);
++   btAbout->signal_enter().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btAbout_enter), false);
++   btAbout->signal_released().connect(sigc::mem_fun(*this, &MainWindow_glade::on_btAbout_released), false);
++   btExit->signal_released().connect(sigc::mem_fun(*this, &MainWindow_glade::gtk_main_quit), true);
+    btExit->grab_default();
+ }
+ 
+--- ./mgeops-psp-3.0.8/src/NutConfig.cpp	2007-10-17 17:10:51.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/NutConfig.cpp	2009-12-13 02:10:22.000000000 +0200
+@@ -33,8 +33,8 @@
+ 	case MgeUtils::SYSTEM_TYPE_MDK:
+ 	case MgeUtils::SYSTEM_TYPE_MDK_2007:
+ 	default:
+-	  nutCfgDir = new Glib::ustring("/etc/ups/");
+-	  nutUser = new Glib::ustring("ups");
++	  nutCfgDir = new Glib::ustring("/etc/nut/");
++	  nutUser = new Glib::ustring("nut");
+ 	  break;
+ 	}
+   bIsNutConfigured = false; //isNutConfigured();
+@@ -76,8 +76,8 @@
+ 	case MgeUtils::SYSTEM_TYPE_MDK:
+ 	case MgeUtils::SYSTEM_TYPE_MDK_2007:
+ 	default:
+-	  nutCfgDir = new Glib::ustring("/etc/ups/");
+-	  nutUser = new Glib::ustring("ups");
++	  nutCfgDir = new Glib::ustring("/etc/nut/");
++	  nutUser = new Glib::ustring("nut");
+ 	  break;
+ 	}
+   // FIXME: load serialised config from wizard.conf
+--- ./mgeops-psp-3.0.8/src/psp.cc	2009-01-14 14:41:25.000000000 +0200
++++ ./mgeops-psp-3.0.8.ok/src/psp.cc	2009-12-13 01:55:56.000000000 +0200
+@@ -11,6 +11,7 @@
+ #include <fstream>
+ #include <glibmm.h>
+ #include <gdkmm.h>
++#include <string.h>
+ #include <pangomm.h> // FIXME: needed there????
+ #include <string.h>
+ 
+--- ./mgeops-psp-3.0.8/src/splashwin.cc	2009-01-06 11:31:12.000000000 +0200
++++ ./mgeops-psp-3.0.8.ok/src/splashwin.cc	2009-12-13 01:48:18.000000000 +0200
+@@ -21,7 +21,7 @@
+ #include "dlgInfo.hh"
+ 
+ splashwin *splashWinPtr;
+-SigC::Connection handle1, handle2;
++sigc::connection handle1, handle2;
+ 
+ int callFinalize()
+ {
+--- ./mgeops-psp-3.0.8/src/splashwin_glade.cc	2008-10-01 14:18:19.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/splashwin_glade.cc	2009-12-13 01:41:33.000000000 +0200
+@@ -35,7 +35,7 @@
+ #  define N_(String) (String)
+ #endif
+ #include <gtkmmconfig.h>
+-#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION>2
++#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION<2
+ #include <sigc++/compatibility.h>
+ #define GMM_GTKMM_22_24(a,b) b
+ #else //gtkmm 2.2
+--- ./mgeops-psp-3.0.8/src/StatusView_glade.cc	2008-10-01 14:18:19.000000000 +0300
++++ ./mgeops-psp-3.0.8.ok/src/StatusView_glade.cc	2009-12-13 02:00:14.000000000 +0200
+@@ -35,7 +35,7 @@
+ #  define N_(String) (String)
+ #endif
+ #include <gtkmmconfig.h>
+-#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION>2
++#if GTKMM_MAJOR_VERSION==2 && GTKMM_MINOR_VERSION<2
+ #include <sigc++/compatibility.h>
+ #define GMM_GTKMM_22_24(a,b) b
+ #else //gtkmm 2.2
+--- ./mgeops-psp-3.0.8/src/SystemService.cpp	2009-01-06 11:50:01.000000000 +0200
++++ ./mgeops-psp-3.0.8.ok/src/SystemService.cpp	2009-12-13 02:08:27.000000000 +0200
+@@ -203,7 +203,6 @@
+ 	  break;
+ 	case MgeUtils::SYSTEM_TYPE_SUSE:
+ 	case MgeUtils::SYSTEM_TYPE_RHFC:
+-	default:
+ 	  // FIXME: test if good!?
+ 	  //if ((Glib::file_test ("/var/lib/ups/upsd.pid", Glib::FILE_TEST_EXISTS) == true)
+ 	  //	  && (Glib::file_test ("/var/lib/ups/upsmon.pid", Glib::FILE_TEST_EXISTS) == true))
+@@ -212,6 +211,14 @@
+ 	  else
+ 		retCode = false;
+ 	  break;
++	default:
++	  if ((Glib::file_test ("/var/lib/nut/upsd.pid", Glib::FILE_TEST_EXISTS) == true)
++	  	  && (Glib::file_test ("/var/run/upsmon.pid", Glib::FILE_TEST_EXISTS) == true))
++
++		retCode = true;
++	  else
++		retCode = false;
++	  break;
+ 	}
+   if (retCode == true)
+ 	std::cout << "Services are already started" << std::endl;

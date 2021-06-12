@@ -1,0 +1,19 @@
+--- gtk+-3.22.30/configure.ac.orig	2018-10-22 09:23:08.542046885 -0500
++++ gtk+-3.22.30/configure.ac	2018-10-22 09:37:03.335514971 -0500
+@@ -1390,14 +1390,10 @@
+ 
+ 
+ ########################################
+-# Check for Accessibility Toolkit flags
++# Removed the at-spi (atk-bridge) support
+ ########################################
+ 
+-if test x$enable_x11_backend = xyes; then
+-   ATK_PACKAGES="atk atk-bridge-2.0"
+-else
+-   ATK_PACKAGES="atk"
+-fi
++ATK_PACKAGES="atk"
+ 
+ PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
+ 

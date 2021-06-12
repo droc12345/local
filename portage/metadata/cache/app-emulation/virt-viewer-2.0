@@ -1,0 +1,22 @@
+libvirt? ( >=app-emulation/libvirt-0.10.0[sasl?] ) >=dev-libs/libxml2-2.6 x11-libs/gtk+:2 spice? ( >=net-misc/spice-gtk-0.22[sasl?] ) vnc? ( >=net-libs/gtk-vnc-0.5.0[sasl?,gtk3] ) dev-lang/perl >=dev-util/intltool-0.35.0 virtual/pkgconfig spice? ( >=app-emulation/spice-protocol-0.10.1 ) >=app-portage/elt-patches-20170815 app-arch/xz-utils dev-util/desktop-file-utils x11-misc/shared-mime-info
+libvirt? ( >=app-emulation/libvirt-0.10.0[sasl?] ) >=dev-libs/libxml2-2.6 x11-libs/gtk+:2 spice? ( >=net-misc/spice-gtk-0.22[sasl?] ) vnc? ( >=net-libs/gtk-vnc-0.5.0[sasl?,gtk3] )
+0
+http://virt-manager.org/download/sources/virt-viewer/virt-viewer-2.0.tar.gz
+
+http://virt-manager.org/
+GPL-2
+Graphical console client for connecting to virtual machines
+amd64 ~x86
+desktop eapi7-ver edos2unix epatch estack eutils fdo-mime gnome.org gnome2 gnome2-utils l10n libtool ltprune multilib preserve-libs toolchain-funcs vcs-clean versionator wrapper xdg xdg-utils
+sasl +libvirt +spice +vnc debug
+|| ( spice vnc )
+
+
+5
+
+compile configure install postinst postrm preinst prepare setup test unpack
+
+
+
+
+

@@ -1,0 +1,47 @@
+## Remove gtk3-atk-bridge support to avoid unwanted dbus dependency.
+
+ 
+--- 1/configure.ac.orig	2018-10-22 09:23:08.542046885 -0500
++++ 2/configure.ac	2018-10-22 09:37:03.335514971 -0500
+@@ -1390,14 +1390,10 @@
+ 
+ 
+ ########################################
+-# Check for Accessibility Toolkit flags
++# Removed the at-spi (atk-bridge) support
+ ########################################
+ 
+-if test x$enable_x11_backend = xyes; then
+-   ATK_PACKAGES="atk atk-bridge-2.0"
+-else
+-   ATK_PACKAGES="atk"
+-fi
++ATK_PACKAGES="atk"
+ 
+ PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
+ 
+## Remove gtk3-atk-bridge support to avoid unwanted dbus dependency.
+
+--- 1/gtk/a11y/gtkaccessibility.c.orig	2018-10-22 09:23:50.806564701 -0500
++++ 2/gtk/a11y/gtkaccessibility.c	2018-10-22 09:33:39.019965471 -0500
+@@ -37,10 +37,6 @@
+ #include <gtk/gtktogglebutton.h>
+ #include <gtk/gtkaccessible.h>
+ 
+-#ifdef GDK_WINDOWING_X11
+-#include <atk-bridge.h>
+-#endif
+-
+ static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
+                                          guint                  n_param_values,
+                                          const GValue          *param_values,
+@@ -988,9 +984,5 @@
+   _gtk_accessibility_override_atk_util ();
+   do_window_event_initialization ();
+ 
+-#ifdef GDK_WINDOWING_X11
+-  atk_bridge_adaptor_init (NULL, NULL);
+-#endif
+-
+   atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
+ }

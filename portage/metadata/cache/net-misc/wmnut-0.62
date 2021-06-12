@@ -1,0 +1,22 @@
+
+
+0
+http://wmnut.tuxfamily.org/files/wmnut-0.62.tar.bz2
+
+http://wmnut.tuxfamily.org/
+GPL-2
+WMNut is a wmaker dock app that displays UPS statistics from NUT's upsd.
+amd64 x86 sparc
+desktop edos2unix epatch estack eutils l10n ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper
+
+
+
+
+0
+
+compile install
+
+
+
+
+

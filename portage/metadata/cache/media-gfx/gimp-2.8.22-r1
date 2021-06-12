@@ -1,0 +1,22 @@
+>=dev-libs/glib-2.30.2:2 >=dev-libs/atk-2.2.0 >=x11-libs/gtk+-2.24.10:2 >=x11-libs/gdk-pixbuf-2.24.1:2 >=x11-libs/cairo-1.10.2 >=x11-libs/pango-1.29.4 xpm? ( x11-libs/libXpm ) >=media-libs/freetype-2.1.7 >=media-libs/fontconfig-2.2.0 sys-libs/zlib dev-libs/libxml2 dev-libs/libxslt x11-themes/hicolor-icon-theme >=media-libs/babl-0.1.10 >=media-libs/gegl-0.2.0:0 aalib? ( media-libs/aalib ) alsa? ( media-libs/alsa-lib ) aqua? ( x11-libs/gtk-mac-integration ) curl? ( net-misc/curl ) dbus? ( dev-libs/dbus-glib ) gnome? ( gnome-base/gvfs ) jpeg? ( virtual/jpeg:0 ) jpeg2k? ( media-libs/jasper:= ) exif? ( >=media-libs/libexif-0.6.15 ) lcms? ( >=media-libs/lcms-2.2:2 ) mng? ( media-libs/libmng ) pdf? ( >=app-text/poppler-0.12.4[cairo] ) png? ( >=media-libs/libpng-1.2.37:0 ) python? ( python_single_target_python2_7? ( >=dev-lang/python-2.7.5-r2:2.7 >=dev-lang/python-exec-2:=[python_targets_python2_7] ) python_single_target_python2_7? ( >=dev-python/pygtk-2.10.4:2[python_targets_python2_7(-)] ) ) tiff? ( >=media-libs/tiff-3.5.7:0 ) svg? ( >=gnome-base/librsvg-2.36.0:2 ) wmf? ( >=media-libs/libwmf-0.2.8 ) x11-libs/libXcursor sys-libs/zlib bzip2? ( app-arch/bzip2 ) postscript? ( app-text/ghostscript-gpl ) udev? ( virtual/libgudev:= ) sys-apps/findutils virtual/pkgconfig >=dev-util/intltool-0.40.1 >=sys-devel/gettext-0.19 doc? ( >=dev-util/gtk-doc-1 ) >=sys-devel/libtool-2.2 >=sys-devel/automake-1.11 dev-util/gtk-doc-am test? ( x11-base/xorg-server[xvfb] x11-apps/xhost ) >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4 app-arch/xz-utils dev-util/desktop-file-utils x11-misc/shared-mime-info
+>=dev-libs/glib-2.30.2:2 >=dev-libs/atk-2.2.0 >=x11-libs/gtk+-2.24.10:2 >=x11-libs/gdk-pixbuf-2.24.1:2 >=x11-libs/cairo-1.10.2 >=x11-libs/pango-1.29.4 xpm? ( x11-libs/libXpm ) >=media-libs/freetype-2.1.7 >=media-libs/fontconfig-2.2.0 sys-libs/zlib dev-libs/libxml2 dev-libs/libxslt x11-themes/hicolor-icon-theme >=media-libs/babl-0.1.10 >=media-libs/gegl-0.2.0:0 aalib? ( media-libs/aalib ) alsa? ( media-libs/alsa-lib ) aqua? ( x11-libs/gtk-mac-integration ) curl? ( net-misc/curl ) dbus? ( dev-libs/dbus-glib ) gnome? ( gnome-base/gvfs ) jpeg? ( virtual/jpeg:0 ) jpeg2k? ( media-libs/jasper:= ) exif? ( >=media-libs/libexif-0.6.15 ) lcms? ( >=media-libs/lcms-2.2:2 ) mng? ( media-libs/libmng ) pdf? ( >=app-text/poppler-0.12.4[cairo] ) png? ( >=media-libs/libpng-1.2.37:0 ) python? ( python_single_target_python2_7? ( >=dev-lang/python-2.7.5-r2:2.7 >=dev-lang/python-exec-2:=[python_targets_python2_7] ) python_single_target_python2_7? ( >=dev-python/pygtk-2.10.4:2[python_targets_python2_7(-)] ) ) tiff? ( >=media-libs/tiff-3.5.7:0 ) svg? ( >=gnome-base/librsvg-2.36.0:2 ) wmf? ( >=media-libs/libwmf-0.2.8 ) x11-libs/libXcursor sys-libs/zlib bzip2? ( app-arch/bzip2 ) postscript? ( app-text/ghostscript-gpl ) udev? ( virtual/libgudev:= )
+2
+mirror://gimp/v2.8/gimp-2.8.22.tar.bz2
+!test? ( test )
+https://www.gimp.org/
+GPL-3 LGPL-3
+GNU Image Manipulation Program
+alpha amd64 ~arm ~arm64 ~hppa ia64 ~mips ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris
+autotools desktop eapi7-ver edos2unix epatch estack eutils fdo-mime gnome.org gnome2 gnome2-utils l10n libtool ltprune multilib preserve-libs python-single-r1 python-utils-r1 toolchain-funcs vcs-clean versionator virtualx wrapper xdg xdg-utils
+alsa aalib altivec aqua bzip2 curl dbus debug doc exif gnome postscript jpeg jpeg2k lcms cpu_flags_x86_mmx mng pdf png python smp cpu_flags_x86_sse svg tiff udev wmf xpm test debug +python_single_target_python2_7
+python? ( ^^ ( python_single_target_python2_7 ) )
+
+
+5
+
+compile configure install postinst postrm preinst prepare setup test unpack
+
+
+
+
+

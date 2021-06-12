@@ -1,0 +1,22 @@
+--- a/meson.build	2021-03-17 12:07:25.332437000 -0500
++++ b/meson.build 	2021-06-11 14:14:18.463563126 -0500
+@@ -521,8 +521,3 @@
+     subdir('test')
+ endif
+ 
+-install_man(configure_file(
+-    input: 'man/Xserver.man',
+-    output: 'Xserver.1',
+-    configuration: manpage_config,
+-))
+
+--- a/dix/meson.build	2021-03-17 12:07:25.304437200 -0500
++++ b/dix/meson.build	2021-06-11 14:38:11.388132092 -0500
+@@ -57,7 +57,3 @@
+     dependencies: common_dep,
+ )
+ 
+-install_data(
+-    'protocol.txt',
+-    install_dir: serverconfigdir,
+-)

@@ -1,0 +1,40 @@
+--- /usr/portage/x11-libs/gtk+/gtk+-3.22.30.ebuild	2018-10-06 19:39:31.000000000 -0500
++++ ./gtk+-3.22.30.ebuild	2018-10-21 14:52:44.370678257 -0500
+@@ -11,7 +11,7 @@
+ 
+ LICENSE="LGPL-2+"
+ SLOT="3"
+-IUSE="aqua broadway cloudprint colord cups examples +introspection test vim-syntax wayland +X xinerama"
++IUSE="aqua atk-bridge broadway cloudprint colord cups examples +introspection test vim-syntax wayland +X xinerama"
+ REQUIRED_USE="
+ 	|| ( aqua wayland X )
+ 	xinerama? ( X )
+@@ -48,7 +48,7 @@
+ 		>=x11-libs/libxkbcommon-0.2[${MULTILIB_USEDEP}]
+ 	)
+ 	X? (
+-		>=app-accessibility/at-spi2-atk-2.5.3[${MULTILIB_USEDEP}]
++		atk-bridge? ( >=app-accessibility/at-spi2-atk-2.5.3[${MULTILIB_USEDEP}] )
+ 		x11-libs/libX11[${MULTILIB_USEDEP}]
+ 		>=x11-libs/libXi-1.3[${MULTILIB_USEDEP}]
+ 		x11-libs/libXext[${MULTILIB_USEDEP}]
+@@ -123,6 +123,11 @@
+ 	# Fix broken autotools logic
+ 	eapply "${FILESDIR}"/${PN}-3.22.20-libcloudproviders-automagic.patch
+ 
++    # get rid of gtk3-atk-bridge crap
++	if ! use atk-bridge; then
++		eapply "${FILESDIR}"/${PN}-3.22.19.atk-bridge.patch
++	fi
++
+ 	eautoreconf
+ 	gnome2_src_prepare
+ }
+@@ -147,6 +152,7 @@
+ 		$(use_enable X xkb) \
+ 		$(use_enable X xrandr) \
+ 		$(use_enable xinerama) \
++		$(use_with atk-bridge) \
+ 		--disable-cloudproviders \
+ 		--disable-mir-backend \
+ 		--disable-papi \

@@ -1,0 +1,22 @@
+alsa? ( media-libs/alsa-lib ) ffmpeg? ( media-video/ffmpeg ) opengl? ( virtual/glu virtual/opengl ) debug? ( sys-libs/ncurses:0 ) media-libs/libpng media-libs/libsdl[joystick,video,X] media-libs/sdl-net media-libs/sdl-sound >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4 >=dev-vcs/git-1.8.2.1[curl]
+alsa? ( media-libs/alsa-lib ) ffmpeg? ( media-video/ffmpeg ) opengl? ( virtual/glu virtual/opengl ) debug? ( sys-libs/ncurses:0 ) media-libs/libpng media-libs/libsdl[joystick,video,X] media-libs/sdl-net media-libs/sdl-sound
+0
+
+
+http://dosbox-x.com/
+GPL-2
+A fork of DOSBox, retaining compatibility with the wide base of DOS games and DOS gaming DOSBox was designed for.
+~amd64 ~arm ~ppc64 ~x86
+autotools desktop edos2unix epatch estack eutils flag-o-matic git-r3 l10n libtool ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper
+alsa debug hardened ffmpeg opengl
+
+
+
+6
+live
+compile prepare unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+>=dev-libs/chmlib-0.36 x11-libs/wxGTK:3.0[X]
+>=dev-libs/chmlib-0.36 x11-libs/wxGTK:3.0[X]
+0
+mirror://sourceforge/xchm/xchm-1.23.tar.gz
+
+http://xchm.sourceforge.net/
+GPL-2
+Utility for viewing Compiled HTML Help (CHM) files
+amd64 ppc x86
+desktop edos2unix epatch estack eutils flag-o-matic l10n ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper wxwidgets xdg-utils
+
+
+
+
+5
+
+install postinst postrm prepare
+
+
+
+
+

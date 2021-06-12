@@ -1,0 +1,22 @@
+x11-libs/gtk+:2 icons? ( x11-themes/faenza-icon-theme ) dev-util/pkgconfig
+x11-libs/gtk+:2 icons? ( x11-themes/faenza-icon-theme )
+0
+http://gnome-look.org/CONTENT/content-files/121881-equinox-1.30.tar.bz2 -> gtk-engines-equinox-1.30.tar.bz2
+
+http://gnome-look.org/content/show.php/Equinox+GTK+Engine?content=121881
+GPL-2
+A heavily modified version of the Aurora engine
+~amd64
+
++icons
+
+
+
+2
+
+configure install unpack
+
+
+
+
+

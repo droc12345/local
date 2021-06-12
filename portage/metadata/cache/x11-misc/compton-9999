@@ -1,0 +1,22 @@
+dev-libs/libconfig x11-libs/libX11 x11-libs/libXcomposite x11-libs/libXdamage x11-libs/libXext x11-libs/libXfixes x11-libs/libXrandr x11-libs/libXrender dbus? ( sys-apps/dbus ) opengl? ( virtual/opengl ) pcre? ( dev-libs/libpcre:3 ) app-text/asciidoc virtual/pkgconfig x11-proto/xproto drm? ( x11-libs/libdrm ) dev-vcs/git
+dev-libs/libconfig x11-libs/libX11 x11-libs/libXcomposite x11-libs/libXdamage x11-libs/libXext x11-libs/libXfixes x11-libs/libXrandr x11-libs/libXrender dbus? ( sys-apps/dbus ) opengl? ( virtual/opengl ) pcre? ( dev-libs/libpcre:3 ) x11-apps/xprop x11-apps/xwininfo
+0
+
+
+http://github.com/chjj/compton
+MIT
+A compositor for X, and a fork of xcompmgr-dana
+
+git-2 multilib toolchain-funcs
+dbus +drm opengl +pcre
+
+
+
+5
+live
+compile install setup unpack
+
+
+
+
+

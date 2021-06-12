@@ -1,0 +1,22 @@
+>=dev-util/spirv-headers-1.5.3
+
+0
+https://github.com/KhronosGroup/SPIRV-Tools/archive/49ca250b44c633ba7cb8897002e62781a451421c.tar.gz -> spirv-tools-2020.4_pre20200429.tar.gz
+test
+https://github.com/KhronosGroup/SPIRV-Tools
+Apache-2.0
+Provides an API and commands for processing SPIR-V modules
+amd64 ~ppc64 x86
+cmake cmake-multilib edos2unix eutils flag-o-matic l10n multibuild multilib multilib-build multilib-minimal multiprocessing ninja-utils python-any-r1 python-utils-r1 toolchain-funcs wrapper xdg-utils
+abi_x86_32 abi_x86_64 abi_x86_x32 abi_mips_n32 abi_mips_n64 abi_mips_o32 abi_s390_32 abi_s390_64
+
+
+|| ( dev-lang/python:3.8 dev-lang/python:3.7 ) >=dev-util/spirv-headers-1.5.3 dev-util/ninja dev-util/cmake
+7
+
+compile configure install prepare setup test
+
+
+
+
+

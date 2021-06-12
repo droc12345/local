@@ -1,0 +1,22 @@
+x11-libs/libdrm
+x11-libs/libdrm
+0
+
+
+https://github.com/gch1p/drm_master_util
+MIT
+suid program that helps to implement a workaround for using modesetting driver under rootless xorg
+~amd64 ~x86
+git-r3 multilib toolchain-funcs
+
+
+
+virtual/pkgconfig >=dev-vcs/git-1.8.2.1[curl]
+7
+live
+compile install postinst unpack
+
+
+
+
+

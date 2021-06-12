@@ -1,0 +1,11 @@
+diff -r 233e1cedf15a kernel/drv/oss_hdaudio/hdaudio_codecids.h
+--- a/kernel/drv/oss_hdaudio/hdaudio_codecids.h	Thu Mar 01 21:05:56 2012 +0200
++++ b/kernel/drv/oss_hdaudio/hdaudio_codecids.h	Tue Mar 05 01:42:49 2013 +0200
+@@ -836,6 +836,7 @@
+   {0x10ec0888, "ALC888", VF_ALC88X_HACK, (char **) &alc883remap}, 
+   {0x10ec0889, "ALC889", VF_ALC88X_HACK, (char **) &alc883remap}, 
+   {0x10ec0892, "ALC892", VF_ALC88X_HACK, (char **) &alc883remap}, 
++  {0x104384fb, "ALC892", VF_ALC88X_HACK, (char **) &alc883remap}, 
+ 
+   /* CMedia HDA codecs */
+   {0x13f69880, "CMI9880", VF_NONE, (char **) &cmi9880remap},

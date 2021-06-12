@@ -1,0 +1,22 @@
+~dev-qt/qtcore-5.12.5 ~dev-qt/qtgui-5.12.5[gles2=,png=,xcb?] gtk? ( ~dev-qt/qtgui-5.12.5[dbus] x11-libs/gtk+:3 x11-libs/libX11 x11-libs/pango ) test? ( ~dev-qt/qttest-5.12.5 )
+~dev-qt/qtcore-5.12.5 ~dev-qt/qtgui-5.12.5[gles2=,png=,xcb?] gtk? ( ~dev-qt/qtgui-5.12.5[dbus] x11-libs/gtk+:3 x11-libs/libX11 x11-libs/pango )
+5/5.12
+https://download.qt.io/official_releases/qt/5.12/5.12.5/submodules/qtbase-everywhere-src-5.12.5.tar.xz
+test
+https://www.qt.io/
+|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3
+Set of components for creating classic desktop-style UIs for the Qt5 framework
+amd64 ~arm ~arm64 ~hppa ~ppc ppc64 ~sparc ~x86
+edos2unix estack eutils flag-o-matic l10n multilib qt5-build toolchain-funcs virtualx wrapper
+gles2 gtk +png +xcb debug test
+
+
+dev-lang/perl virtual/pkgconfig
+7
+
+compile configure install postinst postrm prepare test unpack
+
+
+
+
+

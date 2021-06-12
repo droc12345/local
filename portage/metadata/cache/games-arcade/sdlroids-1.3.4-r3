@@ -1,0 +1,22 @@
+media-libs/libsdl media-libs/sdl-mixer
+media-libs/libsdl media-libs/sdl-mixer games-misc/games-envd
+0
+mirror://sourceforge/sdlroids/sdlroids-1.3.4.tar.bz2
+
+http://david.hedbor.org/projects/sdlroids/
+GPL-2
+Asteroids Clone for X using SDL
+~alpha ~amd64 ~x86 ~x86-fbsd
+base desktop edos2unix epatch estack eutils games l10n ltprune multilib preserve-libs toolchain-funcs user user-info vcs-clean wrapper
+
+
+
+
+5
+
+compile configure install postinst preinst prepare setup unpack
+
+
+
+
+

@@ -1,0 +1,22 @@
+>=sys-devel/autoconf-2.13:2.1 dev-lang/python:2.7 >=dev-lang/perl-5.6 dev-lang/yasm >=dev-vcs/git-1.8.2.1[curl]
+x11-libs/libXt app-arch/zip media-libs/freetype media-libs/fontconfig optimize? ( sys-libs/glibc ) valgrind? ( dev-util/valgrind ) dbus? ( >=sys-apps/dbus-0.60 >=dev-libs/dbus-glib-0.60 ) gnome? ( gnome-base/gconf ) gtk2? ( >=x11-libs/gtk+-2.18.0:2 ) gtk3? ( >=x11-libs/gtk+-3.4.0:3 ) media-libs/alsa-lib pulseaudio? ( media-sound/pulseaudio ) virtual/ffmpeg[x264] necko-wifi? ( net-wireless/wireless-tools )
+0
+
+
+https://www.palemoon.org/
+MPL-2.0 GPL-2 LGPL-2.1
+Pale Moon Web Browser
+~x86 amd64
+check-reqs desktop edos2unix epatch estack eutils fdo-mime flag-o-matic git-r3 gnome2-utils l10n ltprune multilib palemoon-5 pax-utils preserve-libs toolchain-funcs vcs-clean wrapper xdg-utils
++official-branding +optimize cpu_flags_x86_sse cpu_flags_x86_sse2 threads debug +jemalloc -valgrind dbus -necko-wifi gnome +gtk2 -gtk3 pulseaudio +devtools
+optimize? ( !debug ) jemalloc? ( !valgrind ) ^^ ( gtk2 gtk3 ) necko-wifi? ( dbus )
+
+
+6
+live
+compile configure install postinst postrm preinst prepare pretend setup unpack
+
+
+
+
+

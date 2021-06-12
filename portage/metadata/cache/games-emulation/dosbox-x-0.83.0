@@ -1,0 +1,22 @@
+alsa? ( media-libs/alsa-lib ) ffmpeg? ( media-video/ffmpeg ) opengl? ( virtual/glu virtual/opengl ) debug? ( sys-libs/ncurses:0 ) sdl2? ( media-libs/libsdl2[X,joystick,video,sound] media-libs/sdl2-net ) !sdl2? ( media-libs/libsdl[X,joystick,video,sound] media-libs/sdl-net ) media-libs/libpng
+alsa? ( media-libs/alsa-lib ) ffmpeg? ( media-video/ffmpeg ) opengl? ( virtual/glu virtual/opengl ) debug? ( sys-libs/ncurses:0 ) sdl2? ( media-libs/libsdl2[X,joystick,video,sound] media-libs/sdl2-net ) !sdl2? ( media-libs/libsdl[X,joystick,video,sound] media-libs/sdl-net ) media-libs/libpng
+0
+https://github.com/joncampbell123/dosbox-x/archive/dosbox-x-v0.83.0.tar.gz
+
+https://dosbox-x.com/
+GPL-2
+A fork of DOSBox, with patches and more features
+~amd64 ~arm ~ppc64 ~x86
+autotools edos2unix eutils flag-o-matic l10n libtool multilib toolchain-funcs wrapper
+alsa debug hardened ffmpeg opengl +sdl2
+
+
+>=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4
+7
+
+configure prepare
+
+
+
+
+

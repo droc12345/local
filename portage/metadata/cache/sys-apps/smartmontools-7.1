@@ -1,0 +1,22 @@
+caps? ( static? ( sys-libs/libcap-ng[static-libs] ) !static? ( sys-libs/libcap-ng ) ) selinux? ( sys-libs/libselinux ) >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4 virtual/pkgconfig
+caps? ( static? ( sys-libs/libcap-ng[static-libs] ) !static? ( sys-libs/libcap-ng ) ) selinux? ( sys-libs/libselinux ) daemon? ( virtual/mailx ) selinux? ( sec-policy/selinux-smartmon ) systemd? ( sys-apps/systemd ) update_drivedb? ( app-crypt/gnupg || ( net-misc/curl net-misc/wget www-client/lynx dev-vcs/subversion ) )
+0
+mirror://sourceforge/smartmontools/smartmontools-7.1.tar.gz
+
+https://www.smartmontools.org
+GPL-2
+Tools to monitor storage systems to provide advanced warning of disk degradation
+~alpha amd64 arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 sparc x86 ~amd64-linux ~x86-linux ~x64-macos
+autotools desktop edos2unix epatch estack eutils flag-o-matic l10n libtool ltprune multilib preserve-libs systemd toolchain-funcs vcs-clean wrapper
+caps +daemon selinux static systemd update_drivedb
+( caps? ( daemon ) )
+
+
+6
+
+configure install postinst prepare
+
+
+
+
+

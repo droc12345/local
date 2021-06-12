@@ -1,0 +1,22 @@
+>=dev-libs/glib-2.30.1:2 >=dev-libs/libgcrypt-1.4.2:0= dev-libs/libgpg-error >=net-libs/gnutls-3.0:0= >=x11-libs/cairo-1.2 >=x11-libs/gtk+-2.18:2 x11-libs/libX11 gtk3? ( >=x11-libs/gtk+-2.91.3:3[introspection?] ) introspection? ( >=dev-libs/gobject-introspection-0.9.4:= ) pulseaudio? ( media-sound/pulseaudio ) python? ( python_targets_python2_7? ( >=dev-lang/python-2.7.5-r2:2.7 ) >=dev-lang/python-exec-2:=[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] >=dev-python/pygtk-2:2[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] ) sasl? ( dev-libs/cyrus-sasl ) >=dev-lang/perl-5 >=dev-util/intltool-0.40 sys-devel/gettext virtual/pkgconfig vala? ( || ( dev-lang/vala:0.50[vapigen(+)] dev-lang/vala:0.48[vapigen(+)] dev-lang/vala:0.46[vapigen(+)] dev-lang/vala:0.44[vapigen(+)] dev-lang/vala:0.40[vapigen(+)] dev-lang/vala:0.36[vapigen(+)] ) >=dev-libs/gobject-introspection-0.9.4 ) >=app-portage/elt-patches-20170815 app-arch/xz-utils dev-util/desktop-file-utils x11-misc/shared-mime-info
+>=dev-libs/glib-2.30.1:2 >=dev-libs/libgcrypt-1.4.2:0= dev-libs/libgpg-error >=net-libs/gnutls-3.0:0= >=x11-libs/cairo-1.2 >=x11-libs/gtk+-2.18:2 x11-libs/libX11 gtk3? ( >=x11-libs/gtk+-2.91.3:3[introspection?] ) introspection? ( >=dev-libs/gobject-introspection-0.9.4:= ) pulseaudio? ( media-sound/pulseaudio ) python? ( python_targets_python2_7? ( >=dev-lang/python-2.7.5-r2:2.7 ) >=dev-lang/python-exec-2:=[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] >=dev-python/pygtk-2:2[python_targets_python2_7(-)?,-python_single_target_python2_7(-)] ) sasl? ( dev-libs/cyrus-sasl )
+0
+mirror://gnome/sources/gtk-vnc/0.7/gtk-vnc-0.7.1.tar.xz
+
+https://wiki.gnome.org/Projects/gtk-vnc
+GPL-2
+VNC viewer widget for GTK
+~alpha amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-fbsd
+desktop eapi7-ver edos2unix epatch estack eutils gnome.org gnome2 gnome2-utils l10n libtool ltprune multibuild multilib preserve-libs python-r1 python-utils-r1 toolchain-funcs vala vcs-clean versionator wrapper xdg xdg-utils
+examples +gtk3 +introspection pulseaudio python sasl vala python_targets_python2_7
+python? ( || ( python_targets_python2_7 ) ) vala? ( gtk3 introspection )
+
+
+6
+
+compile configure install postinst postrm preinst prepare test
+
+
+
+
+

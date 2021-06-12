@@ -1,0 +1,22 @@
+>=x11-libs/gtk+-2.24.23:2[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?] lua? ( dev-lang/lua:0[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?] ) >=dev-util/intltool-0.31 virtual/pkgconfig >=app-portage/elt-patches-20170815 dev-util/desktop-file-utils x11-misc/shared-mime-info
+>=x11-libs/gtk+-2.24.23:2[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?] lua? ( dev-lang/lua:0[abi_x86_32(-)?,abi_x86_64(-)?,abi_x86_x32(-)?,abi_mips_n32(-)?,abi_mips_n64(-)?,abi_mips_o32(-)?,abi_s390_32(-)?,abi_s390_64(-)?] )
+2
+mirror://gnome/sources/gtk-engines/2.20/gtk-engines-2.20.2.tar.bz2
+
+https://www.gtk.org/
+LGPL-2.1
+GTK+2 standard engines and themes
+~alpha amd64 arm ~arm64 ~hppa ~ia64 ~mips ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~x64-solaris ~x86-solaris
+desktop eapi7-ver edos2unix epatch estack eutils gnome.org gnome2 gnome2-utils l10n libtool ltprune multibuild multilib multilib-build multilib-minimal preserve-libs toolchain-funcs vcs-clean versionator wrapper xdg xdg-utils
+accessibility lua abi_x86_32 abi_x86_64 abi_x86_x32 abi_mips_n32 abi_mips_n64 abi_mips_o32 abi_s390_32 abi_s390_64
+
+
+
+5
+
+compile configure install postinst postrm preinst prepare test unpack
+
+
+
+
+

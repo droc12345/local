@@ -1,0 +1,10 @@
+--- os_cmd/Linux/ossdetect/ossdetect.c	2017-02-17 13:20:42.000000000 -0600
++++ os_cmd/Linux/ossdetect/ossdetect.c	2018-07-07 11:37:09.955234263 -0500
+@@ -21,6 +21,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <sys/types.h>
++#include <sys/sysmacros.h>
+ #include <sys/stat.h>
+ #include <sys/dir.h>
+ 

@@ -1,0 +1,22 @@
+udev? ( dev-lang/perl !=sys-fs/udev-196 ) virtual/pkgconfig
+!<sys-apps/pciutils-3.1.9-r2 !<sys-apps/usbutils-005-r1
+0
+https://github.com/gentoo/hwids/archive/hwids-20130114.tar.gz
+
+https://github.com/gentoo/hwids
+|| ( GPL-2 BSD ) public-domain
+Hardware (PCI, USB, OUI, IAB) IDs databases
+alpha amd64 arm hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~amd64-fbsd ~x86-fbsd ~x64-freebsd ~amd64-linux ~x86-linux
+desktop edos2unix epatch estack eutils l10n ltprune multilib preserve-libs toolchain-funcs udev vcs-clean wrapper
++udev
+
+
+
+5
+
+compile install postinst
+
+
+
+
+

@@ -1,0 +1,22 @@
+python_single_target_python3_7? ( dev-lang/python:3.7 >=dev-lang/python-exec-2:=[python_targets_python3_7] ) python_single_target_python3_8? ( dev-lang/python:3.8 >=dev-lang/python-exec-2:=[python_targets_python3_8] ) python_single_target_python3_7? ( dev-python/click[python_targets_python3_7(-)] ) python_single_target_python3_8? ( dev-python/click[python_targets_python3_8(-)] ) python_single_target_python3_7? ( dev-python/cython-hidapi[python_targets_python3_7(-)] ) python_single_target_python3_8? ( dev-python/cython-hidapi[python_targets_python3_8(-)] ) python_single_target_python3_7? ( dev-python/psutil[python_targets_python3_7(-)] ) python_single_target_python3_8? ( dev-python/psutil[python_targets_python3_8(-)] )
+python_single_target_python3_7? ( dev-lang/python:3.7 >=dev-lang/python-exec-2:=[python_targets_python3_7] ) python_single_target_python3_8? ( dev-lang/python:3.8 >=dev-lang/python-exec-2:=[python_targets_python3_8] ) python_single_target_python3_7? ( dev-python/click[python_targets_python3_7(-)] ) python_single_target_python3_8? ( dev-python/click[python_targets_python3_8(-)] ) python_single_target_python3_7? ( dev-python/cython-hidapi[python_targets_python3_7(-)] ) python_single_target_python3_8? ( dev-python/cython-hidapi[python_targets_python3_8(-)] ) python_single_target_python3_7? ( dev-python/psutil[python_targets_python3_7(-)] ) python_single_target_python3_8? ( dev-python/psutil[python_targets_python3_8(-)] ) python_single_target_python3_7? ( dev-lang/python:3.7 >=dev-lang/python-exec-2:=[python_targets_python3_7] ) python_single_target_python3_8? ( dev-lang/python:3.8 >=dev-lang/python-exec-2:=[python_targets_python3_8] )
+0
+https://github.com/gfduszynski/cm-rgb/archive/v0.1.0.tar.gz -> cm-rgb-0.1.0.tar.gz
+
+https://github.com/gfduszynski/cm-rgb
+MIT
+Python library and CLI tools to control the RGB LEDs on the AMD Wraith heatsink
+~amd64 ~x86
+distutils-r1 github-pkg multilib multiprocessing python-single-r1 python-utils-r1 toolchain-funcs
+python_single_target_python3_7 python_single_target_python3_8
+^^ ( python_single_target_python3_7 python_single_target_python3_8 ) ^^ ( python_single_target_python3_7 python_single_target_python3_8 )
+
+python_single_target_python3_7? ( dev-lang/python:3.7 >=dev-lang/python-exec-2:=[python_targets_python3_7] ) python_single_target_python3_8? ( dev-lang/python:3.8 >=dev-lang/python-exec-2:=[python_targets_python3_8] ) python_single_target_python3_7? ( >=dev-python/setuptools-42.0.2[python_targets_python3_7(-)] ) python_single_target_python3_8? ( >=dev-python/setuptools-42.0.2[python_targets_python3_8(-)] )
+7
+
+compile configure install prepare setup test
+
+
+
+
+

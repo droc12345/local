@@ -1,0 +1,22 @@
+dev-libs/json-c dev-libs/glib:2 dev-libs/libatasmart gnome-base/dconf gtop? ( gnome-base/libgtop:2= ) hddtemp? ( app-admin/hddtemp ) net-misc/curl server? ( net-libs/libmicrohttpd ) sys-apps/lm-sensors udisks? ( sys-fs/udisks:2 ) X? ( x11-libs/gtk+:3 x11-libs/libnotify x11-libs/libX11 x11-libs/libXext x11-libs/cairo )
+dev-libs/json-c dev-libs/glib:2 dev-libs/libatasmart gnome-base/dconf gtop? ( gnome-base/libgtop:2= ) hddtemp? ( app-admin/hddtemp ) net-misc/curl server? ( net-libs/libmicrohttpd ) sys-apps/lm-sensors udisks? ( sys-fs/udisks:2 ) X? ( x11-libs/gtk+:3 x11-libs/libnotify x11-libs/libX11 x11-libs/libXext x11-libs/cairo )
+0
+https://wpitchoune.net/psensor/files/psensor-1.2.0.tar.gz
+
+https://wpitchoune.net/psensor/
+GPL-2
+A graphical hardware temperature monitor
+~amd64 ~x86
+autotools edos2unix eutils flag-o-matic gnome2-utils l10n libtool multilib toolchain-funcs wrapper xdg-utils
++gtop +hddtemp nls +server udisks X
+
+
+nls? ( sys-devel/gettext ) >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4
+7
+
+configure postinst postrm preinst prepare
+
+
+
+
+

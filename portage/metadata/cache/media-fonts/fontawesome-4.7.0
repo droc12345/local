@@ -1,0 +1,22 @@
+X? ( >=x11-apps/mkfontscale-1.2.0 media-fonts/encodings )
+
+0
+https://github.com/FortAwesome/Font-Awesome/archive/v4.7.0.tar.gz -> fontawesome-4.7.0.tar.gz
+
+http://fontawesome.io
+CC-BY-3.0 OFL-1.1
+The iconic font
+~amd64 ~arm ~arm64 ~x86
+desktop edos2unix epatch estack eutils font l10n ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper
++otf +ttf X
+|| ( otf ttf )
+
+
+6
+
+configure install postinst postrm setup
+
+
+
+
+

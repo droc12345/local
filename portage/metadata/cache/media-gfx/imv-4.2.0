@@ -1,0 +1,22 @@
+dev-libs/icu:= dev-libs/inih media-libs/libglvnd[X?] x11-libs/libxkbcommon[X?] x11-libs/pango X? ( x11-libs/libX11 x11-libs/libxcb:= ) freeimage? ( media-libs/freeimage ) gif? ( media-libs/libnsgif ) heif? ( media-libs/libheif:= ) jpeg? ( media-libs/libjpeg-turbo:= ) png? ( media-libs/libpng:= ) svg? ( gnome-base/librsvg ) tiff? ( media-libs/tiff ) wayland? ( dev-libs/wayland ) !sys-apps/renameutils test? ( dev-util/cmocka ) dev-util/desktop-file-utils x11-misc/shared-mime-info
+dev-libs/icu:= dev-libs/inih media-libs/libglvnd[X?] x11-libs/libxkbcommon[X?] x11-libs/pango X? ( x11-libs/libX11 x11-libs/libxcb:= ) freeimage? ( media-libs/freeimage ) gif? ( media-libs/libnsgif ) heif? ( media-libs/libheif:= ) jpeg? ( media-libs/libjpeg-turbo:= ) png? ( media-libs/libpng:= ) svg? ( gnome-base/librsvg ) tiff? ( media-libs/tiff ) wayland? ( dev-libs/wayland ) !sys-apps/renameutils
+0
+https://github.com/eXeC64/imv/archive/v4.2.0.tar.gz -> imv-4.2.0.tar.gz
+!test? ( test )
+https://github.com/eXeC64/imv
+MIT-with-advertising
+Minimal image viewer designed for tiling window manager users
+~amd64 ~x86
+meson multilib multiprocessing ninja-utils python-utils-r1 toolchain-funcs xdg xdg-utils
++X +freeimage gif heif jpeg png svg test tiff wayland
+|| ( X wayland )
+
+app-text/asciidoc >=dev-util/meson-0.54.0 >=dev-util/ninja-1.8.2 dev-util/meson-format-array
+7
+
+compile configure install postinst postrm preinst prepare test
+
+
+
+
+

@@ -1,0 +1,12 @@
+--- setup/Linux/oss/build/osscore.c	2017-01-18 23:05:59.000000000 -0600
++++ setup/Linux/oss/build/osscore1.c	2017-05-27 13:10:49.045496638 -0500
+@@ -34,6 +34,9 @@
+ #if LINUX_VERSION_CODE > KERNEL_VERSION(3,10,0)
+ #include <linux/uidgid.h>
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0)
++#include <linux/cred.h>
++#endif
+ #undef strlen
+ #undef strcpy
+ #define strlen oss_strlen

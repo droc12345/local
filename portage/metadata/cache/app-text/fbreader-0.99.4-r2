@@ -1,0 +1,22 @@
+app-arch/bzip2 dev-libs/expat dev-libs/liblinebreak dev-libs/fribidi dev-db/sqlite net-misc/curl sys-libs/zlib dev-qt/qtcore:4[ssl] dev-qt/qtgui:4 virtual/pkgconfig
+app-arch/bzip2 dev-libs/expat dev-libs/liblinebreak dev-libs/fribidi dev-db/sqlite net-misc/curl sys-libs/zlib dev-qt/qtcore:4[ssl] dev-qt/qtgui:4
+0
+http://www.fbreader.org/files/desktop/fbreader-sources-0.99.4.tgz
+
+http://www.fbreader.org/
+GPL-2
+E-Book Reader. Supports many e-book formats
+amd64 ~arm ~ppc x86
+desktop edos2unix epatch estack eutils l10n ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper
+debug
+
+
+
+5
+
+compile install prepare
+
+
+
+
+

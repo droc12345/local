@@ -1,0 +1,33 @@
+--- a/configure.ac	2020-06-28 08:41:28.000000000 -0500
++++ b/configure.ac	2020-08-14 12:11:10.324380960 -0500
+@@ -16,7 +16,7 @@
+ dnl AC_PROG_LIBTOOL
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_C_BIGENDIAN
+-AM_GNU_GETTEXT
++AM_GNU_GETTEXT([external])
+ PKG_PROG_PKG_CONFIG
+ AM_PROG_CC_C_O
+ AM_ICONV
+@@ -956,7 +956,6 @@
+ plugins/rg_scanner/Makefile
+ plugins/soundtouch/Makefile
+ po/Makefile.in
+-intl/Makefile
+ deadbeef.desktop
+ ])
+ 
+--- a/Makefile.am	2020-06-28 08:41:28.000000000 -0500
++++ b/Makefile.am	2020-08-14 12:06:56.694487527 -0500
+@@ -1,9 +1,8 @@
+-SUBDIRS = pixmaps\
++SUBDIRS = pixmaps\
+ 		  icons\
+ 		  shared\
+ 		  ${PLUGINS_DIRS}\
+-		  po\
+-		  intl
++		  po
+ 
+ bin_PROGRAMS = deadbeef
+ 

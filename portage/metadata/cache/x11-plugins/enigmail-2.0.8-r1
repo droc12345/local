@@ -1,0 +1,22 @@
+( >=app-crypt/gnupg-2.0 || ( app-crypt/pinentry[gtk(-)] app-crypt/pinentry[qt5(-)] ) ) !<mail-client/thunderbird-52.5.0 || ( >=dev-lang/python-2.7.5-r2:2.7 ) app-arch/zip dev-lang/perl
+( >=app-crypt/gnupg-2.0 || ( app-crypt/pinentry[gtk(-)] app-crypt/pinentry[qt5(-)] ) ) !<mail-client/thunderbird-52.5.0
+0
+https://www.enigmail.net/download/source/enigmail-2.0.8.tar.gz
+
+https://www.enigmail.net/
+MPL-2.0 GPL-3
+Mozilla extension to provide GPG support in mail clients
+~alpha amd64 ~arm ppc ppc64 x86 ~amd64-linux ~x86-linux
+multilib python-any-r1 python-utils-r1 toolchain-funcs
+
+
+
+
+7
+
+compile install postinst setup
+
+
+
+
+

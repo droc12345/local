@@ -1,0 +1,22 @@
+>=media-libs/libsdl-1.2 flac? ( media-libs/flac ) mikmod? ( >=media-libs/libmikmod-3.1.9 ) modplug? ( media-libs/libmodplug ) mp3? ( media-sound/mpg123 ) physfs? ( dev-games/physfs ) speex? ( media-libs/speex media-libs/libogg ) vorbis? ( >=media-libs/libvorbis-1.0_beta4 ) virtual/pkgconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4 dev-vcs/mercurial
+>=media-libs/libsdl-1.2 flac? ( media-libs/flac ) mikmod? ( >=media-libs/libmikmod-3.1.9 ) modplug? ( media-libs/libmodplug ) mp3? ( media-sound/mpg123 ) physfs? ( dev-games/physfs ) speex? ( media-libs/speex media-libs/libogg ) vorbis? ( >=media-libs/libvorbis-1.0_beta4 )
+0
+
+
+http://icculus.org/SDL_sound
+LGPL-2.1
+A library that handles the decoding of sound file formats
+amd64
+autotools desktop edos2unix epatch estack eutils l10n libtool ltprune mercurial multilib preserve-libs toolchain-funcs vcs-clean wrapper
+flac midi mikmod modplug mp3 mpeg physfs speex static-libs vorbis wav
+
+
+
+5
+live
+configure install prepare unpack
+
+
+
+
+

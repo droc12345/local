@@ -1,0 +1,22 @@
+x11-libs/gtk+:2 media-libs/libmikmod gnome-base/librsvg:2 virtual/pkgconfig >=app-portage/elt-patches-20170815 || ( >=sys-devel/automake-1.16.2-r1:1.16 ) >=sys-devel/autoconf-2.69 >=sys-devel/libtool-2.4
+x11-libs/gtk+:2 media-libs/libmikmod gnome-base/librsvg:2
+0
+https://launchpad.net/gweled/trunk/0.9.1/+download/gweled-0.9.1.tar.gz
+
+http://www.gweled.org/
+GPL-2
+Bejeweled clone game
+~amd64 ~x86
+autotools desktop edos2unix epatch estack eutils flag-o-matic l10n libtool ltprune multilib preserve-libs toolchain-funcs vcs-clean wrapper xdg-utils
+
+
+
+
+6
+
+configure postinst postrm prepare
+
+
+
+
+
