@@ -19,18 +19,19 @@ HOMEPAGE="https://xorg.freedesktop.org/ https://gitlab.freedesktop.org/xorg/xser
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="bsd eglstream ipv6 rpc selinux unwind xcsecurity"
+IUSE="auth bsd eglstream ipv6 rpc selinux unwind xcsecurity"
 
 BDEPEND="
 	sys-devel/flex
 "
 CDEPEND="
+	auth? (
+		>=x11-apps/iceauth-1.0.2
+		>=x11-apps/xauth-1.0.3
+	)
 	bsd? ( dev-libs/libbsd )
 	media-libs/libglvnd[X]
-	dev-libs/openssl:0=
-	>=x11-apps/iceauth-1.0.2
-	>=x11-apps/rgb-1.0.3
-	>=x11-apps/xauth-1.0.3
+	media-libs/mesa[X,wayland]
 	x11-apps/xkbcomp
 	>=x11-libs/libdrm-2.4.89
 	>=x11-libs/libpciaccess-0.12.901
