@@ -33,7 +33,6 @@ DEPEND="
 	x11-libs/pixman
 	x11-backend? ( x11-libs/libxcb:0= )
 	X? (
-		x11-base/xorg-server[wayland]
 		x11-libs/libxcb:0=
 		x11-libs/xcb-util-image
 		x11-libs/xcb-util-wm
