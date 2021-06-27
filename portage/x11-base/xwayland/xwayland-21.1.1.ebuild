@@ -65,8 +65,6 @@ PATCHES=( "${FILESDIR}"/xwayland-drop-redundantly-installed-files.patch )
 # set xwayland_path only if xorg-server is installed
 src_configure() {
 	local emesonargs=(
-		$(meson_use eglstream xwayland_eglstream)
-		$(meson_use ipv6)
 		$(meson_use rpc secure-rpc)
 		$(meson_use unwind libunwind)
 		-Ddtrace=false
