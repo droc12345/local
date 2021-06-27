@@ -19,32 +19,28 @@ HOMEPAGE="https://xorg.freedesktop.org/ https://gitlab.freedesktop.org/xorg/xser
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="auth bsd eglstream ipv6 rpc selinux unwind xcsecurity"
+IUSE="rpc libselinux unwind"
 
 BDEPEND="
 	sys-devel/flex
 "
 CDEPEND="
-	bsd? ( dev-libs/libbsd )
+	dev-libs/libbsd
 	>=dev-libs/wayland-1.3.0
 	>=dev-libs/wayland-protocols-1.18
-	eglstream? (
-		gui-libs/egl-wayland
-		gui-libs/eglexternalplatform
-	)
+	gui-libs/egl-wayland
+	gui-libs/eglexternalplatform
 	>=media-libs/libepoxy-1.5.4[X,egl(+)]
 	media-libs/libglvnd[X]
 	media-libs/mesa[X,wayland]
 	rpc? ( net-libs/libtirpc )
-	selinux? (
+	libselinux? (
 		>=sys-libs/libselinux-2.9.86
 		sys-process/audit
 	)
 	unwind? ( sys-libs/libunwind )
-	auth? (
-		>=x11-apps/iceauth-1.0.2
-		>=x11-apps/xauth-1.0.3
-	)
+	>=x11-apps/iceauth-1.0.2
+	>=x11-apps/xauth-1.0.3
 	x11-apps/xkbcomp
 	>=x11-base/xorg-proto-2018.4
 	>=x11-libs/libXau-1.0.4
