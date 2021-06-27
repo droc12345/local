@@ -25,23 +25,7 @@ BDEPEND="
 	sys-devel/flex
 "
 CDEPEND="
-	auth? (
-		>=x11-apps/iceauth-1.0.2
-		>=x11-apps/xauth-1.0.3
-	)
 	bsd? ( dev-libs/libbsd )
-	media-libs/libglvnd[X]
-	media-libs/mesa[X,wayland]
-	x11-apps/xkbcomp
-	>=x11-libs/libdrm-2.4.89
-	>=x11-libs/libpciaccess-0.12.901
-	>=x11-libs/libXau-1.0.4
-	>=x11-libs/libXdmcp-1.0.2
-	>=x11-libs/libXfont2-2.0.1
-	>=x11-libs/libxkbfile-1.0.4
-	>=x11-libs/libxshmfence-1.1
-	>=x11-libs/pixman-0.27.2
-	>=x11-misc/xbitmaps-1.0.1
 	>=dev-libs/wayland-1.3.0
 	>=dev-libs/wayland-protocols-1.18
 	eglstream? (
@@ -49,19 +33,30 @@ CDEPEND="
 		gui-libs/eglexternalplatform
 	)
 	>=media-libs/libepoxy-1.5.4[X,egl(+)]
+	media-libs/libglvnd[X]
+	media-libs/mesa[X,wayland]
 	rpc? ( net-libs/libtirpc )
 	selinux? (
 		>=sys-libs/libselinux-2.9.86
 		sys-process/audit
 	)
 	unwind? ( sys-libs/libunwind )
+	auth? (
+		>=x11-apps/iceauth-1.0.2
+		>=x11-apps/xauth-1.0.3
+	)
 	x11-apps/xkbcomp
 	>=x11-base/xorg-proto-2018.4
-	>=x11-libs/libXfont2-2.0.0
+	>=x11-libs/libXau-1.0.4
+	>=x11-libs/libXdmcp-1.0.2
+	>=x11-libs/libXfont2-2.0.1
 	>=x11-libs/libdrm-2.4.89
+	>=x11-libs/libxkbfile-1.0.4
 	>=x11-libs/libxshmfence-1.1
 	>=x11-libs/pixman-0.27.2
+	>=x11-libs/libXfont2-2.0.0
 	>=x11-libs/xtrans-1.3.5
+	>=x11-misc/xbitmaps-1.0.1
 "
 
 DEPEND="${CDEPEND}
