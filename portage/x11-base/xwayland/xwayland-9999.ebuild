@@ -26,11 +26,11 @@ BDEPEND="
 "
 CDEPEND="
 	dev-libs/libbsd
-	>=dev-libs/wayland-1.3.0
-	>=dev-libs/wayland-protocols-1.18
+	dev-libs/wayland
+	dev-libs/wayland-protocols
 	gui-libs/egl-wayland
 	gui-libs/eglexternalplatform
-	>=media-libs/libepoxy-1.5.4[X,egl(+)]
+	media-libs/libepoxy[X,egl]
 	media-libs/libglvnd[X]
 	media-libs/mesa[X,wayland]
 	rpc? ( net-libs/libtirpc )
@@ -39,8 +39,8 @@ CDEPEND="
 		sys-process/audit
 	)
 	unwind? ( sys-libs/libunwind )
-	>=x11-apps/iceauth-1.0.2
-	>=x11-apps/xauth-1.0.3
+	x11-apps/iceauth
+	x11-apps/xauth
 	x11-apps/xkbcomp
 	>=x11-base/xorg-proto-2018.4
 	>=x11-libs/libXau-1.0.4
@@ -50,7 +50,6 @@ CDEPEND="
 	>=x11-libs/libxkbfile-1.0.4
 	>=x11-libs/libxshmfence-1.1
 	>=x11-libs/pixman-0.27.2
-	>=x11-libs/libXfont2-2.0.0
 	>=x11-libs/xtrans-1.3.5
 	>=x11-misc/xbitmaps-1.0.1
 "
