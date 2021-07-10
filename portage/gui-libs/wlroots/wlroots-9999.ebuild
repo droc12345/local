@@ -19,7 +19,7 @@ else
 fi
 
 LICENSE="MIT"
-IUSE="x11-backend X"
+IUSE="x11-backend X examples"
 
 DEPEND="
 	>=dev-libs/libinput-1.14.0:0=
@@ -51,11 +51,11 @@ src_configure() {
 	# xcb-util-errors is not on Gentoo Repository (and upstream seems inactive?)
 	local emesonargs=(
 		"-Dxcb-errors=enabled"
-		"-Dexamples=false"
+		"-Dexamples=$(usex examples true false)"
 		"-Dwerror=false"
 		"-Drenderers=gles2"
-		-Dxwayland=$(usex X enabled disabled)
-		-Dx11-backend=$(usex x11-backend enabled disabled)
+		"-Dxwayland=$(usex X enabled disabled)"
+		"-Dx11-backend=$(usex x11-backend enabled disabled)"
 	)
 
 	meson_src_configure
