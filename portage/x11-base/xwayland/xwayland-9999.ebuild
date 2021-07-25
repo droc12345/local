@@ -19,7 +19,7 @@ HOMEPAGE="https://xorg.freedesktop.org/ https://gitlab.freedesktop.org/xorg/xser
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="rpc libselinux unwind"
+IUSE="rpc libselinux unwind xcsecurity"
 
 BDEPEND="
 	sys-devel/flex
