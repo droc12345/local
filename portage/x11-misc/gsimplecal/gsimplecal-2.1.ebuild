@@ -18,7 +18,6 @@ IUSE=""
 RDEPEND="x11-libs/gtk+:3"
 #RDEPEND="x11-libs/gtk+:2"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
 	>=sys-devel/autoconf-2.65"
 
 S=$WORKDIR/$PF
