@@ -31,3 +31,12 @@ BDEPEND="
 	>=dev-libs/wayland-protocols-1.14
 	virtual/pkgconfig
 "
+
+src_configure() {
+	local emesonargs=(
+		-Dkiwmi-version="9999"
+		-Dlua-pkg="lua5.1"
+	)
+	meson_src_configure
+}
+

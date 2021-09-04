@@ -71,8 +71,8 @@ IUSE="
 	aac adplug alac cdda cdparanoia converter cover curl dts dumb equalizer
 	ffmpeg gme gtk2 gtk3 imlib2 lastfm libav libnotify libsamplerate mac midi
 	mms mono2stereo mpg123 musepack nls nullout opus oss playlist-browser psf
-	pulseaudio replaygain-scanner sc68 shell-exec shn sid tta unity vtx wavpack
-	wma zip
+	pulseaudio replaygain-scanner sc68 shell-exec shn sid statusnotifier
+	tta unity vtx wavpack wma zip
 "
 REQUIRED_USE="
 	|| ( alsa oss nullout pulseaudio )
@@ -266,6 +266,7 @@ src_configure() {
 		$(use_enable shn)
 		$(use_enable sid)
 		$(use_enable sndfile)
+		$(use_enable statusnotifier)
 		$(use_enable tta)
 		$(use_enable vorbis)
 		$(use_enable vtx)
