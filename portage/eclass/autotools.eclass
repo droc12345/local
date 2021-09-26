@@ -27,7 +27,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]]; then
 _AUTOTOOLS_ECLASS=1
 
 case ${EAPI:-0} in
-	0|1|2|3|4|5|6|7) ;;
+	0|1|2|3|4|5|6|7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
 esac
 
@@ -129,7 +129,7 @@ RDEPEND=""
 if [[ ${AUTOTOOLS_AUTO_DEPEND} != "no" ]] ; then
 	case ${EAPI:-0} in
 		0|1|2|3|4|5|6) DEPEND=${AUTOTOOLS_DEPEND} ;;
-		7) BDEPEND=${AUTOTOOLS_DEPEND} ;;
+		7|8) BDEPEND=${AUTOTOOLS_DEPEND} ;;
 	esac
 fi
 __AUTOTOOLS_AUTO_DEPEND=${AUTOTOOLS_AUTO_DEPEND} # See top of eclass
@@ -490,7 +490,7 @@ autotools_env_setup() {
 				5|6)
 					hv_args="--host-root"
 					;;
-				7)
+				7|8)
 					hv_args="-b"
 					;;
 			esac

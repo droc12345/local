@@ -24,7 +24,7 @@
 # Specify the project name in the repository's URL; defaults to PN.
 
 case ${EAPI:-0} in
-	6|7)
+	6|7|8)
 		GITHUB_HOMEPAGE="https://github.com/${GITHUB_USER:?}/${GITHUB_PROJ:-${PN}}"
 		: ${KEYWORDS:?"Must be defined before inheriting github-pkg.eclass"}
 		: ${HOMEPAGE:=$GITHUB_HOMEPAGE}

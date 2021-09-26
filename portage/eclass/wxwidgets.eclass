@@ -61,6 +61,7 @@ case ${EAPI:-0} in
 		;;
 	6)	inherit multilib ;; # compatibility only, not needed by eclass
 	7)	;;
+	8)	;;
 	*)	die "${ECLASS}: EAPI ${EAPI:-0} is not supported" ;;
 esac
 

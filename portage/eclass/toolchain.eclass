@@ -30,7 +30,7 @@ FEATURES=${FEATURES/multilib-strict/}
 case ${EAPI:-0} in
 	0|1|2|3|4*) die "Need to upgrade to at least EAPI=5" ;;
 	5*|6) inherit eapi7-ver ;;
-	7) ;;
+	7|8) ;;
 	*) die "I don't speak EAPI ${EAPI}." ;;
 esac
 
@@ -125,6 +125,7 @@ tc_supports_dostrip() {
 	case ${EAPI:-0} in
 		5*|6) return 1 ;;
 		7) return 0 ;;
+		8) return 0 ;;
 		*) die "Update apply_patches() for ${EAPI}." ;;
 	esac
 }
@@ -443,6 +444,7 @@ tc_apply_patches() {
 		# breaking existing ebuilds use 'eapply' only in EAPI=7 or later.
 		5*|6) epatch "$@" ;;
 		7) eapply "$@" ;;
+		8) eapply "$@" ;;
 		*) die "Update apply_patches() for ${EAPI}." ;;
 	esac
 }
@@ -461,7 +463,7 @@ toolchain_src_prepare() {
 
 	case ${EAPI:-0} in
 		5*) epatch_user;;
-		6|7) eapply_user ;;
+		6|7|8) eapply_user ;;
 		*) die "Update toolchain_src_prepare() for ${EAPI}." ;;
 	esac
 

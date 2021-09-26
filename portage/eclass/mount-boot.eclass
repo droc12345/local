@@ -13,7 +13,7 @@
 # error if it can't.  It does nothing if /boot isn't a separate partition.
 
 case ${EAPI:-0} in
-	0|4|5|6|7) ;;
+	0|4|5|6|7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 

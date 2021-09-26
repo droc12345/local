@@ -21,7 +21,7 @@
 inherit eutils toolchain-funcs xdg-utils
 
 case ${EAPI} in
-	5|6|7) ;;
+	5|6|7|8) ;;
 	*) die "EAPI=${EAPI} is not supported" ;;
 esac
 
@@ -96,7 +96,7 @@ gnome2_environment_reset() {
 	# Ensure we don't rely on dconf/gconf while building, bug #511946
 	export GSETTINGS_BACKEND="memory"
 
-	if has ${EAPI} 6 7; then
+	if has ${EAPI} 6 7 8; then
 		# Try to cover the packages honoring this variable, bug #508124
 		export GST_INSPECT="$(type -P true)"
 

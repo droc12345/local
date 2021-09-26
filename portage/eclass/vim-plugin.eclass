@@ -13,7 +13,7 @@
 # documentation, for which we make a special case via vim-doc.eclass.
 
 case ${EAPI} in
-	5|6|7);;
+	5|6|7|8);;
 	*) die "EAPI ${EAPI:-0} unsupported (too old)";;
 esac
 

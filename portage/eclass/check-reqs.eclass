@@ -61,7 +61,7 @@ if [[ ! ${_CHECK_REQS_ECLASS_} ]]; then
 # How much space is needed in /var? Eg.: CHECKREQS_DISK_VAR=3000M
 
 case ${EAPI:-0} in
-	4|5|6|7) ;;
+	4|5|6|7|8) ;;
 	*) die "${ECLASS}: EAPI=${EAPI:-0} is not supported" ;;
 esac
 

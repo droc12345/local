@@ -28,7 +28,7 @@ case ${EAPI:-0} in
 		inherit desktop edos2unix epatch estack l10n ltprune multilib \
 			preserve-libs toolchain-funcs vcs-clean wrapper
 		;;
-	7) inherit edos2unix l10n wrapper ;;
+	7|8) inherit edos2unix l10n wrapper ;;
 	*) die "${ECLASS} is banned in EAPI ${EAPI}" ;;
 esac
 

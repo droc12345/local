@@ -132,7 +132,7 @@ RUBY_FAKEGEM_EXTENSION_LIBDIR="${RUBY_FAKEGEM_EXTENSION_LIBDIR-lib}"
 case "${EAPI:-0}" in
 	0|1|2|3)
 		die "Unsupported EAPI=${EAPI} (too old) for ruby-fakegem.eclass" ;;
-	4|5|6|7)
+	4|5|6|7|8)
 		;;
 	*)
 		die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}"

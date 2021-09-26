@@ -86,7 +86,7 @@ EXPORT_FUNCTIONS src_unpack src_prepare src_configure src_compile src_test src_i
 case ${EAPI} in
 	0|1|2|3)
 		die "Unsupported EAPI=${EAPI} (too old) for ruby-ng.eclass" ;;
-	4|5|6|7)
+	4|5|6|7|8)
 		# S is no longer automatically assigned when it doesn't exist.
 		S="${WORKDIR}"
 		;;

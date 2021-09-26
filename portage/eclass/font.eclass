@@ -9,7 +9,7 @@
 
 case ${EAPI:-0} in
 	[56]) inherit eutils ;;
-	7) ;;
+	7|8) ;;
 	*) die "EAPI ${EAPI} is not supported by font.eclass." ;;
 esac
 
