@@ -4,7 +4,7 @@
 EAPI=7
 
 if [[ ${PV} = *9999* ]]; then
-	EGIT_BRANCH="xwayland-21.1"
+#	EGIT_BRANCH="xwayland-21.1"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
 	inherit git-r3
 else
@@ -60,7 +60,7 @@ DEPEND="${CDEPEND}
 
 RDEPEND="${CDEPEND}"
 
-PATCHES=( "${FILESDIR}"/xwayland-drop-redundantly-installed-files.patch )
+# PATCHES=( "${FILESDIR}"/xwayland-drop-redundantly-installed-files.patch )
 
 # set xwayland_path only if xorg-server is installed
 src_configure() {
