@@ -1,0 +1,4 @@
+Use these patches if one is pulling xserver master (everything git) and only
+wanting to create Xwayland. 
+
+DO NOT USE if you are using EGIT_BRANCH 

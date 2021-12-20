@@ -1,0 +1,103 @@
+--- a/meson_options.txt	2021-10-10 18:23:13.062534109 -0500
++++ b/meson_options.txt	2021-10-11 11:08:28.243128706 -0500
+@@ -1,20 +1,20 @@
+-option('xorg', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('xorg', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'Enable Xorg X Server')
+ option('xephyr', type: 'boolean', value: false,
+        description: 'Enable Xephyr nested X server')
+-option('xwayland', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('xwayland', type: 'combo', choices: ['true', 'false', 'auto'], value: 'true',
+        description: 'Enable XWayland X server')
+-option('glamor', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('glamor', type: 'combo', choices: ['true', 'false', 'auto'], value: 'true',
+        description: 'Enable glamor (default yes for Xorg/Xwayland builds)')
+ option('xwayland_eglstream', type: 'combo', choices: ['true', 'false', 'auto'],
+        value: 'auto', description: 'Enable EGLStream support for glamor on Xwayland')
+-option('xnest', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('xnest', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'Enable Xnest nested X server')
+ option('xvfb', type: 'boolean', value: true,
+        description: 'Enable Xvfb X server')
+-option('xwin', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('xwin', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'Enable XWin X server')
+-option('xquartz', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('xquartz', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'Enable Xquartz X server')
+ 
+ 
+@@ -59,19 +59,19 @@
+        description: 'Listen on local by default')
+ 
+ option('int10', type: 'combo', choices: ['stub', 'x86emu', 'vm86', 'auto', 'false'],
+-       value: 'auto',
++       value: 'false',
+        description: 'Xorg int10 backend (default: usually x86emu)')
+ option('suid_wrapper', type: 'boolean', value: 'false',
+        description: 'SUID wrapper for legacy driver support')
+-option('pciaccess', type: 'boolean', value: 'true',
++option('pciaccess', type: 'boolean', value: 'false',
+        description: 'Xorg pciaccess support')
+-option('udev', type: 'boolean', value: 'true')
+-option('udev_kms', type: 'boolean', value: 'true')
+-option('hal', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('udev', type: 'boolean', value: 'false')
++option('udev_kms', type: 'boolean', value: 'false')
++option('hal', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'Enable HAL integration')
+-option('systemd_logind', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('systemd_logind', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'Enable systemd-logind integration')
+-option('vgahw', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('vgahw', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'Xorg VGA access module')
+ option('dpms', type: 'boolean', value: true,
+        description: 'Xorg DPMS extension')
+@@ -93,25 +93,25 @@
+        description: 'Xv extension')
+ option('xvmc', type: 'boolean', value: true,
+        description: 'XvMC extension')
+-option('dga', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('dga', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'DGA extension')
+-option('linux_apm', type: 'boolean', value: true,
++option('linux_apm', type: 'boolean', value: false,
+        description: 'APM support on Linux')
+-option('linux_acpi', type: 'boolean', value: true,
++option('linux_acpi', type: 'boolean', value: false,
+        description: 'ACPI support on Linux')
+ option('mitshm', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
+        description: 'SHM extension')
+-option('agp', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('agp', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+        description: 'AGP support')
+ option('sha1', type: 'combo', choices: ['libc', 'CommonCrypto', 'CryptoAPI', 'libmd', 'libsha1', 'libnettle', 'libgcrypt', 'libcrypto', 'auto'], value: 'auto',
+        description: 'SHA1 implementation')
+-option('xf86-input-inputtest', type: 'boolean', value: true,
++option('xf86-input-inputtest', type: 'boolean', value: false,
+        description: 'Test input driver support on Xorg')
+ 
+-option('dri1', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto', description: 'Build DRI1 extension (default: auto)')
+-option('dri2', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto', description: 'Build DRI2 extension (default: auto)')
++option('dri1', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto', description: 'Build DRI1 extension (default: false)')
++option('dri2', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto', description: 'Build DRI2 extension (default: false)')
+ option('dri3', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto', description: 'Build DRI3 extension (default: auto)')
+-option('drm', type: 'boolean', value: 'true',
++option('drm', type: 'boolean', value: 'false',
+         description: 'Build Xorg with libdrm support')
+ 
+ option('apple-applications-dir', type: 'string', value: '/Applications/Utilities',
+@@ -130,9 +130,9 @@
+ 
+ option('xwayland-path', type: 'string', description: 'Directory containing Xwayland executable')
+ 
+-option('docs', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('docs', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+         description: 'Build documentation')
+-option('devel-docs', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('devel-docs', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+         description: 'Build development documentation')
+-option('docs-pdf', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',
++option('docs-pdf', type: 'combo', choices: ['true', 'false', 'auto'], value: 'false',
+         description: 'Whether to build PDF version of documentation. Setting is ignored if documentation is not built.')

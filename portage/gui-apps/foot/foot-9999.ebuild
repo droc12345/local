@@ -21,6 +21,7 @@ SLOT="0"
 IUSE="ime"
 
 DEPEND="
+	dev-libs/libutf8proc
 	dev-libs/wayland
 	media-libs/fcft
 	media-libs/fontconfig

@@ -4,7 +4,7 @@
 EAPI=7
 
 if [[ ${PV} = *9999* ]]; then
-#	EGIT_BRANCH="xwayland-21.1"
+	EGIT_BRANCH="xwayland-21.1"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
 	inherit git-r3
 else
@@ -19,7 +19,7 @@ HOMEPAGE="https://xorg.freedesktop.org/ https://gitlab.freedesktop.org/xorg/xser
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="rpc libselinux unwind xcsecurity"
+IUSE="nvidia rpc libselinux unwind xcsecurity"
 
 BDEPEND="
 	sys-devel/flex
@@ -28,8 +28,10 @@ CDEPEND="
 	dev-libs/libbsd
 	dev-libs/wayland
 	dev-libs/wayland-protocols
-	gui-libs/egl-wayland
-	gui-libs/eglexternalplatform
+	nvidia? (
+		gui-libs/egl-wayland
+		gui-libs/eglexternalplatform
+	)
 	media-libs/libepoxy[X,egl]
 	media-libs/libglvnd[X]
 	media-libs/mesa[X,wayland]

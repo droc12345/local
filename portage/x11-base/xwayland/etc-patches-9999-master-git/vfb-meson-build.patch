@@ -1,0 +1,15 @@
+--- a/hw/vfb/meson.build	2021-10-11 12:32:30.895145435 -0500
++++ b/hw/vfb/meson.build	2021-10-11 12:34:41.195347645 -0500
+@@ -19,11 +19,5 @@
+         libxserver_glx,
+         libglxvnd,
+     ],
+-    install: true,
++    install: false,
+ )
+-
+-install_man(configure_file(
+-    input: 'man/Xvfb.man',
+-    output: 'Xvfb.1',
+-    configuration: manpage_config,
+-))

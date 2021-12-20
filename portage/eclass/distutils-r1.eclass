@@ -98,6 +98,7 @@ esac
 if [[ ! ${_DISTUTILS_R1} ]]; then
 
 [[ ${EAPI} == 6 ]] && inherit eutils xdg-utils
+[[ ${EAPI} == [67] ]] && inherit eapi8-dosym
 inherit multiprocessing toolchain-funcs
 
 if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
@@ -741,8 +742,12 @@ _distutils-r1_wrap_scripts() {
 			local basename=${f##*/}
 
 			debug-print "${FUNCNAME}: installing wrapper at ${bindir}/${basename}"
-			_python_ln_rel "${path}${EPREFIX}"/usr/lib/python-exec/python-exec2 \
-				"${path}${bindir}/${basename}" || die
+			local dosym=dosym
+			[[ ${EAPI} == [67] ]] && dosym=dosym8
+			"${dosym}" -r /usr/lib/python-exec/python-exec2 \
+				"${bindir#${EPREFIX}}/${basename}"
+#			_python_ln_rel "${path}${EPREFIX}"/usr/lib/python-exec/python-exec2 \
+#				"${path}${bindir}/${basename}" || die
 		done
 
 		for f in "${non_python_files[@]}"; do

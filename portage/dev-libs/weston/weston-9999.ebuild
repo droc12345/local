@@ -82,8 +82,8 @@ RDEPEND="
 		x11-libs/libX11
 	)
 	xwayland? (
-		x11-base/xorg-server[wayland]
-		x11-libs/cairo[X,xcb(+)]
+		x11-base/xwayland
+		x11-libs/cairo[X]
 		>=x11-libs/libxcb-1.9
 		x11-libs/libXcursor
 	)

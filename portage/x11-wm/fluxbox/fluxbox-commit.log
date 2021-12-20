@@ -1,0 +1,170 @@
+[33mcommit 1d19662c8975e881b4fa6465a8305be3ea5282ee[m[33m ([m[1;36mHEAD[m[33m, [m[1;32mmaster[m[33m, [m[mrefs/git-r3/x11-wm/fluxbox/0/__old__[m[33m, [m[mrefs/git-r3/x11-wm/fluxbox/0/__main__[m[33m, [m[mrefs/git-r3/HEAD[m[33m)[m
+Author: Mark Tiefenbruck <mark@fluxbox.org>
+Date:   Sat Jul 24 20:13:46 2021 -0700
+
+    Add RelativeSmart documentation to the asciidoc source. Thanks to
+    Alexey Ugnichev for pointing out its disappearance.
+
+[33mcommit 5f3cb410cdda9f94e99f17a60fc0456ca41bf1e0[m
+Author: Mark Tiefenbruck <mark@fluxbox.org>
+Date:   Wed Jul 7 06:58:42 2021 -0700
+
+    Patch from Thomas Luebking
+    
+    Documents Opaque Resizing and adds a fancy config menu item
+
+[33mcommit 8bc11006a5ac8c10a539e5a38cdf62205ff386ad[m
+Author: Mark Tiefenbruck <mark@fluxbox.org>
+Date:   Tue Jul 6 16:56:20 2021 -0700
+
+    Patch from Glen Whitney
+    
+    A priori, there is no reason why the workspace warping functionality should
+    treat the horizontal and vertical directions at all differently. Even if
+    traditionally horizontal warping was more common, for some in recent times
+    as aspect ratios tend to become larger, stacking virtual workspaces
+    vertically may make more sense. Similarly, some might want to traverse
+    an array of workspaces in column-major, rather than row-major, order.
+    
+    Prior to this commit, there were extra parameters for vertical warping (a
+    controlling flag and an offset for how many workspaces to jump) as opposed
+    to horizontal warping. Also it was impossible to allow vertical warping while
+    disallowing vertical warping.
+    
+    This commit makes all of the parameters and behavior for horizontal and
+    vertical warping equivalent. For backwards compatibility, there is an
+    overarching flag controlling whether warping occurs at all, as well as a
+    separate control flag and offset for each of horizontal and vertical warping.
+    
+    The relevant init file resources and default values are:
+    
+    session.screen0.workspaceWarping: true
+    session.screen0.workspaceWarpingHorizontal: true
+    session.screen0.workspaceWarpingVertical: true
+    session.screen0.workspaceWarpingHorizontalOffset: 1
+    session.screen0.workspaceWarpingVerticalOffset: 1
+
+[33mcommit 0279936d835d7d88537bcf1208035787c02ced59[m
+Author: Mark Tiefenbruck <mark@fluxbox.org>
+Date:   Tue Jul 6 16:31:49 2021 -0700
+
+    Patch from Thomas Luebking
+    
+    Adds (secret) opaque resize mode. It sure would be nice if it was documented....
+    
+    The relevant init file resources and their default values are:
+    
+    session.screen0.opaqueResize: False
+    session.screen0.opaqueResizeDelay: 40
+
+[33mcommit 43ae328658518a4ee1b3bf363f8865234c64a674[m
+Author: Mark Tiefenbruck <mark@fluxbox.org>
+Date:   Tue Jul 6 16:19:56 2021 -0700
+
+    Patch from Denis Gantsev
+    
+    Fluxbox would segfault when no fonts were available. Now it just exits with an error.
+
+[33mcommit ee9c0a34baadbae98c510b1bf1b8c720a33c6f56[m
+Author: Mark Tiefenbruck <mark@fluxbox.org>
+Date:   Tue Jul 6 16:10:30 2021 -0700
+
+    Patch from Dmytro Bagrii
+    
+    Fix fbrun completion search for last directory in PATH
+
+[33mcommit dd238f9d95113831daec1f8750ca60abac0e4a01[m
+Author: Mark Tiefenbruck <mark@fluxbox.org>
+Date:   Tue Jul 6 16:03:13 2021 -0700
+
+    Patch from Bo Simonsen.
+    
+    Improve switching between 12H and 24H in Clock Tool
+     configuration
+    
+    Having:
+    
+        session.screen0.strftimeFormat:     %d-%m-%y %02k:%M
+    
+    The switch[1] between 12H and 24H did not work due to the digits (02).
+
+[33mcommit b0663bc167f34b9796f98406329317f7bee15b00[m
+Author: Mark Tiefenbruck <mark@fluxbox.org>
+Date:   Tue Jul 6 15:56:26 2021 -0700
+
+    Patch from Bo Simonsen.
+    
+    Max size per client (setMaxSizePerClient) was computed for
+    iconbar.alignment = Relative not taking into account that a fixed size
+    can be given when iconbar.alignment = Left/Right.
+    
+    In a "recent" change, relative alignment was changed, to better handle
+    items with long titles. This is breaking existing behavior, the new
+    behavior is (with this commit) now denoted RelativeSmart.
+
+[33mcommit f76720d918d1a2c72811a6ec5b3a1fc4b52f768c[m
+Author: Sébastien Ballet <phenixia2003@users.sourceforge.net>
+Date:   Sun Apr 26 11:14:58 2020 +0200
+
+    nls/fr_FR: Fix encoding
+    
+    The encoding of nls/fr_FR/Translation.m is UTF-8 (see 96c52db). This
+    commit puts the correct "codeset" into place.
+
+[33mcommit cbdb3beecc20d12500ce2c5a54621503b358a9e2[m[33m ([m[mrefs/pull/47[m[33m)[m
+Author: Jan Sucan <jan@jansucan.com>
+Date:   Sun Apr 19 16:32:05 2020 +0200
+
+    Move the systray ordering documentation to the asciidoc file
+    
+    The .in file is generated from the .txt file.
+
+[33mcommit 419170668a365625ed61d5c6aa83541c0778446f[m
+Author: Bo Simonsen <bo@geekworld.dk>
+Date:   Tue Apr 14 20:42:38 2020 +0200
+
+    Handle sizehint base_width / base_height being less than 0
+    
+    Some applications supply -1 in base_width / base_height. One example is
+    the Preferences dialog of pcmanfm-qt:
+    
+    WM_NORMAL_HINTS(WM_SIZE_HINTS):
+      ...
+      program specified base size: -1 by -1
+    
+    Without this commit the program will crash due to overflow of unsigned int.
+
+[33mcommit f48237e3ade27dbf69c1e87b80224445d50b1763[m
+Author: Jan Sucan <jan@jansucan.com>
+Date:   Sun Apr 12 08:31:44 2020 +0200
+
+    Synchronize manpages .in files with their .txt files
+    
+    The .in files are generated from the .txt files.
+
+[33mcommit 7559d60edf59584f1a780ff1952d611c0b1f26b5[m
+Author: Jan Sucan <jan@jansucan.com>
+Date:   Sun Apr 12 08:29:23 2020 +0200
+
+    Reformat a paragraph in doc/asciidoc/README.txt
+
+[33mcommit 33860a4d592cc30106d2d0d96ca9c0127d9334ac[m
+Author: Jan Sucan <jan@jansucan.com>
+Date:   Sun Apr 12 08:21:30 2020 +0200
+
+    Update xmlto URL
+    
+    fedorahosted.org was retired on March 1st, 2017.
+
+[33mcommit 9619027631295f4267e09840e8cc7e2781520db6[m[33m ([m[mrefs/pull/44[m[33m)[m
+Author: Jan Sucan <jan@jansucan.com>
+Date:   Thu Apr 9 09:50:29 2020 +0200
+
+    Add description of the system tray ordering to the fluxbox(1) manpage
+
+[33mcommit 625a690067b694afcde1aee7181dbe6ee6877727[m
+Author: Jan Sucan <jan@jansucan.com>
+Date:   Sun Apr 5 10:28:08 2020 +0200
+
+    Add missing scope to a method definition
+

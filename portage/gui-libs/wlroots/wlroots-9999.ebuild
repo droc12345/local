@@ -6,29 +6,32 @@ EAPI=7
 inherit meson
 
 DESCRIPTION="Pluggable, composable, unopinionated modules for building a Wayland compositor"
-HOMEPAGE="https://github.com/swaywm/wlroots"
+#HOMEPAGE="https://github.com/swaywm/wlroots"
+HOMEPAGE="https://gitlab.freedesktop.org/wlroots/wlroots"
 
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
+#	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
 	inherit git-r3
 	SLOT="0/9999"
 else
-	SRC_URI="https://github.com/swaywm/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+#	SRC_URI="https://github.com/swaywm/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${PV}/${PN}-${PV}.tar.bz2"
 	KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
 	SLOT="0/14"
 fi
 
 LICENSE="MIT"
-IUSE="X examples xcb-errors drm x11 libinput gles2"
+IUSE="X drm examples gles2 libinput vulkan x11 xcb-errors"
 
 REQUIRED_USE="
 	xcb-errors? ( X )
 "
 
 DEPEND="
-	>=dev-libs/libinput-1.14.0:0=
+	>=dev-libs/libinput-1.18.0:0=
 	>=dev-libs/wayland-1.19.0
-	>=dev-libs/wayland-protocols-1.17.0
+	>=dev-libs/wayland-protocols-1.21.0
 	media-libs/mesa[egl,gles2?,gbm]
 	sys-auth/seatd:=
 	virtual/libudev
@@ -47,8 +50,8 @@ RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	>=dev-libs/wayland-protocols-1.17
-	>=dev-util/meson-0.56.0
+	>=dev-libs/wayland-protocols-1.21
+	>=dev-util/meson-0.58.1
 	virtual/pkgconfig
 "
 
@@ -76,9 +79,15 @@ src_configure() {
 			-Dbackends="$(_meson_env_array $MY_BKEND)"
 		)
 	fi
-	if ! use gles2; then
+	if use gles2 || use vulkan; then
+		if use gles2; then
+			MY_REND="${MY_REND} gles2"
+		fi
+		if use vulkan; then
+			MY_REND="${MY_REND} vulkan"
+		fi
 		emesonargs+=(
-			-Drenderers="[]"
+			-Drenderers="$(_meson_env_array $MY_REND)"
 		)
 	fi
 

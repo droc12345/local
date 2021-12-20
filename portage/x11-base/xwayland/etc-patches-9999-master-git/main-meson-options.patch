@@ -1,0 +1,25 @@
+--- a/meson.build	2021-10-10 18:09:29.691640076 -0500
++++ b/meson.build	2021-10-10 18:08:25.180037387 -0500
+@@ -806,12 +806,6 @@
+     subdir('test')
+ endif
+ 
+-install_man(configure_file(
+-    input: 'man/Xserver.man',
+-    output: 'Xserver.1',
+-    configuration: manpage_config,
+-))
+-
+ if build_xorg
+     sdkconfig = configuration_data()
+     awk = find_program('awk')
+--- a/dix/meson.build	2021-10-10 18:09:29.596640661 -0500
++++ b/dix/dmeson.build	2021-10-10 18:10:43.827183432 -0500
+@@ -58,7 +58,3 @@
+     dependencies: common_dep,
+ )
+ 
+-install_data(
+-    'protocol.txt',
+-    install_dir: serverconfigdir,
+-)
