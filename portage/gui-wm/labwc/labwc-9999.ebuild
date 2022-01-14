@@ -20,7 +20,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+X"
+IUSE="+X +system-wlroots"
 
 RDEPEND="
 	dev-libs/glib:2
@@ -39,7 +39,9 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
+		--wrap-mode=default
 		$(meson_feature X xwayland)
+		$(meson_feature system-wlroots)
 	)
 	meson_src_configure
 }

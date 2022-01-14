@@ -1,4 +1,4 @@
-# Copyright 2004-2021 Gentoo Authors
+# Copyright 2004-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{8..9} )
 # NEED_BOOTSTRAP is for developers to quickly generate a tarball
 # for publishing to the tree.
 NEED_BOOTSTRAP="no"
-inherit multibuild python-any-r1 multilib-minimal
+inherit multibuild multilib python-any-r1 multilib-minimal
 
 DESCRIPTION="Extended crypt library for descrypt, md5crypt, bcrypt, and others"
 HOMEPAGE="https://github.com/besser82/libxcrypt"
@@ -21,7 +21,7 @@ fi
 LICENSE="LGPL-2.1+ public-domain BSD BSD-2"
 SLOT="0/1"
 KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~mips ppc ppc64 ~riscv ~s390 sparc x86"
-IUSE="+compat split-usr +static-libs system test"
+IUSE="+compat split-usr static-libs system test"
 REQUIRED_USE="split-usr? ( system )"
 RESTRICT="!test? ( test )"
 
@@ -31,7 +31,6 @@ DEPEND="system? (
 	)"
 RDEPEND="${DEPEND}"
 BDEPEND="dev-lang/perl
-	sys-apps/findutils
 	test? ( $(python_gen_any_dep 'dev-python/passlib[${PYTHON_USEDEP}]') )"
 
 python_check_deps() {
@@ -54,8 +53,8 @@ src_prepare() {
 	#
 	# There are two circular dependencies to be aware of:
 	# 1)
-	# 	if we're bootstrapping configure and makefiles:
-	# 		libxcrypt -> automake -> perl -> libxcrypt
+	#	if we're bootstrapping configure and makefiles:
+	#		libxcrypt -> automake -> perl -> libxcrypt
 	#
 	#   mitigation:
 	#		toolchain@ manually runs `make dist` after running autoconf + `./configure`
@@ -106,8 +105,8 @@ get_xclibdir() {
 multilib_src_configure() {
 	local -a myconf=(
 		--disable-werror
-		--libdir=$(get_xclibdir)
-		--with-pkgconfigdir=/usr/$(get_libdir)/pkgconfig
+		--libdir="${EPREFIX}"$(get_xclibdir)
+		--with-pkgconfigdir="${EPREFIX}/usr/$(get_libdir)/pkgconfig"
 		--includedir="${EPREFIX}/usr/include/$(usex system '' 'xcrypt')"
 	)
 
@@ -157,8 +156,8 @@ src_install() {
 	) || die "failglob error"
 
 	# Remove useless stuff from installation
-	find "${D}"/usr/share/doc/${PF} -type l -delete || die
-	find "${D}" -name '*.la' -delete || die
+	find "${ED}"/usr/share/doc/${PF} -type l -delete || die
+	find "${ED}" -name '*.la' -delete || die
 }
 
 multilib_src_install() {
@@ -167,7 +166,7 @@ multilib_src_install() {
 	# Don't install the libcrypt.so symlink for the "compat" version
 	case "${MULTIBUILD_ID}" in
 		xcrypt_compat-*)
-			rm "${D}"$(get_xclibdir)/libcrypt$(get_libname) \
+			rm "${ED}"$(get_xclibdir)/libcrypt$(get_libname) \
 				|| die "failed to remove extra compat libraries"
 		;;
 		xcrypt_nocompat-*)
@@ -181,7 +180,7 @@ multilib_src_install() {
 
 						if [[ -n ${static_libs[*]} ]]; then
 							dodir "/usr/$(get_xclibdir)"
-							mv "${static_libs[@]}" "${D}/usr/$(get_xclibdir)" \
+							mv "${static_libs[@]}" "${ED}/usr/$(get_xclibdir)" \
 								|| die "Moving static libs failed"
 						fi
 					fi

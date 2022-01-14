@@ -40,7 +40,7 @@ DEPEND="
 	X? ( x11-libs/libxcb )
 	system-wfconfig? ( ~gui-libs/wf-config-9999:= )
 	!system-wfconfig? ( !gui-libs/wf-config )
-	system-wlroots? ( ~gui-libs/wlroots-9999:=[X?] )
+	system-wlroots? ( gui-libs/wlroots[X?] )
 	!system-wlroots? ( !gui-libs/wlroots )
 "
 
