@@ -4,7 +4,7 @@
 EAPI=7
 
 if [[ ${PV} = *9999* ]]; then
-	EGIT_BRANCH="xwayland-21.1"
+	EGIT_BRANCH="xwayland-22.1"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
 	inherit git-r3
 else
@@ -34,6 +34,7 @@ CDEPEND="
 	)
 	media-libs/libepoxy[X,egl]
 	media-libs/libglvnd[X]
+	x11-libs/libxcvt
 	media-libs/mesa[X,wayland]
 	rpc? ( net-libs/libtirpc )
 	libselinux? (
@@ -69,7 +70,7 @@ src_configure() {
 	local emesonargs=(
 		$(meson_use rpc secure-rpc)
 		$(meson_use unwind libunwind)
-		$(meson_use xcsecurity true)
+		$(meson_use xcsecurity)
 		-Ddtrace=false
 	)
 	meson_src_configure

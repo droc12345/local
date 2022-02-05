@@ -40,8 +40,8 @@ BDEPEND="
 src_configure() {
 	local emesonargs=(
 		--wrap-mode=default
-		$(meson_feature X xwayland)
 		$(meson_feature system-wlroots)
+		$(meson_feature X xwayland)
 	)
 	meson_src_configure
 }

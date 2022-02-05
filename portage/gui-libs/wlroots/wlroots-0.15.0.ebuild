@@ -18,7 +18,7 @@ else
 #	SRC_URI="https://github.com/swaywm/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${PV}/${PN}-${PV}.tar.bz2"
 	KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
-	SLOT="0/14"
+	SLOT="0/15"
 fi
 
 LICENSE="MIT"

@@ -12,13 +12,14 @@ HOMEPAGE="https://gitlab.freedesktop.org/wlroots/wlroots"
 if [[ ${PV} == 9999 ]]; then
 #	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
+	EGIT_COMMIT="9de992b9fef35ac6ee733740ed0763f4f2a279c8"
 	inherit git-r3
 	SLOT="0/9999"
 else
 #	SRC_URI="https://github.com/swaywm/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	SRC_URI="https://gitlab.freedesktop.org/${PN}/${PN}/-/archive/${PV}/${PN}-${PV}.tar.bz2"
 	KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
-	SLOT="0/14"
+	SLOT="0/15"
 fi
 
 LICENSE="MIT"

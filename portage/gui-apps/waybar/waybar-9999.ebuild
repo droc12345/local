@@ -11,6 +11,7 @@ HOMEPAGE="https://github.com/Alexays/Waybar"
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Alexays/${PN^}.git"
+	EGIT_COMMIT="d9b5c2595a08e481520d96d7ee30daab4ac07f1b"
 else
 	SRC_URI="https://github.com/Alexays/${PN^}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
@@ -38,7 +39,7 @@ DEPEND="
 	dev-libs/date:=
 	dev-libs/wayland
 	dev-libs/wayland-protocols
-	gui-libs/wlroots:=
+	gui-libs/wlroots
 	x11-libs/gtk+:3[wayland]
 	x11-libs/libxkbcommon
 	mpd? ( media-libs/libmpdclient )
