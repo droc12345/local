@@ -1,10 +1,10 @@
-[32;01m * [39;49;00mPackage:    x11-misc/xdialog-2.6.5w
+[32;01m * [39;49;00mPackage:    x11-misc/xdialog-9999
 [32;01m * [39;49;00mRepository: local
 [32;01m * [39;49;00mMaintainer: desktop-misc@gentoo.org
 [32;01m * [39;49;00mUSE:        abi_x86_64 amd64 elibc_glibc examples kernel_linux userland_GNU
 [32;01m * [39;49;00mFEATURES:   network-sandbox preserve-libs sandbox userpriv usersandbox
  [33;01m*[0m source 
-[32;01m * [39;49;00mPackage:    x11-misc/xdialog-2.6.5w
+[32;01m * [39;49;00mPackage:    x11-misc/xdialog-9999
 [32;01m * [39;49;00mRepository: local
 [32;01m * [39;49;00mMaintainer: desktop-misc@gentoo.org
 [32;01m * [39;49;00mUSE:        abi_x86_64 amd64 elibc_glibc examples kernel_linux userland_GNU
@@ -12,147 +12,69 @@
  [33;01m*[0m source 
  [33;01m*[0m source 
 >>> Unpacking source...
->>> Unpacking Xdialog-2.6.5w.tar.xz to /var/tmp/portage/x11-misc/xdialog-2.6.5w/work
->>> Source unpacked in /var/tmp/portage/x11-misc/xdialog-2.6.5w/work
+ [32;01m*[0m Repository id: WdesktopX_Xdialog.git
+ [32;01m*[0m To override fetched repository properties, use:
+ [32;01m*[0m   EGIT_OVERRIDE_REPO_WDESKTOPX_XDIALOG
+ [32;01m*[0m   EGIT_OVERRIDE_BRANCH_WDESKTOPX_XDIALOG
+ [32;01m*[0m   EGIT_OVERRIDE_COMMIT_WDESKTOPX_XDIALOG
+ [32;01m*[0m   EGIT_OVERRIDE_COMMIT_DATE_WDESKTOPX_XDIALOG
+ [32;01m*[0m 
+ [32;01m*[0m Fetching https://github.com/WdesktopX/Xdialog.git ...
+git fetch https://github.com/WdesktopX/Xdialog.git --prune +refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/* +refs/notes/*:refs/notes/* +refs/pull/*/head:refs/pull/* +HEAD:refs/git-r3/HEAD
+git symbolic-ref refs/git-r3/x11-misc/xdialog/0/__main__ refs/git-r3/HEAD
+ [32;01m*[0m Checking out https://github.com/WdesktopX/Xdialog.git to /var/tmp/portage/x11-misc/xdialog-9999/work/xdialog-9999 ...
+git checkout --quiet refs/git-r3/HEAD
+GIT update -->
+   repository:               https://github.com/WdesktopX/Xdialog.git
+   at the commit:            48952342a61c004ba9980019f17ef65692aff1c4
+>>> Source unpacked in /var/tmp/portage/x11-misc/xdialog-9999/work
  [33;01m*[0m source 
->>> Preparing source in /var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w ...
- [32;01m*[0m Running eautoreconf in '/var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w' ...
- [32;01m*[0m Running libtoolize --install --copy --force --automake ...
-[A[112C [34;01m[ [32;01mok[34;01m ][0m
- [32;01m*[0m Running aclocal -I m4 ...
-[A[112C [34;01m[ [32;01mok[34;01m ][0m
- [32;01m*[0m Running autoconf --force ...
-[A[112C [34;01m[ [32;01mok[34;01m ][0m
- [32;01m*[0m Running autoheader ...
-[A[112C [34;01m[ [32;01mok[34;01m ][0m
- [32;01m*[0m Running automake --add-missing --copy --foreign --force-missing ...
-[A[112C [34;01m[ [32;01mok[34;01m ][0m
- * Running elibtoolize in: Xdialog-2.6.5w/
- *   Applying portage/1.2.0 patch ...
- *   Applying sed/1.5.6 patch ...
- *   Applying as-needed/2.4.3 patch ...
+>>> Preparing source in /var/tmp/portage/x11-misc/xdialog-9999/work/xdialog-9999 ...
 >>> Source prepared.
  [33;01m*[0m source 
->>> Configuring source in /var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w ...
- * econf: updating Xdialog-2.6.5w/config.sub with /usr/share/gnuconfig/config.sub
- * econf: updating Xdialog-2.6.5w/config.guess with /usr/share/gnuconfig/config.guess
-./configure --prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --disable-dependency-tracking --disable-silent-rules --docdir=/usr/share/doc/xdialog-2.6.5w --htmldir=/usr/share/doc/xdialog-2.6.5w/html --with-sysroot=/ --libdir=/usr/lib64 --enable-gtk3
-checking for a BSD-compatible install... /usr/lib/portage/python3.9/ebuild-helpers/xattr/install -c
-checking whether build environment is sane... yes
-checking for a thread-safe mkdir -p... /bin/mkdir -p
-checking for gawk... gawk
-checking whether make sets $(MAKE)... yes
-checking whether make supports nested variables... yes
-checking whether make supports nested variables... (cached) yes
-checking whether make supports the include directive... yes (GNU style)
-checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu-gcc
-checking whether the C compiler works... yes
-checking for C compiler default output file name... a.out
-checking for suffix of executables... 
-checking whether we are cross compiling... no
-checking for suffix of object files... o
-checking whether we are using the GNU C compiler... yes
-checking whether x86_64-pc-linux-gnu-gcc accepts -g... yes
-checking for x86_64-pc-linux-gnu-gcc option to accept ISO C89... none needed
-checking whether x86_64-pc-linux-gnu-gcc understands -c and -o together... yes
-checking dependency style of x86_64-pc-linux-gnu-gcc... none
-checking for x86_64-pc-linux-gnu-ar... x86_64-pc-linux-gnu-ar
-checking the archiver (x86_64-pc-linux-gnu-ar) interface... ar
-checking build system type... x86_64-pc-linux-gnu
-checking host system type... x86_64-pc-linux-gnu
-checking how to print strings... printf
-checking for a sed that does not truncate output... /bin/sed
-checking for grep that handles long lines and -e... /bin/grep
-checking for egrep... /bin/grep -E
-checking for fgrep... /bin/grep -F
-checking for ld used by x86_64-pc-linux-gnu-gcc... /usr/x86_64-pc-linux-gnu/bin/ld
-checking if the linker (/usr/x86_64-pc-linux-gnu/bin/ld) is GNU ld... yes
-checking for BSD- or MS-compatible name lister (nm)... /usr/bin/x86_64-pc-linux-gnu-nm -B
-checking the name lister (/usr/bin/x86_64-pc-linux-gnu-nm -B) interface... BSD nm
-checking whether ln -s works... yes
-checking the maximum length of command line arguments... 1572864
-checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
-checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
-checking for /usr/x86_64-pc-linux-gnu/bin/ld option to reload object files... -r
-checking for x86_64-pc-linux-gnu-objdump... x86_64-pc-linux-gnu-objdump
-checking how to recognize dependent libraries... pass_all
-checking for x86_64-pc-linux-gnu-dlltool... no
-checking for dlltool... no
-checking how to associate runtime and link libraries... printf %s\n
-checking for x86_64-pc-linux-gnu-ar... (cached) x86_64-pc-linux-gnu-ar
-checking for archiver @FILE support... @
-checking for x86_64-pc-linux-gnu-strip... x86_64-pc-linux-gnu-strip
-checking for x86_64-pc-linux-gnu-ranlib... x86_64-pc-linux-gnu-ranlib
-checking command to parse /usr/bin/x86_64-pc-linux-gnu-nm -B output from x86_64-pc-linux-gnu-gcc object... ok
-checking for sysroot... /
-checking for a working dd... /bin/dd
-checking how to truncate binary pipes... /bin/dd bs=4096 count=1
-checking for x86_64-pc-linux-gnu-mt... no
-checking for mt... no
-checking if : is a manifest tool... no
-checking how to run the C preprocessor... x86_64-pc-linux-gnu-gcc -E
-checking for ANSI C header files... yes
-checking for sys/types.h... yes
-checking for sys/stat.h... yes
-checking for stdlib.h... yes
-checking for string.h... yes
-checking for memory.h... yes
-checking for strings.h... yes
-checking for inttypes.h... yes
-checking for stdint.h... yes
-checking for unistd.h... yes
-checking for dlfcn.h... yes
-checking for objdir... .libs
-checking if x86_64-pc-linux-gnu-gcc supports -fno-rtti -fno-exceptions... no
-checking for x86_64-pc-linux-gnu-gcc option to produce PIC... -fPIC -DPIC
-checking if x86_64-pc-linux-gnu-gcc PIC flag -fPIC -DPIC works... yes
-checking if x86_64-pc-linux-gnu-gcc static flag -static works... yes
-checking if x86_64-pc-linux-gnu-gcc supports -c -o file.o... yes
-checking if x86_64-pc-linux-gnu-gcc supports -c -o file.o... (cached) yes
-checking whether the x86_64-pc-linux-gnu-gcc linker (/usr/x86_64-pc-linux-gnu/bin/ld -m elf_x86_64) supports shared libraries... yes
-checking whether -lc should be explicitly linked in... no
-checking dynamic linker characteristics... GNU/Linux ld.so
-checking how to hardcode library paths into programs... immediate
-checking whether stripping libraries is possible... yes
-checking if libtool supports shared libraries... yes
-checking whether to build shared libraries... yes
-checking whether to build static libraries... yes
-checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu-gcc
-checking whether we are using the GNU C compiler... (cached) yes
-checking whether x86_64-pc-linux-gnu-gcc accepts -g... (cached) yes
-checking for x86_64-pc-linux-gnu-gcc option to accept ISO C89... (cached) none needed
-checking whether x86_64-pc-linux-gnu-gcc understands -c and -o together... (cached) yes
-checking dependency style of x86_64-pc-linux-gnu-gcc... (cached) none
-checking for x86_64-pc-linux-gnu-pkg-config... /usr/bin/x86_64-pc-linux-gnu-pkg-config
-checking pkg-config is at least version 0.9.0... yes
-checking for GTK... yes
-checking that generated files are newer than configure... done
-configure: creating ./config.status
-config.status: creating Makefile
-config.status: creating src/Makefile
-config.status: creating docs/Makefile
-config.status: creating config.h
-config.status: executing depfiles commands
-config.status: executing libtool commands
+>>> Configuring source in /var/tmp/portage/x11-misc/xdialog-9999/work/xdialog-9999 ...
+./configure --prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --docdir=/usr/share/doc/xdialog-9999 --with-sysroot=/ --libdir=/usr/lib64 --enable-gtk3
+
+Checking for C compiler... /usr/bin/cc
+Checking for pkg-config... /usr/bin/pkg-config [1.8.0]
+Checking cross-compiler... x86_64-pc-linux-gnu
+Checking for stdio.h... yes
+Checking for gtk+-3.0.pc >= 3.14... yes [3.24.30]
+
+* Now run 'make'  (or 'make clean' first if the app is already compiled)
+
 >>> Source configured.
  [33;01m*[0m source 
->>> Compiling source in /var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w ...
+>>> Compiling source in /var/tmp/portage/x11-misc/xdialog-9999/work/xdialog-9999 ...
 make -j14 
-(CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/sh '/var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w/missing' autoheader)
-rm -f stamp-h1
-touch config.h.in
-cd . && /bin/sh ./config.status config.h
-config.status: creating config.h
-config.status: config.h is unchanged
-make  all-recursive
-make[1]: Entering directory '/var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w'
-Making all in src
-make[2]: Entering directory '/var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w/src'
-x86_64-pc-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -I. -I../intl -I../lib -DPACKAGE_LOCALE_DIR=\""/usr//locale"\" -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread    -march=native -O2 -pipe -c -o main.o main.c
-x86_64-pc-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -I. -I../intl -I../lib -DPACKAGE_LOCALE_DIR=\""/usr//locale"\" -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread    -march=native -O2 -pipe -c -o interface.o interface.c
-x86_64-pc-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -I. -I../intl -I../lib -DPACKAGE_LOCALE_DIR=\""/usr//locale"\" -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread    -march=native -O2 -pipe -c -o callbacks.o callbacks.c
-x86_64-pc-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -I. -I../intl -I../lib -DPACKAGE_LOCALE_DIR=\""/usr//locale"\" -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread    -march=native -O2 -pipe -c -o support.o support.c
-x86_64-pc-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -I. -I../intl -I../lib -DPACKAGE_LOCALE_DIR=\""/usr//locale"\" -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread    -march=native -O2 -pipe -c -o gtkcompat.o gtkcompat.c
+make: Entering directory [docs]
+sed -e 's/%%version%%/2.6.5w/' \
+    -e 's:%%bindir%%:/usr/bin:' \
+    -e 's:%%mandir%%:/usr/share/man:' \
+    -e 's:%%datadir%%:/usr/share:' ./Xdialog.man >Xdialog.1
+make: Leaving directory [docs]
+make: Entering directory [src]
+x86_64-pc-linux-gnu-gcc --sysroot=/ -DHAVE_CONFIG_H -march=native -O2 -pipe -Wall -g -O2  -I.. -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread   -c -o callbacks.o callbacks.c
+x86_64-pc-linux-gnu-gcc --sysroot=/ -DHAVE_CONFIG_H -march=native -O2 -pipe -Wall -g -O2  -I.. -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread   -c -o interface.o interface.c
+x86_64-pc-linux-gnu-gcc --sysroot=/ -DHAVE_CONFIG_H -march=native -O2 -pipe -Wall -g -O2  -I.. -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread   -c -o main.o main.c
+x86_64-pc-linux-gnu-gcc --sysroot=/ -DHAVE_CONFIG_H -march=native -O2 -pipe -Wall -g -O2  -I.. -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread   -c -o support.o support.c
+[01m[Kinterface.c:[m[K In function ‘[01m[Kparse_rc_file[m[K’:
+[01m[Kinterface.c:40:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_rc_parse[m[K’ is deprecated: Use 'GtkStyleContext' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+   40 |                 [01;35m[Kgtk_rc_parse[m[K(Xdialog.rc_file);
+      |                 [01;35m[K^~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:273[m[K,
+                 from [01m[Kinterface.c:16[m[K:
+[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkrc.h:194:10:[m[K [01;36m[Knote: [m[Kdeclared here
+  194 | void     [01;36m[Kgtk_rc_parse[m[K                   (const gchar *filename);
+      |          [01;36m[K^~~~~~~~~~~~[m[K
+[01m[Kinterface.c:42:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_rc_parse_string[m[K’ is deprecated: Use 'GtkStyleContext' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+   42 |                 [01;35m[Kgtk_rc_parse_string[m[K(FIXED_FONT_RC_STRING);
+      |                 [01;35m[K^~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:273[m[K,
+                 from [01m[Kinterface.c:16[m[K:
+[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkrc.h:196:11:[m[K [01;36m[Knote: [m[Kdeclared here
+  196 | void      [01;36m[Kgtk_rc_parse_string[m[K           (const gchar *rc_string);
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~~[m[K
 [01m[Kcallbacks.c:[m[K In function ‘[01m[Kdestroy_event[m[K’:
 [01m[Kcallbacks.c:61:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
    61 |                 [01;35m[Kgdk_beep[m[K();
@@ -163,94 +85,9 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:121:6:[m[K [01;36m[Knote: [m[Kdeclared here
   121 | void [01;36m[Kgdk_beep[m[K (void);
       |      [01;36m[K^~~~~~~~[m[K
-[01m[Kinterface.c:[m[K In function ‘[01m[Kparse_rc_file[m[K’:
-[01m[Kinterface.c:40:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_rc_parse[m[K’ is deprecated: Use 'GtkStyleContext' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-   40 |                 [01;35m[Kgtk_rc_parse[m[K(Xdialog.rc_file);
-      |                 [01;35m[K^~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:[m[K In function ‘[01m[Kexit_keypress[m[K’:
-In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:273[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkrc.h:194:10:[m[K [01;36m[Knote: [m[Kdeclared here
-  194 | void     [01;36m[Kgtk_rc_parse[m[K                   (const gchar *filename);
-      |          [01;36m[K^~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:110:63:[m[K [01;31m[Kerror: [m[K‘[01m[KGDK_Escape[m[K’ undeclared (first use in this function); did you mean ‘[01m[KGDK_KEY_Escape[m[K’?
-  110 |         if (event->type == GDK_KEY_PRESS && (event->keyval == [01;31m[KGDK_Escape[m[K)) {
-      |                                                               [01;31m[K^~~~~~~~~~[m[K
-      |                                                               [32m[KGDK_KEY_Escape[m[K
-[01m[Kcallbacks.c:110:63:[m[K [01;36m[Knote: [m[Keach undeclared identifier is reported only once for each function it appears in
-[01m[Kinterface.c:42:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_rc_parse_string[m[K’ is deprecated: Use 'GtkStyleContext' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-   42 |                 [01;35m[Kgtk_rc_parse_string[m[K(FIXED_FONT_RC_STRING);
-      |                 [01;35m[K^~~~~~~~~~~~~~~~~~~[m[K
-In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:273[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkrc.h:196:11:[m[K [01;36m[Knote: [m[Kdeclared here
-  196 | void      [01;36m[Kgtk_rc_parse_string[m[K           (const gchar *rc_string);
-      |           [01;36m[K^~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:[m[K In function ‘[01m[Kchecked[m[K’:
-[01m[Kcallbacks.c:132:52:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkToggleButton[m[K’ {aka ‘[01m[Kstruct _GtkToggleButton[m[K’} has no member named ‘[01m[Kactive[m[K’
-  132 |         Xdialog.checked = GTK_TOGGLE_BUTTON(button)[01;31m[K->[m[Kactive;
-      |                                                    [01;31m[K^~[m[K
-[01m[Kinterface.c:[m[K In function ‘[01m[Kfont_init[m[K’:
-[01m[Kinterface.c:55:9:[m[K [01;31m[Kerror: [m[Kunknown type name ‘[01m[KGdkFont[m[K’; did you mean ‘[01m[KGdkPoint[m[K’?
-   55 |         [01;31m[KGdkFont[m[K *font;
-      |         [01;31m[K^~~~~~~[m[K
-      |         [32m[KGdkPoint[m[K
-[01m[Kinterface.c:69:31:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkWidget[m[K’ {aka ‘[01m[Kstruct _GtkWidget[m[K’} has no member named ‘[01m[Kstyle[m[K’
-   69 |                 style = window[01;31m[K->[m[Kstyle;
-      |                               [01;31m[K^~[m[K
-[01m[Kcallbacks.c:[m[K In function ‘[01m[Kprogress_timeout[m[K’:
-[01m[Kcallbacks.c:295:15:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[KGTK_PROGRESS[m[K’; did you mean ‘[01m[KEINPROGRESS[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  295 |         adj = [01;35m[KGTK_PROGRESS[m[K(Xdialog.widget1)->adjustment;
-      |               [01;35m[K^~~~~~~~~~~~[m[K
-      |               [32m[KEINPROGRESS[m[K
-[01m[Kcallbacks.c:295:44:[m[K [01;31m[Kerror: [m[Kinvalid type argument of ‘[01m[K->[m[K’ (have ‘[01m[Kint[m[K’)
-  295 |         adj = GTK_PROGRESS(Xdialog.widget1)[01;31m[K->[m[Kadjustment;
-      |                                            [01;31m[K^~[m[K
-[01m[Kcallbacks.c:320:30:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkAdjustment[m[K’ {aka ‘[01m[Kstruct _GtkAdjustment[m[K’} has no member named ‘[01m[Kvalue[m[K’
-  320 |                 new_val = adj[01;31m[K->[m[Kvalue + 1;
-      |                              [01;31m[K^~[m[K
-[01m[Kcallbacks.c:323:27:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkAdjustment[m[K’ {aka ‘[01m[Kstruct _GtkAdjustment[m[K’} has no member named ‘[01m[Kupper[m[K’
-  323 |         if ((new_val > adj[01;31m[K->[m[Kupper) || (new_val < adj->lower))
-      |                           [01;31m[K^~[m[K
-[01m[Kcallbacks.c:323:53:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkAdjustment[m[K’ {aka ‘[01m[Kstruct _GtkAdjustment[m[K’} has no member named ‘[01m[Klower[m[K’
-  323 |         if ((new_val > adj->upper) || (new_val < adj[01;31m[K->[m[Klower))
-      |                                                     [01;31m[K^~[m[K
-[01m[Kinterface.c:72:32:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_style_get_font[m[K’; did you mean ‘[01m[Kgtk_style_get_type[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-   72 |                         font = [01;35m[Kgtk_style_get_font[m[K(style);
-      |                                [01;35m[K^~~~~~~~~~~~~~~~~~[m[K
-      |                                [32m[Kgtk_style_get_type[m[K
-[01m[Kinterface.c:72:30:[m[K [01;35m[Kwarning: [m[Kassignment to ‘[01m[Kint *[m[K’ from ‘[01m[Kint[m[K’ makes pointer from integer without a cast [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wint-conversion-Wint-conversion]8;;[m[K]
-   72 |                         font [01;35m[K=[m[K gtk_style_get_font(style);
-      |                              [01;35m[K^[m[K
-In file included from [01m[K/usr/include/string.h:494[m[K,
-                 from [01m[Kmain.c:11[m[K:
-In function ‘[01m[Kstrncat[m[K’,
-    inlined from ‘[01m[Kprint_help_info[m[K’ at [01m[Kmain.c:253:2[m[K:
-[01m[K/usr/include/bits/string_fortified.h:136:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncat_chk[m[K’ specified bound 4200 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-overflow=-Wstringop-overflow=]8;;[m[K]
-  136 |   return [01;35m[K__builtin___strncat_chk (__dest, __src, __len, __bos (__dest))[m[K;
-      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-In function ‘[01m[Kstrncat[m[K’,
-    inlined from ‘[01m[Kprint_help_info[m[K’ at [01m[Kmain.c:267:2[m[K:
-[01m[K/usr/include/bits/string_fortified.h:136:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncat_chk[m[K’ specified bound 64 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-overflow=-Wstringop-overflow=]8;;[m[K]
-  136 |   return [01;35m[K__builtin___strncat_chk (__dest, __src, __len, __bos (__dest))[m[K;
-      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:326:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_progress_set_value[m[K’; did you mean ‘[01m[Kgtk_range_set_value[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  326 |         [01;35m[Kgtk_progress_set_value[m[K(GTK_PROGRESS(Xdialog.widget1), new_val);
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
-      |         [32m[Kgtk_range_set_value[m[K
-[01m[Kinterface.c:73:25:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgdk_string_extents[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-   73 |                         [01;35m[Kgdk_string_extents[m[K(font, ALPHANUM_CHARS, &lbearing,
-      |                         [01;35m[K^~~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kwrap_text[m[K’:
-[01m[Kinterface.c:89:9:[m[K [01;31m[Kerror: [m[Kunknown type name ‘[01m[KGdkFont[m[K’; did you mean ‘[01m[KGdkPoint[m[K’?
-   89 |         [01;31m[KGdkFont[m[K *current_font = gtk_style_get_font(Xdialog.window->style);
-      |         [01;31m[K^~~~~~~[m[K
-      |         [32m[KGdkPoint[m[K
-[01m[Kinterface.c:89:66:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkWidget[m[K’ {aka ‘[01m[Kstruct _GtkWidget[m[K’} has no member named ‘[01m[Kstyle[m[K’
-   89 |         GdkFont *current_font = gtk_style_get_font(Xdialog.window[01;31m[K->[m[Kstyle);
-      |                                                                  [01;31m[K^~[m[K
-[01m[Kinterface.c:96:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-   96 |                 [01;35m[Kmax_line_width[m[K =  gdk_screen_width() - reserved_width - 6 * xmult;
+[01m[Kinterface.c:103:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  103 |                 [01;35m[Kmax_line_width[m[K =  gdk_screen_width() - reserved_width - 6 * xmult;
       |                 [01;35m[K^~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -258,42 +95,15 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:108:6:[m[K [01;36m[Knote: [m[Kdeclared here
   108 | gint [01;36m[Kgdk_screen_width[m[K  (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:[m[K In function ‘[01m[Ktailbox_keypress[m[K’:
-[01m[Kcallbacks.c:375:63:[m[K [01;31m[Kerror: [m[K‘[01m[KGDK_Return[m[K’ undeclared (first use in this function); did you mean ‘[01m[KGDK_KEY_Return[m[K’?
-  375 |         if (event->type == GDK_KEY_PRESS && (event->keyval == [01;31m[KGDK_Return[m[K ||
-      |                                                               [01;31m[K^~~~~~~~~~[m[K
-      |                                                               [32m[KGDK_KEY_Return[m[K
-[01m[Kcallbacks.c:376:63:[m[K [01;31m[Kerror: [m[K‘[01m[KGDK_KP_Enter[m[K’ undeclared (first use in this function); did you mean ‘[01m[KGDK_KEY_KP_Enter[m[K’?
-  376 |                                              event->keyval == [01;31m[KGDK_KP_Enter[m[K)) {
-      |                                                               [01;31m[K^~~~~~~~~~~~[m[K
-      |                                                               [32m[KGDK_KEY_KP_Enter[m[K
-[01m[Kinterface.c:105:29:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgdk_string_width[m[K’; did you mean ‘[01m[Kgdk_screen_width[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  105 |                         if ([01;35m[Kgdk_string_width[m[K(current_font, tmp) < max_line_width) {
-      |                             [01;35m[K^~~~~~~~~~~~~~~~[m[K
-      |                             [32m[Kgdk_screen_width[m[K
-[01m[Kcallbacks.c:[m[K In function ‘[01m[Klogbox_timeout[m[K’:
-[01m[Kcallbacks.c:475:9:[m[K [01;31m[Kerror: [m[Kunknown type name ‘[01m[KGtkCList[m[K’
-  475 |         [01;31m[KGtkCList[m[K *clist = GTK_CLIST(Xdialog.widget1);
-      |         [01;31m[K^~~~~~~~[m[K
-[01m[Kcallbacks.c:475:27:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[KGTK_CLIST[m[K’; did you mean ‘[01m[KGTK_MISC[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  475 |         GtkCList *clist = [01;35m[KGTK_CLIST[m[K(Xdialog.widget1);
-      |                           [01;35m[K^~~~~~~~~[m[K
-      |                           [32m[KGTK_MISC[m[K
-[01m[Kcallbacks.c:475:27:[m[K [01;35m[Kwarning: [m[Kinitialization of ‘[01m[Kint *[m[K’ from ‘[01m[Kint[m[K’ makes pointer from integer without a cast [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wint-conversion-Wint-conversion]8;;[m[K]
-[01m[Kcallbacks.c:487:17:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_freeze[m[K’; did you mean ‘[01m[Kg_slist_free_1[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  487 |                 [01;35m[Kgtk_clist_freeze[m[K(clist);
-      |                 [01;35m[K^~~~~~~~~~~~~~~~[m[K
-      |                 [32m[Kg_slist_free_1[m[K
+[01m[Kinterface.c:93:15:[m[K [01;35m[Kwarning: [m[Kvariable ‘[01m[Ktmp[m[K’ set but not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Wunused-but-set-variable]8;;[m[K]
+   93 |         gchar [01;35m[Ktmp[m[K[MAX_LABEL_LENGTH];
+      |               [01;35m[K^~~[m[K
+[01m[Kinterface.c:91:14:[m[K [01;35m[Kwarning: [m[Kvariable ‘[01m[Kmax_line_width[m[K’ set but not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Wunused-but-set-variable]8;;[m[K]
+   91 |         gint [01;35m[Kmax_line_width[m[K, n = 0;
+      |              [01;35m[K^~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_window_size_and_placement[m[K’:
-[01m[Kinterface.c:137:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_window_set_policy[m[K’; did you mean ‘[01m[Kgtk_window_set_opacity[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  137 |         [01;35m[Kgtk_window_set_policy[m[K(GTK_WINDOW(Xdialog.window), TRUE, TRUE, TRUE);
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~[m[K
-      |         [32m[Kgtk_window_set_opacity[m[K
-[01m[Kinterface.c:141:47:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkWidget[m[K’ {aka ‘[01m[Kstruct _GtkWidget[m[K’} has no member named ‘[01m[Kwindow[m[K’
-  141 |                 gdk_window_move(Xdialog.window[01;31m[K->[m[Kwindow,
-      |                                               [01;31m[K^~[m[K
-[01m[Kinterface.c:143:53:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  143 |                                                     [01;35m[Kgdk_screen_width[m[K()  + Xdialog.xorg - Xdialog.xsize - 2*xmult,
+[01m[Kinterface.c:156:53:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  156 |                                                     [01;35m[Kgdk_screen_width[m[K()  + Xdialog.xorg - Xdialog.xsize - 2*xmult,
       |                                                     [01;35m[K^~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -301,8 +111,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:108:6:[m[K [01;36m[Knote: [m[Kdeclared here
   108 | gint [01;36m[Kgdk_screen_width[m[K  (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:145:53:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  145 |                                                     [01;35m[Kgdk_screen_height[m[K() + Xdialog.yorg - Xdialog.ysize - 3*ymult);
+[01m[Kinterface.c:158:53:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  158 |                                                     [01;35m[Kgdk_screen_height[m[K() + Xdialog.yorg - Xdialog.ysize - 3*ymult);
       |                                                     [01;35m[K^~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -311,18 +121,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
   110 | gint [01;36m[Kgdk_screen_height[m[K (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kopen_window[m[K’:
-[01m[Kinterface.c:164:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_window_set_wmclass[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  164 |                 [01;35m[Kgtk_window_set_wmclass[m[K(GTK_WINDOW(window), Xdialog.wmclass,
-      |                 [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
-In file included from [01m[K/usr/include/gtk-3.0/gtk/gtkdialog.h:32[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gtk/gtkaboutdialog.h:30[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:31[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[K/usr/include/gtk-3.0/gtk/gtkwindow.h:154:12:[m[K [01;36m[Knote: [m[Kdeclared here
-  154 | void       [01;36m[Kgtk_window_set_wmclass[m[K              (GtkWindow           *window,
-      |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:191:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  191 |                 [01;35m[Kgdk_beep[m[K();
+[01m[Kinterface.c:204:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  204 |                 [01;35m[Kgdk_beep[m[K();
       |                 [01;35m[K^~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -331,12 +131,21 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
   121 | void [01;36m[Kgdk_beep[m[K (void);
       |      [01;36m[K^~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_label[m[K’:
-[01m[Kinterface.c:260:42:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkWidget[m[K’ {aka ‘[01m[Kstruct _GtkWidget[m[K’} has no member named ‘[01m[Krequisition[m[K’
-  260 |                         icon_width = icon[01;31m[K->[m[Krequisition.width + 4;
-      |                                          [01;31m[K^~[m[K
+[01m[Kinterface.c:270:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_widget_get_requisition[m[K’ is deprecated: Use 'gtk_widget_get_preferred_width & gtk_widget_get_preferred_height' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  270 |                         [01;35m[Kgtk_widget_get_requisition[m[K (icon, &requisition);
+      |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gtk/gtkapplication.h:27[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gtk/gtkwindow.h:33[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gtk/gtkdialog.h:32[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gtk/gtkaboutdialog.h:30[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:31[m[K,
+                 from [01m[Kinterface.c:16[m[K:
+[01m[K/usr/include/gtk-3.0/gtk/gtkwidget.h:948:23:[m[K [01;36m[Knote: [m[Kdeclared here
+  948 | void                  [01;36m[Kgtk_widget_get_requisition[m[K        (GtkWidget     *widget,
+      |                       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_secondary_label[m[K’:
-[01m[Kinterface.c:301:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_set_alignment[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  301 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 0, 0.5);
+[01m[Kinterface.c:309:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_set_alignment[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  309 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 0, 0.5);
       |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtkaccellabel.h:35[m[K,
@@ -345,8 +154,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkmisc.h:72:9:[m[K [01;36m[Knote: [m[Kdeclared here
    72 | void    [01;36m[Kgtk_misc_set_alignment[m[K (GtkMisc *misc,
       |         [01;36m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:301:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  301 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 0, 0.5);
+[01m[Kinterface.c:309:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  309 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 0, 0.5);
       |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtkaccellabel.h:35[m[K,
@@ -355,8 +164,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkmisc.h:70:9:[m[K [01;36m[Knote: [m[Kdeclared here
    70 | GType   [01;36m[Kgtk_misc_get_type[m[K      (void) G_GNUC_CONST;
       |         [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:304:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_set_alignment[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  304 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 1, 0.5);
+[01m[Kinterface.c:312:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_set_alignment[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  312 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 1, 0.5);
       |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtkaccellabel.h:35[m[K,
@@ -365,8 +174,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkmisc.h:72:9:[m[K [01;36m[Knote: [m[Kdeclared here
    72 | void    [01;36m[Kgtk_misc_set_alignment[m[K (GtkMisc *misc,
       |         [01;36m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:304:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  304 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 1, 0.5);
+[01m[Kinterface.c:312:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  312 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 1, 0.5);
       |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtkaccellabel.h:35[m[K,
@@ -376,8 +185,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
    70 | GType   [01;36m[Kgtk_misc_get_type[m[K      (void) G_GNUC_CONST;
       |         [01;36m[K^~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_button[m[K’:
-[01m[Kinterface.c:378:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_image_new_from_stock[m[K’ is deprecated: Use 'gtk_image_new_from_icon_name' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  378 |                 [01;35m[Kicon[m[K = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_BUTTON);
+[01m[Kinterface.c:383:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_image_new_from_stock[m[K’ is deprecated: Use 'gtk_image_new_from_icon_name' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  383 |                 [01;35m[Kicon[m[K = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_BUTTON);
       |                 [01;35m[K^~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtkentry.h:42[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtktreeview.h:29[m[K,
@@ -388,11 +197,6 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtkentry.h:42[m[K,
 [01m[K/usr/include/gtk-3.0/gtk/gtkimage.h:122:12:[m[K [01;36m[Knote: [m[Kdeclared here
   122 | GtkWidget* [01;36m[Kgtk_image_new_from_stock[m[K     (const gchar     *stock_id,
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
-In function ‘[01m[Kstrncpy[m[K’,
-    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1131:5[m[K:
-[01m[K/usr/include/bits/string_fortified.h:106:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncpy_chk[m[K’ writing 64 bytes into a region of size 32 overflows the destination [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-overflow=-Wstringop-overflow=]8;;[m[K]
-  106 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len, __bos (__dest))[m[K;
-      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_scrollable_text[m[K’:
 [01m[Kinterface.c:501:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_widget_modify_font[m[K’ is deprecated: Use 'gtk_widget_override_font' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
   501 |                 [01;35m[Kgtk_widget_modify_font[m[K(text, fixed_pango_font);
@@ -403,8 +207,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:277[m[K,
   769 | void        [01;36m[Kgtk_widget_modify_font[m[K        (GtkWidget            *widget,
       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_scrolled_window[m[K’:
-[01m[Kinterface.c:526:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  526 |                                      [01;35m[KMIN[m[K(gdk_screen_height() - 15 * ymult,
+[01m[Kinterface.c:524:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  524 |                                      [01;35m[KMIN[m[K(gdk_screen_height() - 15 * ymult,
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -412,8 +216,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:110:6:[m[K [01;36m[Knote: [m[Kdeclared here
   110 | gint [01;36m[Kgdk_screen_height[m[K (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:526:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  526 |                                      [01;35m[KMIN[m[K(gdk_screen_height() - 15 * ymult,
+[01m[Kinterface.c:524:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  524 |                                      [01;35m[KMIN[m[K(gdk_screen_height() - 15 * ymult,
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -422,8 +226,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
   110 | gint [01;36m[Kgdk_screen_height[m[K (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_scrolled_list[m[K’:
-[01m[Kinterface.c:558:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_scrolled_window_add_with_viewport[m[K’ is deprecated: Use 'gtk_container_add' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  558 |         [01;35m[Kgtk_scrolled_window_add_with_viewport[m[K(GTK_SCROLLED_WINDOW(scrolled_window),
+[01m[Kinterface.c:549:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_scrolled_window_add_with_viewport[m[K’ is deprecated: Use 'gtk_container_add' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  549 |         [01;35m[Kgtk_scrolled_window_add_with_viewport[m[K(GTK_SCROLLED_WINDOW(scrolled_window),
       |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:187[m[K,
                  from [01m[Kinterface.c:16[m[K:
@@ -431,8 +235,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:187[m[K,
   186 | void           [01;36m[Kgtk_scrolled_window_add_with_viewport[m[K (GtkScrolledWindow *scrolled_window,
       |                [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_horizontal_slider[m[K’:
-[01m[Kinterface.c:571:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_alignment_new[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  571 |         [01;35m[Kalign[m[K = gtk_alignment_new(0.5, 0.5, 0.8, 0);
+[01m[Kinterface.c:562:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_alignment_new[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  562 |         [01;35m[Kalign[m[K = gtk_alignment_new(0.5, 0.5, 0.8, 0);
       |         [01;35m[K^~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:255[m[K,
                  from [01m[Kinterface.c:16[m[K:
@@ -440,8 +244,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:255[m[K,
    79 | GtkWidget* [01;36m[Kgtk_alignment_new[m[K        (gfloat             xalign,
       |            [01;36m[K^~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kset_spin_button[m[K’:
-[01m[Kinterface.c:605:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_set_alignment[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  605 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 0, 0.5);
+[01m[Kinterface.c:593:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_set_alignment[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  593 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 0, 0.5);
       |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtkaccellabel.h:35[m[K,
@@ -450,8 +254,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkmisc.h:72:9:[m[K [01;36m[Knote: [m[Kdeclared here
    72 | void    [01;36m[Kgtk_misc_set_alignment[m[K (GtkMisc *misc,
       |         [01;36m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:605:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  605 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 0, 0.5);
+[01m[Kinterface.c:593:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_misc_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  593 |                         [01;35m[Kgtk_misc_set_alignment[m[K(GTK_MISC(label), 0, 0.5);
       |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtkaccellabel.h:35[m[K,
@@ -460,136 +264,17 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtklabel.h:32[m[K,
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkmisc.h:70:9:[m[K [01;36m[Knote: [m[Kdeclared here
    70 | GType   [01;36m[Kgtk_misc_get_type[m[K      (void) G_GNUC_CONST;
       |         [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_gauge[m[K’:
-[01m[Kinterface.c:716:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_alignment_new[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  716 |         [01;35m[Kalign[m[K = gtk_alignment_new(0.5, 0.5, 0.8, 0);
-      |         [01;35m[K^~~~~[m[K
-In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:255[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkalignment.h:79:12:[m[K [01;36m[Knote: [m[Kdeclared here
-   79 | GtkWidget* [01;36m[Kgtk_alignment_new[m[K        (gfloat             xalign,
-      |            [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:541:34:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_prepend[m[K’; did you mean ‘[01m[Kg_slist_prepend[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  541 |                         rownum = [01;35m[Kgtk_clist_prepend[m[K(clist,
-      |                                  [01;35m[K^~~~~~~~~~~~~~~~~[m[K
-      |                                  [32m[Kg_slist_prepend[m[K
-[01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_progress[m[K’:
-[01m[Kinterface.c:746:9:[m[K [01;31m[Kerror: [m[Kunknown type name ‘[01m[KGtkProgress[m[K’; did you mean ‘[01m[KGtkProgressBar[m[K’?
-  746 |         [01;31m[KGtkProgress[m[K *pbar;
-      |         [01;31m[K^~~~~~~~~~~[m[K
-      |         [32m[KGtkProgressBar[m[K
-[01m[Kinterface.c:764:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_alignment_new[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  764 |         [01;35m[Kalign[m[K = gtk_alignment_new(0.5, 0.5, 0.8, 0);
-      |         [01;35m[K^~~~~[m[K
-In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:255[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkalignment.h:79:12:[m[K [01;36m[Knote: [m[Kdeclared here
-   79 | GtkWidget* [01;36m[Kgtk_alignment_new[m[K        (gfloat             xalign,
-      |            [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:544:34:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_append[m[K’; did you mean ‘[01m[Kg_slist_append[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  544 |                         rownum = [01;35m[Kgtk_clist_append[m[K(clist,
-      |                                  [01;35m[K^~~~~~~~~~~~~~~~[m[K
-      |                                  [32m[Kg_slist_append[m[K
-[01m[Kcallbacks.c:546:17:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_set_selectable[m[K’; did you mean ‘[01m[Kgtk_label_set_selectable[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  546 |                 [01;35m[Kgtk_clist_set_selectable[m[K(clist, rownum, FALSE);
-      |                 [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
-      |                 [32m[Kgtk_label_set_selectable[m[K
-[01m[Kinterface.c:772:27:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_progress_bar_new_with_adjustment[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  772 |         Xdialog.widget1 = [01;35m[Kgtk_progress_bar_new_with_adjustment[m[K(adj);
-      |                           [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:772:25:[m[K [01;35m[Kwarning: [m[Kassignment to ‘[01m[KGtkWidget *[m[K’ {aka ‘[01m[Kstruct _GtkWidget *[m[K’} from ‘[01m[Kint[m[K’ makes pointer from integer without a cast [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wint-conversion-Wint-conversion]8;;[m[K]
-  772 |         Xdialog.widget1 [01;35m[K=[m[K gtk_progress_bar_new_with_adjustment(adj);
-      |                         [01;35m[K^[m[K
-[01m[Kinterface.c:773:16:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[KGTK_PROGRESS[m[K’; did you mean ‘[01m[KEINPROGRESS[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  773 |         pbar = [01;35m[KGTK_PROGRESS[m[K(Xdialog.widget1);
-      |                [01;35m[K^~~~~~~~~~~~[m[K
-      |                [32m[KEINPROGRESS[m[K
-[01m[Kinterface.c:773:14:[m[K [01;35m[Kwarning: [m[Kassignment to ‘[01m[Kint *[m[K’ from ‘[01m[Kint[m[K’ makes pointer from integer without a cast [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wint-conversion-Wint-conversion]8;;[m[K]
-  773 |         pbar [01;35m[K=[m[K GTK_PROGRESS(Xdialog.widget1);
-      |              [01;35m[K^[m[K
-[01m[Kcallbacks.c:548:25:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_set_foreground[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  548 |                         [01;35m[Kgtk_clist_set_foreground[m[K(clist, rownum, fgcolor);
-      |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:775:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_progress_configure[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  775 |         [01;35m[Kgtk_progress_configure[m[K(pbar, 0, 0, ceiling);
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:550:25:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_set_background[m[K’; did you mean ‘[01m[Kgtk_style_set_background[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  550 |                         [01;35m[Kgtk_clist_set_background[m[K(clist, rownum, bgcolor);
-      |                         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
-      |                         [32m[Kgtk_style_set_background[m[K
-[01m[Kcallbacks.c:552:25:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_set_text[m[K’; did you mean ‘[01m[Kgtk_entry_set_text[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  552 |                         [01;35m[Kgtk_clist_set_text[m[K(clist, rownum, 1, buffer);
-      |                         [01;35m[K^~~~~~~~~~~~~~~~~~[m[K
-      |                         [32m[Kgtk_entry_set_text[m[K
-[01m[Kinterface.c:782:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_progress_set_format_string[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  782 |         [01;35m[Kgtk_progress_set_format_string[m[K(pbar, "%p%%");
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:563:17:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_columns_autosize[m[K’; did you mean ‘[01m[Kgtk_tree_view_columns_autosize[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  563 |                 [01;35m[Kgtk_clist_columns_autosize[m[K(clist);
-      |                 [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-      |                 [32m[Kgtk_tree_view_columns_autosize[m[K
-[01m[Kcallbacks.c:567:33:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_thaw[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  567 |                                 [01;35m[Kgtk_clist_thaw[m[K(clist);
-      |                                 [01;35m[K^~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:783:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_progress_set_show_text[m[K’; did you mean ‘[01m[Kgtk_progress_bar_set_show_text[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  783 |         [01;35m[Kgtk_progress_set_show_text[m[K(pbar, TRUE);
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-      |         [32m[Kgtk_progress_bar_set_show_text[m[K
-[01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_logbox[m[K’:
-[01m[Kinterface.c:863:9:[m[K [01;31m[Kerror: [m[Kunknown type name ‘[01m[KGtkCList[m[K’
-  863 |         [01;31m[KGtkCList[m[K *clist;
-      |         [01;31m[K^~~~~~~~[m[K
-[01m[Kinterface.c:871:27:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_new[m[K’; did you mean ‘[01m[Kgtk_hsv_new[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  871 |         Xdialog.widget1 = [01;35m[Kgtk_clist_new[m[K(Xdialog.time_stamp ? 2 : 1);
-      |                           [01;35m[K^~~~~~~~~~~~~[m[K
-      |                           [32m[Kgtk_hsv_new[m[K
-[01m[Kinterface.c:871:25:[m[K [01;35m[Kwarning: [m[Kassignment to ‘[01m[KGtkWidget *[m[K’ {aka ‘[01m[Kstruct _GtkWidget *[m[K’} from ‘[01m[Kint[m[K’ makes pointer from integer without a cast [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wint-conversion-Wint-conversion]8;;[m[K]
-  871 |         Xdialog.widget1 [01;35m[K=[m[K gtk_clist_new(Xdialog.time_stamp ? 2 : 1);
-      |                         [01;35m[K^[m[K
-[01m[Kinterface.c:872:17:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[KGTK_CLIST[m[K’; did you mean ‘[01m[KGTK_MISC[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  872 |         clist = [01;35m[KGTK_CLIST[m[K(Xdialog.widget1);
-      |                 [01;35m[K^~~~~~~~~[m[K
-      |                 [32m[KGTK_MISC[m[K
-[01m[Kinterface.c:872:15:[m[K [01;35m[Kwarning: [m[Kassignment to ‘[01m[Kint *[m[K’ from ‘[01m[Kint[m[K’ makes pointer from integer without a cast [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wint-conversion-Wint-conversion]8;;[m[K]
-  872 |         clist [01;35m[K=[m[K GTK_CLIST(Xdialog.widget1);
-      |               [01;35m[K^[m[K
-[01m[Kcallbacks.c:572:33:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_moveto[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  572 |                                 [01;35m[Kgtk_clist_moveto[m[K(clist, rownum, 0, 0.0, 0.0);
-      |                                 [01;35m[K^~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:[m[K In function ‘[01m[Kinput_keypress[m[K’:
-[01m[Kcallbacks.c:610:63:[m[K [01;31m[Kerror: [m[K‘[01m[KGDK_Return[m[K’ undeclared (first use in this function); did you mean ‘[01m[KGDK_KEY_Return[m[K’?
-  610 |         if (event->type == GDK_KEY_PRESS && (event->keyval == [01;31m[KGDK_Return[m[K ||
-      |                                                               [01;31m[K^~~~~~~~~~[m[K
-      |                                                               [32m[KGDK_KEY_Return[m[K
-[01m[Kcallbacks.c:611:63:[m[K [01;31m[Kerror: [m[K‘[01m[KGDK_KP_Enter[m[K’ undeclared (first use in this function); did you mean ‘[01m[KGDK_KEY_KP_Enter[m[K’?
-  611 |                                              event->keyval == [01;31m[KGDK_KP_Enter[m[K)) {
-      |                                                               [01;31m[K^~~~~~~~~~~~[m[K
-      |                                                               [32m[KGDK_KEY_KP_Enter[m[K
-[01m[Kcallbacks.c:[m[K In function ‘[01m[Krangebox_exit[m[K’:
-[01m[Kcallbacks.c:700:49:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkAdjustment[m[K’ {aka ‘[01m[Kstruct _GtkAdjustment[m[K’} has no member named ‘[01m[Kvalue[m[K’
-  700 |         fprintf(Xdialog.output, "%d", (gint) adj[01;31m[K->[m[Kvalue);
-      |                                                 [01;31m[K^~[m[K
-[01m[Kcallbacks.c:704:35:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkAdjustment[m[K’ {aka ‘[01m[Kstruct _GtkAdjustment[m[K’} has no member named ‘[01m[Kvalue[m[K’
-  704 |                         (gint) adj[01;31m[K->[m[Kvalue);
-      |                                   [01;31m[K^~[m[K
-[01m[Kcallbacks.c:709:35:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkAdjustment[m[K’ {aka ‘[01m[Kstruct _GtkAdjustment[m[K’} has no member named ‘[01m[Kvalue[m[K’
-  709 |                         (gint) adj[01;31m[K->[m[Kvalue);
-      |                                   [01;31m[K^~[m[K
-[01m[Kcallbacks.c:[m[K In function ‘[01m[Kitem_toggle[m[K’:
-[01m[Kcallbacks.c:763:36:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkToggleButton[m[K’ {aka ‘[01m[Kstruct _GtkToggleButton[m[K’} has no member named ‘[01m[Kactive[m[K’
-  763 |         if (GTK_TOGGLE_BUTTON(item)[01;31m[K->[m[Kactive) {
-      |                                    [01;31m[K^~[m[K
 [01m[Kcallbacks.c:[m[K In function ‘[01m[Kcolorsel_exit[m[K’:
-[01m[Kcallbacks.c:1012:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_get_current_color[m[K’ is deprecated: Use 'gtk_color_chooser_get_rgba' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1012 |         [01;35m[Kgtk_color_selection_get_current_color[m[K (
+[01m[Kcallbacks.c:974:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_get_current_color[m[K’ is deprecated: Use 'gtk_color_chooser_get_rgba' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  974 |         [01;35m[Kgtk_color_selection_get_current_color[m[K (
       |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:256[m[K,
                  from [01m[Kcallbacks.c:15[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkcolorsel.h:162:10:[m[K [01;36m[Knote: [m[Kdeclared here
   162 | void     [01;36m[Kgtk_color_selection_get_current_color[m[K   (GtkColorSelection *colorsel,
       |          [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:1013:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1013 |                         [01;35m[KGTK_COLOR_SELECTION[m[K(client_data),
+[01m[Kcallbacks.c:975:25:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  975 |                         [01;35m[KGTK_COLOR_SELECTION[m[K(client_data),
       |                         [01;35m[K^~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:256[m[K,
                  from [01m[Kcallbacks.c:15[m[K:
@@ -597,48 +282,46 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:256[m[K,
   105 | GType      [01;36m[Kgtk_color_selection_get_type[m[K                (void) G_GNUC_CONST;
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 [01m[Kcallbacks.c:[m[K In function ‘[01m[Kfontsel_exit[m[K’:
-[01m[Kcallbacks.c:1025:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_font_name[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1025 |                 [01;35m[Kgtk_font_selection_dialog_get_font_name[m[K(GTK_FONT_SELECTION_DIALOG(client_data)));
+[01m[Kcallbacks.c:987:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_font_name[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  987 |                 [01;35m[Kgtk_font_selection_dialog_get_font_name[m[K(GTK_FONT_SELECTION_DIALOG(client_data)));
       |                 [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kcallbacks.c:15[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:152:12:[m[K [01;36m[Knote: [m[Kdeclared here
   152 | gchar*     [01;36m[Kgtk_font_selection_dialog_get_font_name[m[K     (GtkFontSelectionDialog *fsd);
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kcallbacks.c:1025:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1025 |                 [01;35m[Kgtk_font_selection_dialog_get_font_name[m[K(GTK_FONT_SELECTION_DIALOG(client_data)));
+[01m[Kcallbacks.c:987:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  987 |                 [01;35m[Kgtk_font_selection_dialog_get_font_name[m[K(GTK_FONT_SELECTION_DIALOG(client_data)));
       |                 [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kcallbacks.c:15[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:141:12:[m[K [01;36m[Knote: [m[Kdeclared here
   141 | GType      [01;36m[Kgtk_font_selection_dialog_get_type[m[K          (void) G_GNUC_CONST;
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-make[2]: *** [Makefile:408: callbacks.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-[01m[Kinterface.c:873:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_set_selection_mode[m[K’; did you mean ‘[01m[Kgtk_list_box_set_selection_mode[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  873 |         [01;35m[Kgtk_clist_set_selection_mode[m[K(clist, GTK_SELECTION_SINGLE);
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-      |         [32m[Kgtk_list_box_set_selection_mode[m[K
-[01m[Kinterface.c:874:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_set_shadow_type[m[K’; did you mean ‘[01m[Kgtk_frame_set_shadow_type[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  874 |         [01;35m[Kgtk_clist_set_shadow_type[m[K(clist, GTK_SHADOW_IN);
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-      |         [32m[Kgtk_frame_set_shadow_type[m[K
-[01m[Kinterface.c:876:17:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_set_column_title[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  876 |                 [01;35m[Kgtk_clist_set_column_title[m[K(clist, 0, Xdialog.date_stamp ? DATE_STAMP : TIME_STAMP);
-      |                 [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:878:17:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_column_title_passive[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  878 |                 [01;35m[Kgtk_clist_column_title_passive[m[K(clist, 0);
-      |                 [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:880:17:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_column_titles_show[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  880 |                 [01;35m[Kgtk_clist_column_titles_show[m[K(clist);
-      |                 [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:887:9:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kgtk_clist_columns_autosize[m[K’; did you mean ‘[01m[Kgtk_tree_view_columns_autosize[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
-  887 |         [01;35m[Kgtk_clist_columns_autosize[m[K(clist);
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-      |         [32m[Kgtk_tree_view_columns_autosize[m[K
+[01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_logbox[m[K’:
+[01m[Kinterface.c:848:37:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_color_get_type[m[K’ is deprecated: Use 'gdk_rgba_get_type' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  848 |                                     [01;35m[KGDK_TYPE_COLOR[m[K,
+      |                                     [01;35m[K^~~~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gdk/gdkcairo.h:26[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:33[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
+                 from [01m[Kinterface.c:16[m[K:
+[01m[K/usr/include/gtk-3.0/gdk/deprecated/gdkcolor.h:65:11:[m[K [01;36m[Knote: [m[Kdeclared here
+   65 | GType     [01;36m[Kgdk_color_get_type[m[K (void) G_GNUC_CONST;
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~[m[K
+[01m[Kinterface.c:849:37:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_color_get_type[m[K’ is deprecated: Use 'gdk_rgba_get_type' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  849 |                                     [01;35m[KGDK_TYPE_COLOR[m[K);
+      |                                     [01;35m[K^~~~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gdk/gdkcairo.h:26[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:33[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
+                 from [01m[Kinterface.c:16[m[K:
+[01m[K/usr/include/gtk-3.0/gdk/deprecated/gdkcolor.h:65:11:[m[K [01;36m[Knote: [m[Kdeclared here
+   65 | GType     [01;36m[Kgdk_color_get_type[m[K (void) G_GNUC_CONST;
+      |           [01;36m[K^~~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_textbox[m[K’:
-[01m[Kinterface.c:987:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  987 |                                      [01;35m[KMIN[m[K(llen*ffxmult, gdk_screen_width()-4*ffxmult),
+[01m[Kinterface.c:999:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  999 |                                      [01;35m[KMIN[m[K(llen*ffxmult, gdk_screen_width()-4*ffxmult),
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -646,8 +329,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:108:6:[m[K [01;36m[Knote: [m[Kdeclared here
   108 | gint [01;36m[Kgdk_screen_width[m[K  (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:987:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  987 |                                      [01;35m[KMIN[m[K(llen*ffxmult, gdk_screen_width()-4*ffxmult),
+[01m[Kinterface.c:999:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+  999 |                                      [01;35m[KMIN[m[K(llen*ffxmult, gdk_screen_width()-4*ffxmult),
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -655,8 +338,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:108:6:[m[K [01;36m[Knote: [m[Kdeclared here
   108 | gint [01;36m[Kgdk_screen_width[m[K  (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:988:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  988 |                                      [01;35m[KMIN[m[K(lcnt*ffymult, gdk_screen_height()-10*ffymult));
+[01m[Kinterface.c:1000:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1000 |                                      [01;35m[KMIN[m[K(lcnt*ffymult, gdk_screen_height()-10*ffymult));
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -664,8 +347,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:110:6:[m[K [01;36m[Knote: [m[Kdeclared here
   110 | gint [01;36m[Kgdk_screen_height[m[K (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:988:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  988 |                                      [01;35m[KMIN[m[K(lcnt*ffymult, gdk_screen_height()-10*ffymult));
+[01m[Kinterface.c:1000:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1000 |                                      [01;35m[KMIN[m[K(lcnt*ffymult, gdk_screen_height()-10*ffymult));
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -673,8 +356,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:110:6:[m[K [01;36m[Knote: [m[Kdeclared here
   110 | gint [01;36m[Kgdk_screen_height[m[K (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:991:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  991 |                                      [01;35m[KMIN[m[K(llen*xmult, gdk_screen_width()-4*xmult),
+[01m[Kinterface.c:1003:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1003 |                                      [01;35m[KMIN[m[K(llen*xmult, gdk_screen_width()-4*xmult),
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -682,8 +365,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:108:6:[m[K [01;36m[Knote: [m[Kdeclared here
   108 | gint [01;36m[Kgdk_screen_width[m[K  (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:991:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  991 |                                      [01;35m[KMIN[m[K(llen*xmult, gdk_screen_width()-4*xmult),
+[01m[Kinterface.c:1003:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1003 |                                      [01;35m[KMIN[m[K(llen*xmult, gdk_screen_width()-4*xmult),
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -691,8 +374,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:108:6:[m[K [01;36m[Knote: [m[Kdeclared here
   108 | gint [01;36m[Kgdk_screen_width[m[K  (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:992:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  992 |                                      [01;35m[KMIN[m[K(lcnt*ymult, gdk_screen_height()-10*ymult));
+[01m[Kinterface.c:1004:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1004 |                                      [01;35m[KMIN[m[K(lcnt*ymult, gdk_screen_height()-10*ymult));
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -700,8 +383,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:110:6:[m[K [01;36m[Knote: [m[Kdeclared here
   110 | gint [01;36m[Kgdk_screen_height[m[K (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:992:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
-  992 |                                      [01;35m[KMIN[m[K(lcnt*ymult, gdk_screen_height()-10*ymult));
+[01m[Kinterface.c:1004:38:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1004 |                                      [01;35m[KMIN[m[K(lcnt*ymult, gdk_screen_height()-10*ymult));
       |                                      [01;35m[K^~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -710,8 +393,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
   110 | gint [01;36m[Kgdk_screen_height[m[K (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_itemlist[m[K’:
-[01m[Kinterface.c:1274:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_scrolled_window_add_with_viewport[m[K’ is deprecated: Use 'gtk_container_add' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1274 |         [01;35m[Kgtk_scrolled_window_add_with_viewport[m[K(GTK_SCROLLED_WINDOW(scrolled_window), vbox);
+[01m[Kinterface.c:1267:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_scrolled_window_add_with_viewport[m[K’ is deprecated: Use 'gtk_container_add' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1267 |         [01;35m[Kgtk_scrolled_window_add_with_viewport[m[K(GTK_SCROLLED_WINDOW(scrolled_window), vbox);
       |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:187[m[K,
                  from [01m[Kinterface.c:16[m[K:
@@ -728,15 +411,15 @@ In file included from [01m[K/usr/include/glib-2.0/gobject/gobject.h:28[m[K,
                  from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:32[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
                  from [01m[Kinterface.c:16[m[K:
-[01m[Kinterface.c:1302:61:[m[K [01;35m[Kwarning: [m[Kcast to pointer from integer of different size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wint-to-pointer-cast-Wint-to-pointer-cast]8;;[m[K]
- 1302 |                                    G_CALLBACK(item_toggle), [01;35m[K([m[Kgpointer)i);
+[01m[Kinterface.c:1293:61:[m[K [01;35m[Kwarning: [m[Kcast to pointer from integer of different size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wint-to-pointer-cast-Wint-to-pointer-cast]8;;[m[K]
+ 1293 |                                    G_CALLBACK(item_toggle), [01;35m[K([m[Kgpointer)i);
       |                                                             [01;35m[K^[m[K
 [01m[K/usr/include/glib-2.0/gobject/gsignal.h:501:73:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[Kg_signal_connect[m[K’
   501 |     g_signal_connect_data ((instance), (detailed_signal), (c_handler), ([01;36m[Kdata[m[K), NULL, (GConnectFlags) 0)
       |                                                                         [01;36m[K^~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_treeview[m[K’:
-[01m[Kinterface.c:1573:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_scrolled_window_add_with_viewport[m[K’ is deprecated: Use 'gtk_container_add' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1573 |         [01;35m[Kgtk_scrolled_window_add_with_viewport[m[K(GTK_SCROLLED_WINDOW(scrolled_window), Xdialog.widget1);
+[01m[Kinterface.c:1558:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_scrolled_window_add_with_viewport[m[K’ is deprecated: Use 'gtk_container_add' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1558 |         [01;35m[Kgtk_scrolled_window_add_with_viewport[m[K(GTK_SCROLLED_WINDOW(scrolled_window), Xdialog.widget1);
       |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:187[m[K,
                  from [01m[Kinterface.c:16[m[K:
@@ -744,8 +427,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:187[m[K,
   186 | void           [01;36m[Kgtk_scrolled_window_add_with_viewport[m[K (GtkScrolledWindow *scrolled_window,
       |                [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_filesel[m[K’:
-[01m[Kinterface.c:1646:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_dialog_get_action_area[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1646 |         [01;35m[Khbuttonbox[m[K = gtk_dialog_get_action_area (GTK_DIALOG (filesel));
+[01m[Kinterface.c:1631:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_dialog_get_action_area[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1631 |         [01;35m[Khbuttonbox[m[K = gtk_dialog_get_action_area (GTK_DIALOG (filesel));
       |         [01;35m[K^~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtkaboutdialog.h:30[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:31[m[K,
@@ -753,8 +436,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gtk/gtkaboutdialog.h:30[m[K
 [01m[K/usr/include/gtk-3.0/gtk/gtkdialog.h:203:13:[m[K [01;36m[Knote: [m[Kdeclared here
   203 | GtkWidget * [01;36m[Kgtk_dialog_get_action_area[m[K  (GtkDialog *dialog);
       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1690:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1690 |                 [01;35m[Kgdk_beep[m[K();
+[01m[Kinterface.c:1675:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1675 |                 [01;35m[Kgdk_beep[m[K();
       |                 [01;35m[K^~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -763,147 +446,56 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
   121 | void [01;36m[Kgdk_beep[m[K (void);
       |      [01;36m[K^~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_colorsel[m[K’:
-[01m[Kinterface.c:1714:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_dialog_new[m[K’ is deprecated: Use 'gtk_color_chooser_dialog_new' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1714 |         [01;35m[KXdialog[m[K.window = gtk_color_selection_dialog_new(Xdialog.title);
+[01m[Kinterface.c:1697:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_dialog_new[m[K’ is deprecated: Use 'gtk_color_chooser_dialog_new' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1697 |         [01;35m[KXdialog[m[K.window = gtk_color_selection_dialog_new(Xdialog.title);
       |         [01;35m[K^~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:257[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkcolorseldialog.h:74:12:[m[K [01;36m[Knote: [m[Kdeclared here
    74 | GtkWidget* [01;36m[Kgtk_color_selection_dialog_new[m[K                 (const gchar *title);
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1715:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_dialog_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1715 |         [01;35m[Kcolorsel_dlg[m[K = GTK_COLOR_SELECTION_DIALOG (Xdialog.window);
+[01m[Kinterface.c:1698:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_dialog_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1698 |         [01;35m[Kcolorsel_dlg[m[K = GTK_COLOR_SELECTION_DIALOG (Xdialog.window);
       |         [01;35m[K^~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:257[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkcolorseldialog.h:72:12:[m[K [01;36m[Knote: [m[Kdeclared here
    72 | GType      [01;36m[Kgtk_color_selection_dialog_get_type[m[K            (void) G_GNUC_CONST;
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1716:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_dialog_get_color_selection[m[K’ is deprecated: Use 'GtkColorChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1716 |         [01;35m[Kcolorsel[m[K     = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (colorsel_dlg));
+[01m[Kinterface.c:1699:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_dialog_get_color_selection[m[K’ is deprecated: Use 'GtkColorChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1699 |         [01;35m[Kcolorsel[m[K     = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (colorsel_dlg));
       |         [01;35m[K^~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:257[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkcolorseldialog.h:76:12:[m[K [01;36m[Knote: [m[Kdeclared here
    76 | GtkWidget* [01;36m[Kgtk_color_selection_dialog_get_color_selection[m[K (GtkColorSelectionDialog *colorsel);
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1716:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1716 |         [01;35m[Kcolorsel[m[K     = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (colorsel_dlg));
+[01m[Kinterface.c:1699:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1699 |         [01;35m[Kcolorsel[m[K     = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (colorsel_dlg));
       |         [01;35m[K^~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:256[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkcolorsel.h:105:12:[m[K [01;36m[Knote: [m[Kdeclared here
   105 | GType      [01;36m[Kgtk_color_selection_get_type[m[K                (void) G_GNUC_CONST;
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-In file included from [01m[K/usr/include/glib-2.0/gobject/gobject.h:24[m[K,
-                 from [01m[K/usr/include/glib-2.0/gobject/gbinding.h:29[m[K,
-                 from [01m[K/usr/include/glib-2.0/glib-object.h:22[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gioenums.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/giotypes.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gio.h:26[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:28[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:32[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[Kinterface.c:1717:68:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kcolorsel[m[K’
- 1717 |         Xdialog.vbox = GTK_BOX(gtk_widget_get_ancestor(colorsel_dlg[01;31m[K->[m[Kcolorsel, gtk_box_get_type()));
-      |                                                                    [01;31m[K^~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gtype.h:2300:57:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[K_G_TYPE_CIC[m[K’
- 2300 |     ((ct*) g_type_check_instance_cast ((GTypeInstance*) [01;36m[Kip[m[K, gt))
-      |                                                         [01;36m[K^~[m[K
-[01m[K/usr/include/gtk-3.0/gtk/gtkbox.h:40:34:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_TYPE_CHECK_INSTANCE_CAST[m[K’
-   40 | #define GTK_BOX(obj)            ([01;36m[KG_TYPE_CHECK_INSTANCE_CAST[m[K ((obj), GTK_TYPE_BOX, GtkBox))
-      |                                  [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1717:24:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KGTK_BOX[m[K’
- 1717 |         Xdialog.vbox = [01;36m[KGTK_BOX[m[K(gtk_widget_get_ancestor(colorsel_dlg->colorsel, gtk_box_get_type()));
-      |                        [01;36m[K^~~~~~~[m[K
-[01m[Kinterface.c:1722:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_set_current_color[m[K’ is deprecated: Use 'gtk_color_chooser_set_rgba' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1722 |         [01;35m[Kgtk_color_selection_set_current_color[m[K (colorsel, &gcolor);
+[01m[Kinterface.c:1705:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_set_current_color[m[K’ is deprecated: Use 'gtk_color_chooser_set_rgba' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1705 |         [01;35m[Kgtk_color_selection_set_current_color[m[K (colorsel, &gcolor);
       |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:256[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkcolorsel.h:159:10:[m[K [01;36m[Knote: [m[Kdeclared here
   159 | void     [01;36m[Kgtk_color_selection_set_current_color[m[K   (GtkColorSelection *colorsel,
       |          [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1725:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_set_has_palette[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1725 |         [01;35m[Kgtk_color_selection_set_has_palette[m[K (colorsel, TRUE);
+[01m[Kinterface.c:1707:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_color_selection_set_has_palette[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1707 |         [01;35m[Kgtk_color_selection_set_has_palette[m[K (colorsel, TRUE);
       |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:256[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkcolorsel.h:116:12:[m[K [01;36m[Knote: [m[Kdeclared here
   116 | void       [01;36m[Kgtk_color_selection_set_has_palette[m[K         (GtkColorSelection *colorsel,
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1746:58:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1746 |         hbuttonbox = gtk_widget_get_ancestor(colorsel_dlg[01;31m[K->[m[Kok_button, gtk_hbutton_box_get_type());
-      |                                                          [01;31m[K^~[m[K
-[01m[Kinterface.c:1746:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_hbutton_box_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1746 |         [01;35m[Khbuttonbox[m[K = gtk_widget_get_ancestor(colorsel_dlg->ok_button, gtk_hbutton_box_get_type());
-      |         [01;35m[K^~~~~~~~~~[m[K
-In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:261[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkhbbox.h:60:12:[m[K [01;36m[Knote: [m[Kdeclared here
-   60 | GType      [01;36m[Kgtk_hbutton_box_get_type[m[K (void) G_GNUC_CONST;
-      |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1749:40:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1749 |         gtk_widget_destroy(colorsel_dlg[01;31m[K->[m[Kok_button);
-      |                                        [01;31m[K^~[m[K
-[01m[Kinterface.c:1750:40:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kcancel_button[m[K’
- 1750 |         gtk_widget_destroy(colorsel_dlg[01;31m[K->[m[Kcancel_button);
-      |                                        [01;31m[K^~[m[K
-[01m[Kinterface.c:1751:40:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Khelp_button[m[K’
- 1751 |         gtk_widget_destroy(colorsel_dlg[01;31m[K->[m[Khelp_button);
-      |                                        [01;31m[K^~[m[K
-[01m[Kinterface.c:1760:29:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1760 |                 colorsel_dlg[01;31m[K->[m[Kok_button = button;
-      |                             [01;31m[K^~[m[K
-[01m[Kinterface.c:1767:29:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kcancel_button[m[K’
- 1767 |                 colorsel_dlg[01;31m[K->[m[Kcancel_button = button;
-      |                             [01;31m[K^~[m[K
-[01m[Kinterface.c:1772:29:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1772 |                 colorsel_dlg[01;31m[K->[m[Kok_button = button;
-      |                             [01;31m[K^~[m[K
-In file included from [01m[K/usr/include/glib-2.0/gobject/gobject.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gobject/gbinding.h:29[m[K,
-                 from [01m[K/usr/include/glib-2.0/glib-object.h:22[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gioenums.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/giotypes.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gio.h:26[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:28[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:32[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[Kinterface.c:1782:48:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1782 |         g_signal_connect (G_OBJECT(colorsel_dlg[01;31m[K->[m[Kok_button), "clicked",
-      |                                                [01;31m[K^~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gsignal.h:501:29:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[Kg_signal_connect[m[K’
-  501 |     g_signal_connect_data (([01;36m[Kinstance[m[K), (detailed_signal), (c_handler), (data), NULL, (GConnectFlags) 0)
-      |                             [01;36m[K^~~~~~~~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gtype.h:484:66:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[K_G_TYPE_CIC[m[K’
-  484 | #define G_TYPE_CHECK_INSTANCE_CAST(instance, g_type, c_type)    ([01;36m[K_G_TYPE_CIC[m[K ((instance), (g_type), c_type))
-      |                                                                  [01;36m[K^~~~~~~~~~~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gobject.h:56:38:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_TYPE_CHECK_INSTANCE_CAST[m[K’
-   56 | #define G_OBJECT(object)            ([01;36m[KG_TYPE_CHECK_INSTANCE_CAST[m[K ((object), G_TYPE_OBJECT, GObject))
-      |                                      [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1782:27:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_OBJECT[m[K’
- 1782 |         g_signal_connect ([01;36m[KG_OBJECT[m[K(colorsel_dlg->ok_button), "clicked",
-      |                           [01;36m[K^~~~~~~~[m[K
-[01m[Kinterface.c:1783:76:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkColorSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkColorSelectionDialog[m[K’} has no member named ‘[01m[Kcolorsel[m[K’
- 1783 |                            G_CALLBACK(colorsel_exit), G_OBJECT(colorsel_dlg[01;31m[K->[m[Kcolorsel));
-      |                                                                            [01;31m[K^~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gsignal.h:501:73:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[Kg_signal_connect[m[K’
-  501 |     g_signal_connect_data ((instance), (detailed_signal), (c_handler), ([01;36m[Kdata[m[K), NULL, (GConnectFlags) 0)
-      |                                                                         [01;36m[K^~~~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gtype.h:484:66:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[K_G_TYPE_CIC[m[K’
-  484 | #define G_TYPE_CHECK_INSTANCE_CAST(instance, g_type, c_type)    ([01;36m[K_G_TYPE_CIC[m[K ((instance), (g_type), c_type))
-      |                                                                  [01;36m[K^~~~~~~~~~~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gobject.h:56:38:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_TYPE_CHECK_INSTANCE_CAST[m[K’
-   56 | #define G_OBJECT(object)            ([01;36m[KG_TYPE_CHECK_INSTANCE_CAST[m[K ((object), G_TYPE_OBJECT, GObject))
-      |                                      [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1783:55:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_OBJECT[m[K’
- 1783 |                            G_CALLBACK(colorsel_exit), [01;36m[KG_OBJECT[m[K(colorsel_dlg->colorsel));
-      |                                                       [01;36m[K^~~~~~~~[m[K
-[01m[Kinterface.c:1787:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1787 |                 [01;35m[Kgdk_beep[m[K();
+[01m[Kinterface.c:1757:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1757 |                 [01;35m[Kgdk_beep[m[K();
       |                 [01;35m[K^~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -912,171 +504,81 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
   121 | void [01;36m[Kgdk_beep[m[K (void);
       |      [01;36m[K^~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kcreate_fontsel[m[K’:
-[01m[Kinterface.c:1808:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_new[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1808 |         [01;35m[KXdialog[m[K.window = gtk_font_selection_dialog_new(Xdialog.title);
-      |         [01;35m[K^~~~~~~[m[K
+[01m[Kinterface.c:1776:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_new[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1776 |         [01;35m[Kfontsel_dlg[m[K = GTK_FONT_SELECTION_DIALOG (gtk_font_selection_dialog_new (Xdialog.title));
+      |         [01;35m[K^~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:143:12:[m[K [01;36m[Knote: [m[Kdeclared here
   143 | GtkWidget *[01;36m[Kgtk_font_selection_dialog_new[m[K               (const gchar            *title);
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1809:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1809 |         [01;35m[Kfontsel[m[K = GTK_FONT_SELECTION_DIALOG(Xdialog.window);
-      |         [01;35m[K^~~~~~~[m[K
+[01m[Kinterface.c:1776:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1776 |         [01;35m[Kfontsel_dlg[m[K = GTK_FONT_SELECTION_DIALOG (gtk_font_selection_dialog_new (Xdialog.title));
+      |         [01;35m[K^~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:141:12:[m[K [01;36m[Knote: [m[Kdeclared here
   141 | GType      [01;36m[Kgtk_font_selection_dialog_get_type[m[K          (void) G_GNUC_CONST;
       |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-In file included from [01m[K/usr/include/glib-2.0/gobject/gobject.h:24[m[K,
-                 from [01m[K/usr/include/glib-2.0/gobject/gbinding.h:29[m[K,
-                 from [01m[K/usr/include/glib-2.0/glib-object.h:22[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gioenums.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/giotypes.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gio.h:26[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:28[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:32[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
+[01m[Kinterface.c:1777:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_font_selection[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1777 |         [01;35m[Kfontsel[m[K = GTK_FONT_SELECTION (gtk_font_selection_dialog_get_font_selection (fontsel_dlg));
+      |         [01;35m[K^~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kinterface.c:16[m[K:
-[01m[Kinterface.c:1810:39:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kmain_vbox[m[K’
- 1810 |         Xdialog.vbox = GTK_BOX(fontsel[01;31m[K->[m[Kmain_vbox);
-      |                                       [01;31m[K^~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gtype.h:2300:57:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[K_G_TYPE_CIC[m[K’
- 2300 |     ((ct*) g_type_check_instance_cast ((GTypeInstance*) [01;36m[Kip[m[K, gt))
-      |                                                         [01;36m[K^~[m[K
-[01m[K/usr/include/gtk-3.0/gtk/gtkbox.h:40:34:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_TYPE_CHECK_INSTANCE_CAST[m[K’
-   40 | #define GTK_BOX(obj)            ([01;36m[KG_TYPE_CHECK_INSTANCE_CAST[m[K ((obj), GTK_TYPE_BOX, GtkBox))
-      |                                  [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1810:24:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KGTK_BOX[m[K’
- 1810 |         Xdialog.vbox = [01;36m[KGTK_BOX[m[K(fontsel->main_vbox);
-      |                        [01;36m[K^~~~~~~[m[K
-[01m[Kinterface.c:1816:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_set_font_name[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1816 |         [01;35m[Kgtk_font_selection_set_font_name[m[K(GTK_FONT_SELECTION(fontsel->fontsel), optarg);
+[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:150:12:[m[K [01;36m[Knote: [m[Kdeclared here
+  150 | GtkWidget *[01;36m[Kgtk_font_selection_dialog_get_font_selection[m[K (GtkFontSelectionDialog *fsd);
+      |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kinterface.c:1777:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1777 |         [01;35m[Kfontsel[m[K = GTK_FONT_SELECTION (gtk_font_selection_dialog_get_font_selection (fontsel_dlg));
+      |         [01;35m[K^~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
+                 from [01m[Kinterface.c:16[m[K:
+[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:107:14:[m[K [01;36m[Knote: [m[Kdeclared here
+  107 | GType        [01;36m[Kgtk_font_selection_get_type[m[K          (void) G_GNUC_CONST;
+      |              [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kinterface.c:1785:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_set_font_name[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1785 |         [01;35m[Kgtk_font_selection_set_font_name[m[K (fontsel, optarg);
       |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:132:14:[m[K [01;36m[Knote: [m[Kdeclared here
   132 | gboolean     [01;36m[Kgtk_font_selection_set_font_name[m[K     (GtkFontSelection *fontsel,
       |              [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-In file included from [01m[K/usr/include/glib-2.0/gobject/gobject.h:24[m[K,
-                 from [01m[K/usr/include/glib-2.0/gobject/gbinding.h:29[m[K,
-                 from [01m[K/usr/include/glib-2.0/glib-object.h:22[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gioenums.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/giotypes.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gio.h:26[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:28[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:32[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[Kinterface.c:1816:68:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kfontsel[m[K’
- 1816 |         gtk_font_selection_set_font_name(GTK_FONT_SELECTION(fontsel[01;31m[K->[m[Kfontsel), optarg);
-      |                                                                    [01;31m[K^~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gtype.h:2300:57:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[K_G_TYPE_CIC[m[K’
- 2300 |     ((ct*) g_type_check_instance_cast ((GTypeInstance*) [01;36m[Kip[m[K, gt))
-      |                                                         [01;36m[K^~[m[K
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:44:47:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_TYPE_CHECK_INSTANCE_CAST[m[K’
-   44 | #define GTK_FONT_SELECTION(obj)              ([01;36m[KG_TYPE_CHECK_INSTANCE_CAST[m[K ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelection))
-      |                                               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1816:42:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KGTK_FONT_SELECTION[m[K’
- 1816 |         gtk_font_selection_set_font_name([01;36m[KGTK_FONT_SELECTION[m[K(fontsel->fontsel), optarg);
-      |                                          [01;36m[K^~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1816:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1816 |         [01;35m[Kgtk_font_selection_set_font_name[m[K(GTK_FONT_SELECTION(fontsel->fontsel), optarg);
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
-                 from [01m[Kinterface.c:16[m[K:
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:107:14:[m[K [01;36m[Knote: [m[Kdeclared here
-  107 | GType        [01;36m[Kgtk_font_selection_get_type[m[K          (void) G_GNUC_CONST;
-      |              [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1817:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_set_preview_text[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1817 |         [01;35m[Kgtk_font_selection_set_preview_text[m[K(GTK_FONT_SELECTION(fontsel->fontsel),
+[01m[Kinterface.c:1786:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_set_preview_text[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1786 |         [01;35m[Kgtk_font_selection_set_preview_text[m[K(fontsel, "abcdefghijklmnopqrstuvwxyz 0123456789");
       |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kinterface.c:16[m[K:
 [01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:137:14:[m[K [01;36m[Knote: [m[Kdeclared here
   137 | void         [01;36m[Kgtk_font_selection_set_preview_text[m[K  (GtkFontSelection *fontsel,
       |              [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-In file included from [01m[K/usr/include/glib-2.0/gobject/gobject.h:24[m[K,
-                 from [01m[K/usr/include/glib-2.0/gobject/gbinding.h:29[m[K,
-                 from [01m[K/usr/include/glib-2.0/glib-object.h:22[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gioenums.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/giotypes.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gio.h:26[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:28[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:32[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
+[01m[Kinterface.c:1789:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_dialog_get_action_area[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1789 |         [01;35m[Kset_check_button[m[K (gtk_dialog_get_action_area (GTK_DIALOG (fontsel_dlg)));
+      |         [01;35m[K^~~~~~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gtk/gtkaboutdialog.h:30[m[K,
+                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:31[m[K,
                  from [01m[Kinterface.c:16[m[K:
-[01m[Kinterface.c:1817:71:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kfontsel[m[K’
- 1817 |         gtk_font_selection_set_preview_text(GTK_FONT_SELECTION(fontsel[01;31m[K->[m[Kfontsel),
-      |                                                                       [01;31m[K^~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gtype.h:2300:57:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[K_G_TYPE_CIC[m[K’
- 2300 |     ((ct*) g_type_check_instance_cast ((GTypeInstance*) [01;36m[Kip[m[K, gt))
-      |                                                         [01;36m[K^~[m[K
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:44:47:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_TYPE_CHECK_INSTANCE_CAST[m[K’
-   44 | #define GTK_FONT_SELECTION(obj)              ([01;36m[KG_TYPE_CHECK_INSTANCE_CAST[m[K ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelection))
-      |                                               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1817:45:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KGTK_FONT_SELECTION[m[K’
- 1817 |         gtk_font_selection_set_preview_text([01;36m[KGTK_FONT_SELECTION[m[K(fontsel->fontsel),
-      |                                             [01;36m[K^~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1817:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_get_type[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1817 |         [01;35m[Kgtk_font_selection_set_preview_text[m[K(GTK_FONT_SELECTION(fontsel->fontsel),
-      |         [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/usr/include/gtk-3.0/gtk/gtkdialog.h:203:13:[m[K [01;36m[Knote: [m[Kdeclared here
+  203 | GtkWidget * [01;36m[Kgtk_dialog_get_action_area[m[K  (GtkDialog *dialog);
+      |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kinterface.c:1797:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_ok_button[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1797 |         [01;35m[Kok_button[m[K = gtk_font_selection_dialog_get_ok_button (fontsel_dlg);
+      |         [01;35m[K^~~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kinterface.c:16[m[K:
-[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:107:14:[m[K [01;36m[Knote: [m[Kdeclared here
-  107 | GType        [01;36m[Kgtk_font_selection_get_type[m[K          (void) G_GNUC_CONST;
-      |              [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1821:33:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kaction_area[m[K’
- 1821 |         set_check_button(fontsel[01;31m[K->[m[Kaction_area);
-      |                                 [01;31m[K^~[m[K
-[01m[Kinterface.c:1830:29:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kaction_area[m[K’
- 1830 |         hbuttonbox = fontsel[01;31m[K->[m[Kaction_area;
-      |                             [01;31m[K^~[m[K
-[01m[Kinterface.c:1833:35:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1833 |         gtk_widget_destroy(fontsel[01;31m[K->[m[Kok_button);
-      |                                   [01;31m[K^~[m[K
-[01m[Kinterface.c:1834:35:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kcancel_button[m[K’
- 1834 |         gtk_widget_destroy(fontsel[01;31m[K->[m[Kcancel_button);
-      |                                   [01;31m[K^~[m[K
-[01m[Kinterface.c:1835:35:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kapply_button[m[K’
- 1835 |         gtk_widget_destroy(fontsel[01;31m[K->[m[Kapply_button);
-      |                                   [01;31m[K^~[m[K
-[01m[Kinterface.c:1844:24:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1844 |                 fontsel[01;31m[K->[m[Kok_button = button;
-      |                        [01;31m[K^~[m[K
-[01m[Kinterface.c:1851:24:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kcancel_button[m[K’
- 1851 |                 fontsel[01;31m[K->[m[Kcancel_button = button;
-      |                        [01;31m[K^~[m[K
-[01m[Kinterface.c:1856:24:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1856 |                 fontsel[01;31m[K->[m[Kok_button = button;
-      |                        [01;31m[K^~[m[K
-In file included from [01m[K/usr/include/glib-2.0/gobject/gobject.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gobject/gbinding.h:29[m[K,
-                 from [01m[K/usr/include/glib-2.0/glib-object.h:22[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gioenums.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/giotypes.h:28[m[K,
-                 from [01m[K/usr/include/glib-2.0/gio/gio.h:26[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:28[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:32[m[K,
-                 from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
+[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:146:12:[m[K [01;36m[Knote: [m[Kdeclared here
+  146 | GtkWidget *[01;36m[Kgtk_font_selection_dialog_get_ok_button[m[K     (GtkFontSelectionDialog *fsd);
+      |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kinterface.c:1798:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgtk_font_selection_dialog_get_cancel_button[m[K’ is deprecated: Use 'GtkFontChooser' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1798 |         [01;35m[Kcancel_button[m[K = gtk_font_selection_dialog_get_cancel_button (fontsel_dlg);
+      |         [01;35m[K^~~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:258[m[K,
                  from [01m[Kinterface.c:16[m[K:
-[01m[Kinterface.c:1866:43:[m[K [01;31m[Kerror: [m[K‘[01m[KGtkFontSelectionDialog[m[K’ {aka ‘[01m[Kstruct _GtkFontSelectionDialog[m[K’} has no member named ‘[01m[Kok_button[m[K’
- 1866 |         g_signal_connect (G_OBJECT(fontsel[01;31m[K->[m[Kok_button),
-      |                                           [01;31m[K^~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gsignal.h:501:29:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[Kg_signal_connect[m[K’
-  501 |     g_signal_connect_data (([01;36m[Kinstance[m[K), (detailed_signal), (c_handler), (data), NULL, (GConnectFlags) 0)
-      |                             [01;36m[K^~~~~~~~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gtype.h:484:66:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[K_G_TYPE_CIC[m[K’
-  484 | #define G_TYPE_CHECK_INSTANCE_CAST(instance, g_type, c_type)    ([01;36m[K_G_TYPE_CIC[m[K ((instance), (g_type), c_type))
-      |                                                                  [01;36m[K^~~~~~~~~~~[m[K
-[01m[K/usr/include/glib-2.0/gobject/gobject.h:56:38:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_TYPE_CHECK_INSTANCE_CAST[m[K’
-   56 | #define G_OBJECT(object)            ([01;36m[KG_TYPE_CHECK_INSTANCE_CAST[m[K ((object), G_TYPE_OBJECT, GObject))
-      |                                      [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1866:27:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KG_OBJECT[m[K’
- 1866 |         g_signal_connect ([01;36m[KG_OBJECT[m[K(fontsel->ok_button),
-      |                           [01;36m[K^~~~~~~~[m[K
-[01m[Kinterface.c:1871:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1871 |                 [01;35m[Kgdk_beep[m[K();
+[01m[K/usr/include/gtk-3.0/gtk/deprecated/gtkfontsel.h:148:12:[m[K [01;36m[Knote: [m[Kdeclared here
+  148 | GtkWidget *[01;36m[Kgtk_font_selection_dialog_get_cancel_button[m[K (GtkFontSelectionDialog *fsd);
+      |            [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[Kinterface.c:1824:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_beep[m[K’ is deprecated: Use 'gdk_display_beep' instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1824 |                 [01;35m[Kgdk_beep[m[K();
       |                 [01;35m[K^~~~~~~~[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -1085,8 +587,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
   121 | void [01;36m[Kgdk_beep[m[K (void);
       |      [01;36m[K^~~~~~~~[m[K
 [01m[Kinterface.c:[m[K In function ‘[01m[Kget_maxsize[m[K’:
-[01m[Kinterface.c:1956:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1956 |         [01;35m[K*[m[Kx = gdk_screen_width()/xmult-2;
+[01m[Kinterface.c:1906:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_width[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1906 |         [01;35m[K*[m[Kx = gdk_screen_width()/xmult-2;
       |         [01;35m[K^[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -1094,8 +596,8 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:108:6:[m[K [01;36m[Knote: [m[Kdeclared here
   108 | gint [01;36m[Kgdk_screen_width[m[K  (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~[m[K
-[01m[Kinterface.c:1957:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
- 1957 |         [01;35m[K*[m[Ky = gdk_screen_height()/ymult-2;
+[01m[Kinterface.c:1907:9:[m[K [01;35m[Kwarning: [m[K‘[01m[Kgdk_screen_height[m[K’ is deprecated [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+ 1907 |         [01;35m[K*[m[Ky = gdk_screen_height()/ymult-2;
       |         [01;35m[K^[m[K
 In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
                  from [01m[K/usr/include/gtk-3.0/gtk/gtk.h:30[m[K,
@@ -1103,18 +605,209 @@ In file included from [01m[K/usr/include/gtk-3.0/gdk/gdk.h:50[m[K,
 [01m[K/usr/include/gtk-3.0/gdk/gdkmain.h:110:6:[m[K [01;36m[Knote: [m[Kdeclared here
   110 | gint [01;36m[Kgdk_screen_height[m[K (void) G_GNUC_CONST;
       |      [01;36m[K^~~~~~~~~~~~~~~~~[m[K
-make[2]: *** [Makefile:408: interface.o] Error 1
-make[2]: Leaving directory '/var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w/src'
-make[1]: *** [Makefile:458: all-recursive] Error 1
-make[1]: Leaving directory '/var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w'
-make: *** [Makefile:369: all] Error 2
- [31;01m*[0m ERROR: x11-misc/xdialog-2.6.5w::local failed (compile phase):
- [31;01m*[0m   emake failed
- [31;01m*[0m 
- [31;01m*[0m If you need support, post the output of `emerge --info '=x11-misc/xdialog-2.6.5w::local'`,
- [31;01m*[0m the complete build log and the output of `emerge -pqv '=x11-misc/xdialog-2.6.5w::local'`.
- [31;01m*[0m The complete build log is located at '/var/tmp/portage/x11-misc/xdialog-2.6.5w/temp/build.log'.
- [31;01m*[0m The ebuild environment file is located at '/var/tmp/portage/x11-misc/xdialog-2.6.5w/temp/environment'.
- [31;01m*[0m Working directory: '/var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w'
- [31;01m*[0m S: '/var/tmp/portage/x11-misc/xdialog-2.6.5w/work/Xdialog-2.6.5w'
- [33;01m*[0m source 
+In file included from [01m[K/usr/include/string.h:519[m[K,
+                 from [01m[Kmain.c:11[m[K:
+In function ‘[01m[Kstrncat[m[K’,
+    inlined from ‘[01m[Kprint_help_info[m[K’ at [01m[Kmain.c:251:2[m[K:
+[01m[K/usr/include/bits/string_fortified.h:135:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncat_chk[m[K’ specified bound 4200 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-overflow=-Wstringop-overflow=]8;;[m[K]
+  135 |   return [01;35m[K__builtin___strncat_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  136 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncat[m[K’,
+    inlined from ‘[01m[Kprint_help_info[m[K’ at [01m[Kmain.c:265:2[m[K:
+[01m[K/usr/include/bits/string_fortified.h:135:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncat_chk[m[K’ specified bound 64 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-overflow=-Wstringop-overflow=]8;;[m[K]
+  135 |   return [01;35m[K__builtin___strncat_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  136 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1159:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 256 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1141:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 256 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1138:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 32 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1132:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 32 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1129:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncpy_chk[m[K’ offset [2688, 2719] from the object at ‘[01m[KXdialog[m[K’ is out of the bounds of referenced subobject ‘[01m[Kok_label[m[K’ with type ‘[01m[Kgchar[32][m[K’ {aka ‘[01m[Kchar[32][m[K’} at offset 2656 [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Warray-bounds-Warray-bounds]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[Kmain.c:16[m[K:
+[01m[Kmain.c:[m[K In function ‘[01m[Kmain[m[K’:
+[01m[Kinterface.h:122:25:[m[K [01;36m[Knote: [m[Ksubobject ‘[01m[Kok_label[m[K’ declared here
+  122 |         gchar           [01;36m[Kok_label[m[K[MAX_BUTTON_LABEL_LENGTH];      /* OK button label text */
+      |                         [01;36m[K^~~~~~~~[m[K
+In file included from [01m[K/usr/include/string.h:519[m[K,
+                 from [01m[Kmain.c:11[m[K:
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1119:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 64 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1115:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 2048 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:1112:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:998:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 32 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:995:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 256 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kmain[m[K’ at [01m[Kmain.c:992:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 64 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/string.h:519[m[K,
+                 from [01m[Kcallbacks.c:11[m[K:
+In function ‘[01m[Kstrncat[m[K’,
+    inlined from ‘[01m[Kprint_text[m[K’ at [01m[Kcallbacks.c:636:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:135:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncat_chk[m[K’ specified bound 96 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-overflow=-Wstringop-overflow=]8;;[m[K]
+  135 |   return [01;35m[K__builtin___strncat_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  136 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[K/usr/include/string.h:519[m[K,
+                 from [01m[Kinterface.c:11[m[K:
+In function ‘[01m[Kstrncat[m[K’,
+    inlined from ‘[01m[Kcreate_progress[m[K’ at [01m[Kinterface.c:772:5[m[K:
+[01m[K/usr/include/bits/string_fortified.h:135:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncat_chk[m[K’ specified bound 2048 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-overflow=-Wstringop-overflow=]8;;[m[K]
+  135 |   return [01;35m[K__builtin___strncat_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  136 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_inputbox[m[K’ at [01m[Kinterface.c:1047:4[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 1024 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_inputbox[m[K’ at [01m[Kinterface.c:1044:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 1024 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_itemlist[m[K’ at [01m[Kinterface.c:1273:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_itemlist[m[K’ at [01m[Kinterface.c:1276:4[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncat[m[K’,
+    inlined from ‘[01m[Kcreate_itemlist[m[K’ at [01m[Kinterface.c:1279:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:135:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncat_chk[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+  135 |   return [01;35m[K__builtin___strncat_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  136 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/usr/include/bits/string_fortified.h:135:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin___strncat_chk[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-overflow=-Wstringop-overflow=]8;;[m[K]
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_buildlist[m[K’ at [01m[Kinterface.c:1336:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_buildlist[m[K’ at [01m[Kinterface.c:1337:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_menubox[m[K’ at [01m[Kinterface.c:1450:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_menubox[m[K’ at [01m[Kinterface.c:1451:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_menubox[m[K’ at [01m[Kinterface.c:1453:4[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_treeview[m[K’ at [01m[Kinterface.c:1519:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In function ‘[01m[Kstrncpy[m[K’,
+    inlined from ‘[01m[Kcreate_treeview[m[K’ at [01m[Kinterface.c:1520:3[m[K:
+[01m[K/usr/include/bits/string_fortified.h:95:10:[m[K [01;35m[Kwarning: [m[K‘[01m[K__builtin_strncpy[m[K’ specified bound 128 equals destination size [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wstringop-truncation-Wstringop-truncation]8;;[m[K]
+   95 |   return [01;35m[K__builtin___strncpy_chk (__dest, __src, __len,[m[K
+      |          [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+   96 | [01;35m[K                                  __glibc_objsize (__dest))[m[K;
+      |                                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+x86_64-pc-linux-gnu-gcc --sysroot=/ -DHAVE_CONFIG_H -march=native -O2 -pipe -Wall -g -O2  -I.. -I/usr/include/gtk-3.0 -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib64/libffi-3.2.1/include -I/usr/include/harfbuzz -I/usr/include/freetype2 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/fribidi -I/usr/include/uuid -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/gio-unix-2.0 -I/usr/include/atk-1.0 -pthread callbacks.o interface.o main.o support.o -o Xdialog -Wl,-O1 -Wl,--as-needed  -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0
+make: Leaving directory [src]
+>>> Source compiled.

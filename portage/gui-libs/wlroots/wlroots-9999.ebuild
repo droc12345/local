@@ -12,7 +12,7 @@ HOMEPAGE="https://gitlab.freedesktop.org/wlroots/wlroots"
 if [[ ${PV} == 9999 ]]; then
 #	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
-	EGIT_COMMIT="9de992b9fef35ac6ee733740ed0763f4f2a279c8"
+#	EGIT_COMMIT="9de992b9fef35ac6ee733740ed0763f4f2a279c8"
 	inherit git-r3
 	SLOT="0/9999"
 else
@@ -30,9 +30,9 @@ REQUIRED_USE="
 "
 
 DEPEND="
-	>=dev-libs/libinput-1.18.0:0=
-	>=dev-libs/wayland-1.19.0
-	>=dev-libs/wayland-protocols-1.21.0
+	>=dev-libs/libinput-1.19.0:0=
+	>=dev-libs/wayland-1.20.0
+	>=dev-libs/wayland-protocols-1.25
 	media-libs/mesa[egl,gles2?,gbm]
 	sys-auth/seatd:=
 	virtual/libudev
@@ -44,14 +44,14 @@ DEPEND="
 		x11-libs/libxcb
 		x11-libs/xcb-util-image
 		x11-libs/xcb-util-wm
-		xcb-errors? ( x11-libs/xcb-util-errors )
 	)
+	xcb-errors? ( x11-libs/xcb-util-errors )
 "
 RDEPEND="
 	${DEPEND}
 "
 BDEPEND="
-	>=dev-libs/wayland-protocols-1.21
+	>=dev-libs/wayland-protocols-1.25
 	>=dev-util/meson-0.58.1
 	virtual/pkgconfig
 "
@@ -63,34 +63,10 @@ src_configure() {
 		-Dxcb-errors=$(usex xcb-errors enabled disabled)
 		"-Dexamples=$(usex examples true false)"
 		"-Dwerror=false"
-		-Dxwayland=$(usex X enabled disabled)
+		-Drenderers=gles2,vulkan
+		-Dxwayland=enabled
+		-Dbackends=drm,libinput
 	)
-
-	if use drm || use x11 || use libinput; then
-		if use drm; then
-			MY_BKEND="${MY_BKEND} drm"
-		fi
-		if use x11; then
-			MY_BKEND="${MY_BKEND} x11"
-		fi
-		if use libinput; then
-			MY_BKEND="${MY_BKEND} libinput"
-		fi
-		emesonargs+=(
-			-Dbackends="$(_meson_env_array $MY_BKEND)"
-		)
-	fi
-	if use gles2 || use vulkan; then
-		if use gles2; then
-			MY_REND="${MY_REND} gles2"
-		fi
-		if use vulkan; then
-			MY_REND="${MY_REND} vulkan"
-		fi
-		emesonargs+=(
-			-Drenderers="$(_meson_env_array $MY_REND)"
-		)
-	fi
 
 	meson_src_configure
 }

@@ -10,10 +10,11 @@ HOMEPAGE="https://github.com/johanmalm/labwc"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/johanmalm/labwc"
+	EGIT_REPO_URI="https://github.com/labwc/labwc"
+#	EGIT_BRANCH="scene-graph"
 else
 	COMMIT=64b6c37e7c2f6057000b36d530046b2b084283df
-	SRC_URI="https://github.com/johanmalm/labwc/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/labwc/labwc/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}"/${PN}-${COMMIT}
 	KEYWORDS="~amd64"
 fi

@@ -19,7 +19,7 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="+text-shaping"
+IUSE="+run-shaping"
 
 RDEPEND="
 	media-libs/harfbuzz
@@ -37,7 +37,7 @@ BDEPEND="
 src_configure() {
 	local emesonargs=(
 		-Dwerror=false
-		$(meson_feature text-shaping)
+		$(meson_feature run-shaping)
 	)
 	meson_src_configure
 }

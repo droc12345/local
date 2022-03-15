@@ -7,11 +7,18 @@ inherit autotools
 
 DESCRIPTION="Drop-in replacement for cdialog using GTK"
 HOMEPAGE=""
-SRC_URI="https://github.com/wdlkmpx/Xdialog/releases/download/v${PV}/Xdialog-${PV}.tar.xz"
+
+if [[ ${PV} == 9999 ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/WdesktopX/Xdialog.git"
+else
+	SRC_URI="https://github.com/WdesktopX/Xdialog/releases/download/v${PV}/Xdialog-${PV}.tar.xz"
+	KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~x86"
+	S="${WORKDIR}/${P/x/X}"
+fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~x86"
 IUSE="doc examples"
 
 RDEPEND="
@@ -23,7 +30,6 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-S="${WORKDIR}/${P/x/X}"
 
 DOCS=( AUTHORS BUGS ChangeLog README )
 

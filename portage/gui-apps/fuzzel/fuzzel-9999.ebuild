@@ -27,8 +27,8 @@ RDEPEND="
 	x11-libs/libxkbcommon
 	cairo? ( x11-libs/cairo )
 	png? ( media-libs/libpng )
-	svg? ( gnome-base/librsvg )
 "
+#	svg? ( gnome-base/librsvg )
 DEPEND="${RDEPEND}
 	dev-libs/tllist
 "

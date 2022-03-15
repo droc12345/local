@@ -6,11 +6,11 @@ EAPI=7
 inherit meson
 
 DESCRIPTION="Openbox alternative for wayland"
-HOMEPAGE="https://github.com/johanmalm/labwc"
+HOMEPAGE="https://github.com/labwc/labwc"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/johanmalm/labwc"
+	EGIT_REPO_URI="https://github.com/labwc/labwc"
 else
 	SRC_URI="https://github.com/labwc/labwc/archive/refs/tags/${PN}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64"

@@ -21,6 +21,11 @@ PATCHES=( "${FILESDIR}"/${P}-autotools.patch )
 
 src_prepare() {
 	default
+
+	cp "${FILESDIR}"/buttons.gif images/
+	cp "${FILESDIR}"/digits.gif images/
+	cp "${FILESDIR}"/thick.gif share/tiles/
+
 	mv configure.{in,ac} || die
 	eautoreconf
 }

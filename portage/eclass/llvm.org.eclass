@@ -1,4 +1,4 @@
-# Copyright 2019-2021 Gentoo Authors
+# Copyright 2019-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: llvm.org.eclass
@@ -45,7 +45,7 @@ esac
 # @DESCRIPTION:
 # The major version of current LLVM trunk.  Used to determine
 # the correct branch to use.
-_LLVM_MASTER_MAJOR=14
+_LLVM_MASTER_MAJOR=15
 
 # @ECLASS-VARIABLE: _LLVM_SOURCE_TYPE
 # @INTERNAL
@@ -142,8 +142,15 @@ case ${PV} in
 			PowerPC RISCV Sparc SystemZ WebAssembly X86 XCore
 		)
 		;;
-	*)
+	14*)
 		ALL_LLVM_EXPERIMENTAL_TARGETS=( ARC CSKY M68k )
+		ALL_LLVM_PRODUCTION_TARGETS=(
+			AArch64 AMDGPU ARM AVR BPF Hexagon Lanai Mips MSP430 NVPTX
+			PowerPC RISCV Sparc SystemZ VE WebAssembly X86 XCore
+		)
+		;;
+	*)
+		ALL_LLVM_EXPERIMENTAL_TARGETS=( ARC CSKY LoongArch M68k )
 		ALL_LLVM_PRODUCTION_TARGETS=(
 			AArch64 AMDGPU ARM AVR BPF Hexagon Lanai Mips MSP430 NVPTX
 			PowerPC RISCV Sparc SystemZ VE WebAssembly X86 XCore
@@ -294,6 +301,14 @@ llvm.org_src_unpack() {
 			"${WORKDIR}/llvm-gentoo-patchset-${LLVM_PATCHSET}" |
 			xargs rm
 		assert
+
+		if ver_test -ge 13.0.1_rc3; then
+			# fail if no patches remain
+			if [[ ! -s ${WORKDIR}/llvm-gentoo-patchset-${LLVM_PATCHSET} ]]
+			then
+				die "No patches in the patchset apply to the package"
+			fi
+		fi
 	fi
 }
 
