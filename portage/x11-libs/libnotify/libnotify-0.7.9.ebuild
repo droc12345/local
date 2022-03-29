@@ -11,11 +11,11 @@ HOMEPAGE="https://gitlab.gnome.org/GNOME/libnotify"
 LICENSE="LGPL-2.1+"
 SLOT="0"
 KEYWORDS="~alpha amd64 arm arm64 ~ia64 ~mips ppc ppc64 ~riscv sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x86-solaris"
-IUSE="gtk-doc +introspection test"
+IUSE="select gtk-doc +introspection test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	app-eselect/eselect-notify-send
+	select? ( app-eselect/eselect-notify-send )
 	>=dev-libs/glib-2.26:2[${MULTILIB_USEDEP}]
 	x11-libs/gdk-pixbuf:2[${MULTILIB_USEDEP}]
 	introspection? ( >=dev-libs/gobject-introspection-1.54:= )
@@ -25,13 +25,14 @@ BDEPEND="
 	>=dev-libs/gobject-introspection-common-1.32
 	dev-util/glib-utils
 	virtual/pkgconfig
-	app-text/docbook-xsl-ns-stylesheets
-	dev-libs/libxslt
-	gtk-doc? ( dev-util/gtk-doc
+	gtk-doc? (
+		app-text/docbook-xsl-ns-stylesheets
+		dev-libs/libxslt
+		dev-util/gtk-doc
 		app-text/docbook-xml-dtd:4.1.2 )
 	test? ( x11-libs/gtk+:3[${MULTILIB_USEDEP}] )
 "
-PDEPEND="virtual/notification-daemon"
+#PDEPEND="virtual/notification-daemon"
 
 src_prepare() {
 	default
@@ -43,6 +44,7 @@ multilib_src_configure() {
 		$(meson_use test tests)
 		$(meson_native_use_feature introspection)
 		$(meson_native_use_bool gtk-doc gtk_doc)
+		$(meson_native_use_bool gtk-doc man)
 		-Ddocbook_docs=disabled
 	)
 	meson_src_configure
@@ -54,10 +56,10 @@ multilib_src_install() {
 	mv "${ED}"/usr/bin/{,libnotify-}notify-send || die #379941
 }
 
-pkg_postinst() {
-	eselect notify-send update ifunset
-}
-
-pkg_postrm() {
-	eselect notify-send update ifunset
-}
+#pkg_postinst() {
+#	eselect notify-send update ifunset
+#}
+#
+#pkg_postrm() {
+#	eselect notify-send update ifunset
+#}
