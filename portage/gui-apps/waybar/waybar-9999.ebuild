@@ -19,7 +19,7 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="mpd network +popups pulseaudio sndio tray +udev wifi"
+IUSE="mpd network +popups pulseaudio sndio tests tray +udev wifi"
 
 BDEPEND="
 	>=app-text/scdoc-1.9.2
@@ -63,9 +63,13 @@ src_configure() {
 		$(meson_feature popups gtk-layer-shell)
 		$(meson_feature pulseaudio)
 		$(meson_feature sndio)
+		$(meson_feature tests)
 		$(meson_feature tray dbusmenu-gtk)
 		$(meson_feature udev libudev)
 		$(meson_feature wifi rfkill)
 	)
+	if use tests; then
+		emsonargs+="--wrap-mode=default"
+	fi
 	meson_src_configure
 }
