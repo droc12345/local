@@ -17,7 +17,7 @@ IUSE="static-libs test valgrind"
 RESTRICT="!test? ( test )"
 
 BDEPEND="sys-apps/help2man
-	virtual/yacc
+	app-alternatives/yacc
 	test? ( valgrind? ( dev-util/valgrind ) )"
 
 DOCS=(

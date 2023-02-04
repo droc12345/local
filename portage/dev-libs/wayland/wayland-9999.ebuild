@@ -17,10 +17,11 @@ HOMEPAGE="https://wayland.freedesktop.org/ https://gitlab.freedesktop.org/waylan
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="doc"
+IUSE="doc test"
+RESTRICT="!test? ( test )"
 
 BDEPEND="
-	~dev-util/wayland-scanner-${PV}[$MULTILIB_USEDEP]
+	~dev-util/wayland-scanner-${PV}
 	virtual/pkgconfig
 	doc? (
 		>=app-doc/doxygen-1.6[dot]
@@ -41,6 +42,7 @@ multilib_src_configure() {
 		$(meson_native_true dtd_validation)
 		-Dlibraries=true
 		-Dscanner=false
+		$(meson_use test tests)
 	)
 	meson_src_configure
 }

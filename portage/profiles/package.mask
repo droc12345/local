@@ -226,7 +226,7 @@ dev-go/go-text
 
 # Mart Raudsepp <leio@gentoo.org> (2021-12-18)
 # GNOME 42 mask
->=gui-libs/libhandy-1.5.0
+#>=gui-libs/libhandy-1.5.0
 
 # Michał Górny <mgorny@gentoo.org> (2021-12-18)
 # EOL kernel with known vulnerabilities.  Please move to one of the LTS
@@ -305,7 +305,7 @@ dev-tex/pdfannotextractor
 # Dev channel releases are only for people who
 # are developers or want more experimental features
 # and accept a more unstable release.
->=www-client/chromium-99
+#>=www-client/chromium-99
 
 # Mike Pagano <mpagano@gentoo.org> (2021-11-18)
 # Bug introduced in this version that can
@@ -320,8 +320,8 @@ dev-tex/pdfannotextractor
 
 # Mart Raudsepp <leio@gentoo.org> (2021-11-11)
 # Needs testing to ensure valac-0.54 works for existing packages
->=dev-libs/vala-common-0.53
-dev-lang/vala:0.54
+#>=dev-libs/vala-common-0.53
+#dev-lang/vala:0.54
 
 # Sam James <sam@gentoo.org> (2021-11-03)
 # Known issues with YAMA (kernel.yama.ptrace_scope=1) which is on by default
@@ -350,9 +350,9 @@ x11-drivers/nvidia-drivers:0/vulkan
 
 # Mart Raudsepp <leio@gentoo.org> (2021-09-24)
 # Experimental split media-sound/pulseaudio packages, bug #536780.
-media-libs/libpulse
-media-sound/pulseaudio-daemon
->=media-sound/pulseaudio-15.0-r100
+#media-libs/libpulse
+#media-sound/pulseaudio-daemon
+#>=media-sound/pulseaudio-15.0-r100
 
 # Mart Raudsepp <leio@gentoo.org> (2021-09-23)
 # Incompatible with c++17 abseil-cpp, no in-tree consumers yet

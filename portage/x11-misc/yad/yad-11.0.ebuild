@@ -11,7 +11,7 @@ SRC_URI="https://https://github.com/v1cont/yad/releases/download/v${PV}/${P}.tar
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64"
-IUSE="html nls spell sourceview"
+IUSE="+gsettings html nls spell sourceview"
 
 RDEPEND="
 	x11-libs/gtk+:3
@@ -30,11 +30,15 @@ src_prepare() {
 
 src_configure() {
 	econf \
-		--enable-standalone \
+		$(use_enable gsettings standalone) \
 		$(use_enable nls) \
 		$(use_enable html) \
 		$(use_enable spell) \
-		$(use_enable sourceview)
+		$(use_enable sourceview) \
+		--enable-tools \
+		--enable-icon-browser \
+		--enable-tools \
+		--enable-tray
 }
 
 src_install() {

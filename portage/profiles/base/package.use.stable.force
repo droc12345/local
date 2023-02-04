@@ -10,7 +10,7 @@
 # We want users to be able to benefit from the other PA 15 fixes, so
 # force this on for now, to be revisited once libpulse split is complete
 # in Gentoo. bug #820332
-media-sound/pulseaudio daemon
+#media-sound/pulseaudio daemon
 
 ## Kent Fredric <kentnl@gentoo.org> (2019-07-11)
 # The absense of these features require dev-perl/GD, which currently

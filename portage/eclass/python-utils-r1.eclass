@@ -41,7 +41,7 @@ inherit toolchain-funcs
 _PYTHON_ALL_IMPLS=(
 	pypy3
 	python2_7
-	python3_7 python3_8 python3_9 python3_10
+	python3_7 python3_{8..11}
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -124,7 +124,7 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				jython2_7|pypy|pypy1_[89]|pypy2_0|pypy3|python2_[5-7]|python3_[1-9]|python3_10)
+				jython2_7|pypy|pypy1_[89]|pypy2_0|pypy3|python2_[5-7]|python3_[1-9]|python3_10|python3_11)
 					;;
 				*)
 					if has "${i}" "${_PYTHON_ALL_IMPLS[@]}" \
@@ -1451,4 +1451,37 @@ python_generate_cffi_modules() {
 }
 
 _PYTHON_UTILS_R1=1
+
+# @FUNCTION: python_has_version
+# @USAGE: [-b|-d|-r] <atom>...
+# @DESCRIPTION:
+# A convenience wrapper for has_version() with verbose output and better
+# defaults for use in python_check_deps().
+#
+# The wrapper accepts -b/-d/-r options to indicate the root to perform
+# the lookup on.  Unlike has_version, the default is -b.
+#
+# The wrapper accepts multiple package specifications.  For the check
+# to succeed, *all* specified atoms must match.
+python_has_version() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	local root_arg=( -b )
+	case ${1} in
+		-b|-d|-r)
+			root_arg=( "${1}" )
+			shift
+			;;
+	esac
+
+	local pkg
+	for pkg; do
+		ebegin "    ${pkg}"
+		has_version "${root_arg[@]}" "${pkg}"
+		eend ${?} || return
+	done
+
+	return 0
+}
+
 fi

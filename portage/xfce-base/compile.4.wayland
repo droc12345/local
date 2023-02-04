@@ -1,0 +1,26 @@
+These are the steps I took on Arch Linux to get it going:
+
+    I installed the following from the AUR:
+
+    xfce4-dev-tools-devel
+    garcon-devel
+    libxfce4util-devel
+    libxfce4ui-devel
+
+    I then ran the following:
+
+pacman -S exo gtk-layer-shell
+
+git clone https://gitlab.xfce.org/kelnos/libxfce4windowing
+cd libxfce4windowing
+./autogen --prefix=/usr
+make
+sudo make install
+cd ..
+
+git clone --branch=wayland-xfw https://gitlab.xfce.org/Tamaranch/xfce4-panel
+cd xfce-panel
+./autogen --prefix=/usr
+make
+sudo make install
+

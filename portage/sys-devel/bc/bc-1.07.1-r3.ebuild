@@ -24,7 +24,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	sys-devel/flex
-	virtual/yacc
+	app-alternatives/yacc
 "
 
 PATCHES=(

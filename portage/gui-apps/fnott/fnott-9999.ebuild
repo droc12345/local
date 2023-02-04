@@ -19,7 +19,6 @@ IUSE="+icons"
 
 DEPEND="
 	dev-libs/wayland
-	gui-libs/wlroots
 	media-libs/fcft
 	media-libs/fontconfig
 	media-libs/freetype

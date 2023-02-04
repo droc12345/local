@@ -27,7 +27,7 @@ RDEPEND="
 	dev-libs/glib:2
 	dev-libs/libinput
 	dev-libs/libxml2:2
-	gui-libs/wlroots[X?]
+	system-wlroots? ( gui-libs/wlroots[X?] )
 	x11-libs/cairo[X?]
 	x11-libs/libxkbcommon:=[X?]
 	x11-libs/pango[X?]
@@ -37,12 +37,18 @@ BDEPEND="
 	dev-libs/wayland-protocols
 	virtual/pkgconfig
 "
+src_install() {
+	meson_src_install --skip-subprojects
+}
 
 src_configure() {
 	local emesonargs=(
 		--wrap-mode=default
-		$(meson_feature system-wlroots)
 		$(meson_feature X xwayland)
 	)
+	if ! use system-wlroots; then
+		emesonargs+=(--force-fallback-for=wlroots)
+	fi
+
 	meson_src_configure
 }

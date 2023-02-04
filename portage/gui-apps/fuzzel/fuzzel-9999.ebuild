@@ -25,10 +25,11 @@ RDEPEND="
 	dev-libs/wayland
 	media-libs/fcft
 	x11-libs/libxkbcommon
+	x11-libs/pixman
 	cairo? ( x11-libs/cairo )
 	png? ( media-libs/libpng )
+	svg? ( gnome-base/librsvg )
 "
-#	svg? ( gnome-base/librsvg )
 DEPEND="${RDEPEND}
 	dev-libs/tllist
 "
@@ -40,7 +41,8 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-Dwerror=false
+		-Dpng-backend=$(usex png libpng none)
+		-Dsvg-backend=$(usex svg librsvg none)
 		$(meson_feature cairo enable-cairo)
 	)
 	meson_src_configure

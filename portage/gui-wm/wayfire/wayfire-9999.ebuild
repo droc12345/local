@@ -69,7 +69,7 @@ src_configure() {
 }
 
 src_install() {
-	meson_src_install
+	meson_src_install --skip-subprojects
 	dobin "${T}"/wayfire-session
 
 	insinto "/usr/share/wayland-sessions/"

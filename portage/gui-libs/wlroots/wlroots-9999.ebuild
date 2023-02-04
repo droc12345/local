@@ -12,7 +12,7 @@ HOMEPAGE="https://gitlab.freedesktop.org/wlroots/wlroots"
 if [[ ${PV} == 9999 ]]; then
 #	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
-#	EGIT_COMMIT="9de992b9fef35ac6ee733740ed0763f4f2a279c8"
+	EGIT_COMMIT="252b2348bd62170d97c4e81fb2050f757b56d67e"
 	inherit git-r3
 	SLOT="0/9999"
 else
@@ -33,7 +33,7 @@ DEPEND="
 	>=dev-libs/libinput-1.19.0:0=
 	>=dev-libs/wayland-1.20.0
 	>=dev-libs/wayland-protocols-1.25
-	media-libs/mesa[egl,gles2?,gbm]
+	media-libs/mesa[gles2?]
 	sys-auth/seatd:=
 	virtual/libudev
 	x11-libs/libdrm

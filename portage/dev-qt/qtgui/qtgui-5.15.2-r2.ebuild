@@ -36,9 +36,9 @@ COMMON_DEPEND="
 	>=media-libs/harfbuzz-1.6.0:=
 	sys-libs/zlib:=
 	dbus? ( ~dev-qt/qtdbus-${PV} )
-	egl? ( media-libs/mesa[egl] )
+	egl? ( media-libs/mesa )
 	eglfs? (
-		media-libs/mesa[gbm]
+		media-libs/mesa
 		x11-libs/libdrm
 	)
 	evdev? ( sys-libs/mtdev )

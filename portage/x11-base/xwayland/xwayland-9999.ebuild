@@ -72,6 +72,9 @@ src_configure() {
 		$(meson_use unwind libunwind)
 		$(meson_use xcsecurity)
 		-Ddtrace=false
+		-Ddocs=false
+		-Ddevel-docs=false
+		-Ddocs-pdf=false
 	)
 	meson_src_configure
 }

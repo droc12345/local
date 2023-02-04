@@ -37,7 +37,7 @@ BDEPEND="${BUILD_DEPEND}
 	virtual/pkgconfig
 	nftables? (
 		sys-devel/flex
-		virtual/yacc
+		app-alternatives/yacc
 	)
 "
 RDEPEND="${COMMON_DEPEND}

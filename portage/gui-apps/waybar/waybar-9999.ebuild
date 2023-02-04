@@ -19,7 +19,7 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="mpd network +popups pulseaudio sndio tests tray +udev wifi"
+IUSE="experimental mpd network +popups pulseaudio sndio tests tray +udev wifi"
 
 BDEPEND="
 	>=app-text/scdoc-1.9.2
@@ -27,19 +27,15 @@ BDEPEND="
 	virtual/pkgconfig
 "
 DEPEND="
-	dev-cpp/cairomm:0
-	dev-cpp/glibmm:2
 	dev-cpp/gtkmm:3.0
 	dev-libs/glib:2
 	dev-libs/jsoncpp:=
 	dev-libs/libinput:=
-	dev-libs/libsigc++:2
 	>=dev-libs/libfmt-5.3.0:=
 	>=dev-libs/spdlog-1.8.5:=
 	dev-libs/date:=
 	dev-libs/wayland
 	dev-libs/wayland-protocols
-	gui-libs/wlroots
 	x11-libs/gtk+:3[wayland]
 	x11-libs/libxkbcommon
 	mpd? ( media-libs/libmpdclient )
@@ -67,6 +63,7 @@ src_configure() {
 		$(meson_feature tray dbusmenu-gtk)
 		$(meson_feature udev libudev)
 		$(meson_feature wifi rfkill)
+		$(meson_use experimental)
 	)
 	if use tests; then
 		emsonargs+="--wrap-mode=default"

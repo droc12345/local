@@ -11,7 +11,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 	S="${WORKDIR}/wayland-${PV}"
 fi
-inherit meson-multilib
+inherit meson
 
 DESCRIPTION="wayland-scanner tool"
 HOMEPAGE="https://wayland.freedesktop.org/ https://gitlab.freedesktop.org/wayland/wayland"
@@ -22,16 +22,23 @@ SLOT="0"
 BDEPEND="virtual/pkgconfig"
 RDEPEND="
 	!<dev-libs/wayland-${PV}
-	>=dev-libs/expat-2.1.0-r3:=[$MULTILIB_USEDEP]
+	>=dev-libs/expat-2.1.0-r3:=
 "
 DEPEND="${RDEPEND}"
 
-multilib_src_configure() {
+src_configure() {
 	local emesonargs=(
 		-Ddocumentation=false
 		-Ddtd_validation=false
 		-Dlibraries=false
 		-Dscanner=true
+		-Dtests=false
 	)
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+
+	mv "${ED}"/usr/$(get_libdir)/pkgconfig "${ED}"/usr/share/pkgconfig
 }

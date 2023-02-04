@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 	app-text/scrollkeeper-dtd
 	>=dev-util/intltool-0.35
 	sys-devel/gettext
-	virtual/awk
+	app-alternatives/awk
 	virtual/pkgconfig
 "
 # dev-libs/glib needed for eautofoo, bug #255114.

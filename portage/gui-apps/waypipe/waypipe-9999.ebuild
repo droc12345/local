@@ -35,12 +35,12 @@ RESTRICT="!test? ( test )"
 
 DEPEND="
 	dmabuf? (
-		media-libs/mesa[gbm(+),vaapi?,wayland]
+		media-libs/mesa[vaapi?,wayland]
 		x11-libs/libdrm
 	)
 	lz4? ( app-arch/lz4 )
 	systemtap? ( dev-util/systemtap )
-	vaapi? ( x11-libs/libva[drm,wayland] )
+	vaapi? ( media-libs/libva[wayland] )
 	ffmpeg? (
 		media-video/ffmpeg[x264,vaapi?]
 	)

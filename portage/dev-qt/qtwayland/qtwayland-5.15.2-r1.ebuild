@@ -17,7 +17,7 @@ DEPEND="
 	~dev-qt/qtcore-${PV}
 	~dev-qt/qtdeclarative-${PV}
 	~dev-qt/qtgui-${PV}[egl,libinput,vulkan=]
-	media-libs/mesa[egl]
+	media-libs/mesa
 	>=x11-libs/libxkbcommon-0.2.0
 	vulkan? ( dev-util/vulkan-headers )
 	X? (
