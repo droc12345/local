@@ -18,7 +18,7 @@ DESCRIPTION="Simplistic and highly configurable status panel for X and Wayland"
 HOMEPAGE="https://codeberg.org/dnkl/yambar"
 LICENSE="MIT"
 SLOT="0"
-IUSE="+core +alsa backlight battery +clock +cpu +disk-io dwl +foreign-toplevel +memory mpd +i3 +label +network +pipewire pulseaudio +removables river +script sway-xkb wayland X xkb xwindow"
+IUSE="core +alsa +backlight +battery +clock +cpu +disk-io +dwl +foreign-toplevel +memory +mpd +i3 +label +network +pipewire +pulseaudio +removables +river +script sway-xkb wayland X xkb xwindow"
 REQUIRED_USE="
 	|| ( wayland X )
 	sway-xkb? ( wayland )
@@ -34,8 +34,8 @@ RDEPEND="
 	battery? ( virtual/libudev:= )
 	mpd? ( media-libs/libmpdclient )
 	pipewire? (
-		dev-libs/json-c
-		media-video/pipewire
+			  dev-libs/json-c
+			  media-video/pipewire
 	)
 	pulseaudio? ( media-libs/libpulse )
 	removables? ( virtual/libudev:= )
@@ -59,6 +59,10 @@ BDEPEND="
 		dev-libs/wayland-protocols
 		dev-util/wayland-scanner
 	)
+"
+
+PATCHES="
+	${FILESDIR}/round.patch
 "
 
 src_configure() {
@@ -95,4 +99,10 @@ src_configure() {
 src_install() {
 	meson_src_install
 	rm -rf "${D}/usr/share/doc/${PN}"
+}
+
+pkg_postinst() {
+	ewarn "Warning: if you are upgrading from 1.8.0, please note that there are breaking changes that might affect your config.yml file."
+	ewarn "See the changelog for more information"
+	ewarn "https://codeberg.org/dnkl/yambar/releases/tag/1.9.0"
 }
