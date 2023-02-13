@@ -125,4 +125,6 @@ pkg_postinst() {
 		ewarn "box, and you are on your own with configuration."
 		ewarn
 	fi
+
+	setcap 'cap_sys_nice=eip' /usr/bin/wireplumber
 }

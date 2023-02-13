@@ -38,7 +38,7 @@ HOMEPAGE="https://pipewire.org/"
 LICENSE="MIT LGPL-2.1+ GPL-2"
 # ABI was broken in 0.3.42 for https://gitlab.freedesktop.org/pipewire/wireplumber/-/issues/49
 SLOT="0/0.4"
-IUSE="bluetooth dbus doc echo-cancel extra flatpak gstreamer gsettings jack-client jack-sdk lv2
+IUSE="bluetooth dbus doc echo-cancel extra ffmpeg flatpak gstreamer gsettings jack-client jack-sdk lv2
 modemmanager pipewire-alsa readline sound-server ssl system-service systemd test udev v4l X zeroconf"
 
 # Once replacing system JACK libraries is possible, it's likely that
@@ -53,6 +53,7 @@ modemmanager pipewire-alsa readline sound-server ssl system-service systemd test
 # If that works, pulseaudio defaults are loaded into alsa-lib runtime replacing default PCM and CTL.
 # When pipewire-alsa will be able to perform similar check, pipewire-alsa can be enabled unconditionally.
 REQUIRED_USE="
+	ffmpeg? ( extra )
 	jack-sdk? ( !jack-client )
 	modemmanager? ( bluetooth )
 	system-service? ( systemd )
@@ -92,6 +93,7 @@ RDEPEND="
 	extra? (
 		>=media-libs/libsndfile-1.0.20
 	)
+	ffmpeg? ( media-video/ffmpeg:= )
 	flatpak? (
 		dev-libs/glib
 	)
@@ -438,4 +440,6 @@ pkg_postinst() {
 		ewarn "box, and you are on your own with configuration."
 		ewarn
 	fi
+
+	setcap 'cap_sys_nice=eip' /usr/bin/pipewire
 }
