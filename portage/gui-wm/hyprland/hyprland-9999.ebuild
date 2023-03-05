@@ -52,6 +52,9 @@ RDEPEND="
 
 BDEPEND="
 	>=dev-libs/wayland-protocols-1.27
+	dev-libs/libliftoff
+	dev-libs/udis86
+	media-libs/libdisplay-info
 	virtual/pkgconfig
 "
 
