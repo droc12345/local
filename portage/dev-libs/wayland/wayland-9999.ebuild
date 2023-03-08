@@ -5,7 +5,7 @@ EAPI=7
 
 if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/wayland/wayland.git"
-	EGIT_COMMIT="d4d322885349c73f8753cca0c6d7754d2b0b411e"
+	#EGIT_COMMIT="d4d322885349c73f8753cca0c6d7754d2b0b411e"
 	inherit git-r3
 else
 	SRC_URI="https://wayland.freedesktop.org/releases/${P}.tar.xz"
