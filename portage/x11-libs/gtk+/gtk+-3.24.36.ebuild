@@ -1,7 +1,7 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=7
 
 inherit gnome2 meson-multilib multilib
 
@@ -102,6 +102,10 @@ PATCHES=(
 	# gtk-update-icon-cache is installed by dev-util/gtk-update-icon-cache
 	"${FILESDIR}"/${PN}-3.24.36-update-icon-cache.patch
 )
+
+#src_prepare() {
+#	gnome2_src_prepare
+#}
 
 multilib_src_configure() {
 	local emesonargs=(
