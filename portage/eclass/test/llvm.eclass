@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: llvm.eclass
@@ -6,7 +6,7 @@
 # Michał Górny <mgorny@gentoo.org>
 # @AUTHOR:
 # Michał Górny <mgorny@gentoo.org>
-# @SUPPORTED_EAPIS: 7 8
+# @SUPPORTED_EAPIS: 6 7 8
 # @BLURB: Utility functions to build against slotted LLVM
 # @DESCRIPTION:
 # The llvm.eclass provides utility functions that can be used to build
@@ -56,39 +56,46 @@
 # }
 # @CODE
 
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+case "${EAPI:-0}" in
+	0|1|2|3|4|5)
+		die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}"
+		;;
+	6|7|8)
+		;;
+	*)
+		die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}"
+		;;
 esac
 
+EXPORT_FUNCTIONS pkg_setup
+
 if [[ ! ${_LLVM_ECLASS} ]]; then
-_LLVM_ECLASS=1
 
 # make sure that the versions installing straight into /usr/bin
 # are uninstalled
 DEPEND="!!sys-devel/llvm:0"
 
-# @ECLASS_VARIABLE: LLVM_MAX_SLOT
+# @ECLASS-VARIABLE: LLVM_MAX_SLOT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Highest LLVM slot supported by the package. Needs to be set before
 # llvm_pkg_setup is called. If unset, no upper bound is assumed.
 
-# @ECLASS_VARIABLE: _LLVM_KNOWN_SLOTS
+# @ECLASS-VARIABLE: _LLVM_KNOWN_SLOTS
 # @INTERNAL
 # @DESCRIPTION:
 # Correct values of LLVM slots, newest first.
-declare -g -r _LLVM_KNOWN_SLOTS=( {17..8} )
+declare -g -r _LLVM_KNOWN_SLOTS=( {15..8} )
 
-# @FUNCTION: get_llvm_slot
+# @FUNCTION: get_llvm_prefix
 # @USAGE: [-b|-d] [<max_slot>]
 # @DESCRIPTION:
 # Find the newest LLVM install that is acceptable for the package,
-# and print its major version number (i.e. slot).
+# and print an absolute path to it.
 #
 # If -b is specified, the checks are performed relative to BROOT,
 # and BROOT-path is returned.  This is appropriate when your package
-# calls llvm-config executable.
+# calls llvm-config executable.  -b is supported since EAPI 7.
 #
 # If -d is specified, the checks are performed relative to ESYSROOT,
 # and ESYSROOT-path is returned.  This is appropriate when your package
@@ -107,7 +114,7 @@ declare -g -r _LLVM_KNOWN_SLOTS=( {17..8} )
 # is acceptable, false otherwise. If llvm_check_deps() is not defined,
 # the function defaults to checking whether sys-devel/llvm:${LLVM_SLOT}
 # is installed.
-get_llvm_slot() {
+get_llvm_prefix() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	local hv_switch=-d
@@ -118,6 +125,28 @@ get_llvm_slot() {
 		esac
 		shift
 	done
+
+	local prefix=
+	if [[ ${EAPI} != 6 ]]; then
+		case ${hv_switch} in
+			-b)
+				prefix=${BROOT}
+				;;
+			-d)
+				prefix=${ESYSROOT}
+				;;
+		esac
+	else
+		case ${hv_switch} in
+			-b)
+				die "${FUNCNAME} -b is not supported in EAPI ${EAPI}"
+				;;
+			-d)
+				prefix=${EPREFIX}
+				hv_switch=
+				;;
+		esac
+	fi
 
 	local max_slot=${1}
 	local slot
@@ -139,7 +168,7 @@ get_llvm_slot() {
 			has_version ${hv_switch} "sys-devel/llvm:${slot}" || continue
 		fi
 
-		echo "${slot}"
+		echo "${prefix}/usr/lib/llvm/${slot}"
 		return
 	done
 
@@ -149,80 +178,6 @@ get_llvm_slot() {
 	fi
 
 	die "No LLVM slot${1:+ <= ${1}} satisfying the package's dependencies found installed!"
-}
-
-# @FUNCTION: get_llvm_prefix
-# @USAGE: [-b|-d] [<max_slot>]
-# @DESCRIPTION:
-# Find the newest LLVM install that is acceptable for the package,
-# and print an absolute path to it.
-#
-# The options and behavior is the same as for get_llvm_slot.
-get_llvm_prefix() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	local prefix=${ESYSROOT}
-	[[ ${1} == -b ]] && prefix=${BROOT}
-
-	echo "${prefix}/usr/lib/llvm/$(get_llvm_slot "${@}")"
-}
-
-# @FUNCTION: llvm_fix_clang_version
-# @USAGE: <variable-name>...
-# @DESCRIPTION:
-# Fix the clang compiler name in specified variables to include
-# the major version, to prevent PATH alterations from forcing an older
-# clang version being used.
-llvm_fix_clang_version() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	local shopt_save=$(shopt -p -o noglob)
-	set -f
-	local var
-	for var; do
-		local split=( ${!var} )
-		case ${split[0]} in
-			*clang|*clang++|*clang-cpp)
-				local version=()
-				read -r -a version < <("${split[0]}" --version)
-				local major=${version[-1]%%.*}
-				if [[ -n ${major//[0-9]} ]]; then
-					die "${var}=${!var} produced invalid --version: ${version[*]}"
-				fi
-
-				split[0]+=-${major}
-				if ! type -P "${split[0]}" &>/dev/null; then
-					die "${split[0]} does not seem to exist"
-				fi
-				declare -g "${var}=${split[*]}"
-				;;
-		esac
-	done
-	${shopt_save}
-}
-
-# @FUNCTION: llvm_fix_tool_path
-# @USAGE: <variable-name>...
-# @DESCRIPTION:
-# Fix the LLVM tools referenced in the specified variables to their
-# current location, to prevent PATH alterations from forcing older
-# versions being used.
-llvm_fix_tool_path() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	local shopt_save=$(shopt -p -o noglob)
-	set -f
-	local var
-	for var; do
-		local split=( ${!var} )
-		local path=$(type -P ${split[0]} 2>/dev/null)
-		# if it resides in one of the LLVM prefixes, it's an LLVM tool!
-		if [[ ${path} == "${BROOT}/usr/lib/llvm"* ]]; then
-			split[0]=${path}
-			declare -g "${var}=${split[*]}"
-		fi
-	done
-	${shopt_save}
 }
 
 # @FUNCTION: llvm_pkg_setup
@@ -243,15 +198,7 @@ llvm_pkg_setup() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	if [[ ${MERGE_TYPE} != binary ]]; then
-		LLVM_SLOT=$(get_llvm_slot "${LLVM_MAX_SLOT}")
-
-		llvm_fix_clang_version CC CPP CXX
-		# keep in sync with profiles/features/llvm/make.defaults!
-		llvm_fix_tool_path ADDR2LINE AR AS LD NM OBJCOPY OBJDUMP RANLIB
-		llvm_fix_tool_path READELF STRINGS STRIP
-
-		local prefix=${ESYSROOT}
-		local llvm_path=${prefix}/usr/lib/llvm/${LLVM_SLOT}/bin
+		local llvm_path=$(get_llvm_prefix "${LLVM_MAX_SLOT}")/bin
 		local IFS=:
 		local split_path=( ${PATH} )
 		local new_path=()
@@ -277,6 +224,5 @@ llvm_pkg_setup() {
 	fi
 }
 
+_LLVM_ECLASS=1
 fi
-
-EXPORT_FUNCTIONS pkg_setup
