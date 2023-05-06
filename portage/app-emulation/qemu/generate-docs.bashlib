@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+. /lib/gentoo/functions.sh || { echo "Failed to source functions.sh!" ; exit 1 ; }
+. "$(pkg-config iwdevtools --variable=atomf)" || { echo "Failed to source iwdevtools' atomf!" ; exit 1 ; }
+
+generate-docs_setup_environment() {
+	atomset ${1} || atomset ${PWD}/${1} || { eerror "Failed to run: 'atomset ${1}'. Exiting!" ; exit 1 ; }
+
+	# We don't want to compress the man pages ourselves
+	export PORTAGE_COMPRESS_EXCLUDE_SUFFIXES=".*"
+	export PORTAGE_TMPDIR=${PORTAGE_TMPDIR:-/tmp/${0##*/}}
+	export PORTAGE_USERNAME="$(whoami)"
+	export PORTAGE_WORKDIR_MODE="775"
+	export XZ_DEFAULTS="-9 -T 0"
+
+	if [[ ${PWD} == */${CATEGORY}/${PN} ]] ; then
+		# If we're already in the directory with the ebuilds,
+		# we can back up instead.
+		local repo_path=${PWD}/../..
+	else
+		local repo_path=${PWD}
+	fi
+
+	# For new setups (first-time running doc generation at all), not
+	# all the infrastructure may be in the ebuild yet. We only pass
+	# USE="doc man" ... when it's not present because otherwise
+	# it pulls in unnecessary deps. We can just rely on the deps
+	# from ${PN^^}_DOCS_PREBUILT=0 when it's an already setup package.
+	local docs_prebuilt_set="${PN^^}_DOCS_PREBUILT"
+	local use_prefix=""
+	if [[ -n "${!docs_prebuilt_set}" ]] ; then
+		use_prefix="USE='doc man'"
+	fi
+
+	ebuild ${repo_path}/${1} manifest || exit 1
+	sudo "${use_prefix}" PORTDIR_OVERLAY="${repo_path}" emerge --quiet --oneshot --onlydeps =${PF} || { eerror "Installing doc dependencies for =${PF} failed! Exiting!" ; exit 1 ; }
+
+	# We need this to flush out a previous doc entry from a failed attempt
+	USE="doc man" ebuild ${repo_path}/${1} manifest
+	USE="doc man" ebuild ${repo_path}/${1} clean compile install || { eerror "Failed to build ${1} with USE='doc man'. Exiting!" ; exit 1 ; }
+
+	D="${PORTAGE_TMPDIR}"/portage/${CATEGORY}/${PF}/image
+	WORKDIR="${PORTAGE_TMPDIR}"/portage/${CATEGORY}/${PF}/work
+	# Borrowed from mgorny-dev-tools' pkgdiff
+	S=$(sed -nr 's/^declare -x S="(.*)"/\1/p' "${PORTAGE_TMPDIR}"/portage/${CATEGORY}/${PF}/temp/environment)
+
+	dir=$(mktemp -d)
+	mkdir "${dir}"/${P}-docs || { eerror "Creating ${dir}/${P}-docs failed. Exiting!" ; exit 1 ; }
+}
+
+generate-docs_copy_docs() {
+	ebegin "Copying docs to ${dir}/${P}-docs"
+	cp -r "${D}"/usr/share/man*/* "${dir}"/${P}-docs/
+	eend ${?} || { eerror "Copying docs failed!" ; exit 1 ; }
+}
+
+generate-docs_create_tarball() {
+	ebegin "Creating tarball"
+
+	# Embed generate-docs.bashlib and the generate-${PN}-docs script
+	# within the tarball for posterity.
+	cp {${0},$(dirname ${BASH_SOURCE}/generate-docs.bashlib)} "${dir}"/${P}-docs/ || { eerror "Failed to embed script within tarball. Exiting!" ; exit 1 ; }
+
+	tar -caf "${dir}"/${P}-docs.tar.xz -C "${dir}" ${P}-docs/
+	eend ${?} || { eerror "Creating tarball failed!" ; exit 1 ; }
+
+	einfo "Tarball at ${dir}/${P}-docs.tar.xz"
+}
+
+generate-docs() {
+	generate-docs_setup_environment "$@"
+	generate-docs_copy_docs "$@"
+	generate-docs_create_tarball "$@"
+}

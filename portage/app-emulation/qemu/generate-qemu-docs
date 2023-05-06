@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+if [[ ${BASH_SOURCE} = */* ]]; then
+	SCRIPT_DIR=${BASH_SOURCE%/*}/
+else
+	SCRIPT_DIR=./
+fi
+
+. ${SCRIPT_DIR}/generate-docs.bashlib || { echo "Failed to source generate-docs.bashlib!" ; exit 1 ; }
+
+export QEMU_DOCS_PREBUILT=0
+
+generate-docs_copy_docs() {
+	ebegin "Deleting HTML docs"
+	# We don't want the HTML docs
+	rm -rf "${S}"/tools-build/docs/manual
+	eend $? || exit 1
+
+	ebegin "Copying docs to ${dir}/${P}-docs"
+	cp -ra "${S}"/tools-build/docs "${dir}"/${P}-docs/
+	eend $? || exit 1
+}
+
+generate-docs $@
