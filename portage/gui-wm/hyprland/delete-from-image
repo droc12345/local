@@ -1,0 +1,3 @@
+config.h.in
+meson.build
+version.h.in
