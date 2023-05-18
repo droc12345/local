@@ -48,8 +48,8 @@ src_configure() {
 		$(qt_use odbc     sql-odbc   plugin)
 		$(qt_use postgres sql-psql   plugin)
 		$(qt_use sqlite   sql-sqlite plugin)
-		$(usev sqlite -system-sqlite)
 	)
+#		$(usev sqlite -system-sqlite)
 
 	use oci8 && myconf+=("-I${ORACLE_HOME}/include" "-L${ORACLE_HOME}/$(get_libdir)")
 
