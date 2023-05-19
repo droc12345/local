@@ -6,11 +6,11 @@ EAPI=7
 inherit meson
 
 DESCRIPTION="xrandr clone for wlroots compositors"
-HOMEPAGE="https://github.com/emersion/wlr-randr"
+HOMEPAGE="https://git.sr.ht/~emersion/wlr-randr"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/emersion/wlr-randr"
+	EGIT_REPO_URI="https://git.sr.ht/~emersion/wlr-randr"
 else
 	SRC_URI="https://github.com/emersion/wlr-randr/releases/download/v${PV}/${P}.tar.gz"
 	KEYWORDS="~amd64"
