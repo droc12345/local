@@ -6,8 +6,9 @@
 #layout:
 #arch		profile_directory				status
 
-# SYMLINK_LIB=no profiles
-# Run app-portage/unsymlink-lib *before* switching the profile.
-amd64		default/linux/amd64/17.1/desktop			stable
-amd64           default/linux/amd64/17.1/no-multilib                    stable
+# @MAINTAINER: amd64@gentoo.org
+amd64           default/linux/amd64/17.0                                stable
+amd64           default/linux/amd64/17.0/desktop                        stable
+amd64           default/linux/amd64/17.0/no-multilib                    stable
 
+# vim: set ts=8:

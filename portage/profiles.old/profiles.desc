@@ -1,0 +1,13 @@
+#############################################
+# This is a list of valid profiles for each architecture.  This file is used by
+# repoman when doing a repoman scan or repoman full.
+# DO NOT ADD PROFILES WITH A "die" or "exit" IN THEM OR IT KILLS REPOMAN
+#
+#layout:
+#arch		profile_directory				status
+
+# SYMLINK_LIB=no profiles
+# Run app-portage/unsymlink-lib *before* switching the profile.
+amd64		default/linux/amd64/17.1/desktop			stable
+amd64           default/linux/amd64/17.1/no-multilib                    stable
+

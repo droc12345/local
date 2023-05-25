@@ -1,5 +1,3 @@
-acct-group
-acct-user
 app-accessibility
 app-admin
 app-antivirus
@@ -7,7 +5,6 @@ app-arch
 app-backup
 app-benchmarks
 app-cdr
-app-containers
 app-crypt
 app-dicts
 app-doc
@@ -18,6 +15,7 @@ app-eselect
 app-forensics
 app-i18n
 app-laptop
+app-leechcraft
 app-metrics
 app-misc
 app-mobilephone
@@ -134,7 +132,6 @@ sci-mathematics
 sci-misc
 sci-physics
 sci-visualization
-sec-keys
 sec-policy
 sys-apps
 sys-auth
@@ -144,6 +141,7 @@ sys-cluster
 sys-devel
 sys-fabric
 sys-firmware
+sys-freebsd
 sys-fs
 sys-kernel
 sys-libs
