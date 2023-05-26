@@ -1,10 +1,14 @@
+acct-group
+acct-user
 app-accessibility
 app-admin
+app-alternatives
 app-antivirus
 app-arch
 app-backup
 app-benchmarks
 app-cdr
+app-containers
 app-crypt
 app-dicts
 app-doc
@@ -15,7 +19,6 @@ app-eselect
 app-forensics
 app-i18n
 app-laptop
-app-leechcraft
 app-metrics
 app-misc
 app-mobilephone
@@ -46,7 +49,6 @@ dev-perl
 dev-php
 dev-python
 dev-qt
-dev-ros
 dev-ruby
 dev-scheme
 dev-tcltk
@@ -120,7 +122,6 @@ net-voip
 net-vpn
 net-wireless
 perl-core
-ros-meta
 sci-astronomy
 sci-biology
 sci-calculators
@@ -132,6 +133,7 @@ sci-mathematics
 sci-misc
 sci-physics
 sci-visualization
+sec-keys
 sec-policy
 sys-apps
 sys-auth
@@ -141,7 +143,6 @@ sys-cluster
 sys-devel
 sys-fabric
 sys-firmware
-sys-freebsd
 sys-fs
 sys-kernel
 sys-libs
