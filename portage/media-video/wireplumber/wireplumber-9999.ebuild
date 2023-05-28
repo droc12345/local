@@ -10,7 +10,7 @@ EAPI=8
 # continue to move quickly. It's not uncommon for fixes to be made shortly
 # after releases.
 
-LUA_COMPAT=( lua5-{3,4} )
+LUA_COMPAT=( lua5-{1,3,4} )
 
 inherit lua-single meson systemd
 
