@@ -866,7 +866,7 @@ python_replicate_script() {
 	local f
 	for f; do
 		local dosym=dosym
-		[[ ${EAPI} == [67] ]] && dosym=dosym8
+		[[ ${EAPI} == [678] ]] && dosym=dosym8
 		"${dosym}" -r /usr/lib/python-exec/python-exec2 "${f#${ED}}"
 #		_python_ln_rel "${ED%/}/usr/lib/python-exec/python-exec2" "${f}" || die
 	done

@@ -4,7 +4,7 @@
 EAPI=7
 
 if [[ ${PV} = *9999* ]]; then
-	EGIT_BRANCH="xwayland-22.1"
+#	EGIT_BRANCH="xwayland-22.1"
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/xserver.git"
 	inherit git-r3
 else
