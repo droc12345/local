@@ -12,6 +12,6 @@ KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 ~riscv ~s390 sparc 
 
 RDEPEND="
 	|| (
-		>=media-libs/mesa-9.1.6[X(+),${MULTILIB_USEDEP}]
+		>=media-libs/mesa-9.1.6[${MULTILIB_USEDEP}]
 		dev-util/mingw64-runtime
 	)"

@@ -134,7 +134,6 @@ DEPEND="
 		dev-libs/jansson
 		x11-libs/gtk+:3
 	)
-	hotkeys? ( x11-libs/libX11 )
 	libnotify? ( sys-apps/dbus )
 	libsamplerate? ( media-libs/libsamplerate )
 	mad? ( media-libs/libmad )

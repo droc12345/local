@@ -24,7 +24,7 @@ DEPEND="
 	>=dev-libs/wayland-protocols-1.14
 	dev-libs/wayland
 	x11-libs/cairo
-	x11-libs/libxcb"
+	x11-libs/libxkbcommon"
 
 RDEPEND="${DEPEND}"
 

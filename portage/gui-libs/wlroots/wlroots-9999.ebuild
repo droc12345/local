@@ -23,7 +23,7 @@ else
 fi
 
 LICENSE="MIT"
-IUSE="X drm examples gles2 libinput vulkan x11 xcb-errors"
+IUSE="X drm examples gles2 libinput vulkan xwayland xcb-errors"
 
 REQUIRED_USE="
 	xcb-errors? ( X )
@@ -64,7 +64,7 @@ src_configure() {
 		"-Dexamples=$(usex examples true false)"
 		"-Dwerror=false"
 		-Drenderers=gles2,vulkan
-		-Dxwayland=enabled
+		-Dxwayland=$(usex xwayland enabled disabled)
 		-Dbackends=drm,libinput
 	)
 
