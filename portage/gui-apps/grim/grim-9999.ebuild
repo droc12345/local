@@ -10,7 +10,7 @@ HOMEPAGE="https://github.com/emersion/grim"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/emersion/${PN}.git"
+	EGIT_REPO_URI="https://git.sr.ht/~emersion/grim"
 else
 	SRC_URI="https://github.com/emersion/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~arm64"
