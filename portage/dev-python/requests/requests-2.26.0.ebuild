@@ -20,7 +20,7 @@ IUSE="socks5"
 
 RDEPEND="
 	>=dev-python/certifi-2017.4.17[${PYTHON_USEDEP}]
-	dev-python/charset_normalizer[${PYTHON_USEDEP}]
+	dev-python/charset-normalizer[${PYTHON_USEDEP}]
 	<dev-python/idna-4[${PYTHON_USEDEP}]
 	<dev-python/urllib3-1.27[${PYTHON_USEDEP}]
 	socks5? ( >=dev-python/PySocks-1.5.6[${PYTHON_USEDEP}] )
