@@ -715,6 +715,7 @@ python_newexe() {
 	local dosym=dosym
 	[[ ${EAPI} == [678] ]] && dosym=dosym8
 	"${dosym}" -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
+
 #	_python_ln_rel "${ED%/}"/usr/lib/python-exec/python-exec2 \
 #		"${ED%/}/${wrapd}/${newfn}" || die
 
