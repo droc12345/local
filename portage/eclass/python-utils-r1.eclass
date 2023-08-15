@@ -32,7 +32,9 @@ fi
 if [[ ! ${_PYTHON_UTILS_R1} ]]; then
 
 [[ ${EAPI} == 5 ]] && inherit eutils multilib
-inherit toolchain-funcs
+[[ ${EAPI} == 7 ]] && inherit eapi8-dosym
+inherit multiprocessing toolchain-funcs
+#inherit toolchain-funcs
 
 # @ECLASS-VARIABLE: _PYTHON_ALL_IMPLS
 # @INTERNAL

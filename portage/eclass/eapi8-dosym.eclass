@@ -17,7 +17,7 @@
 # https://bugs.gentoo.org/708360
 
 case ${EAPI} in
-	5|6|7) ;;
+	5|6|7|8) ;;
 	*) die "${ECLASS}: EAPI=${EAPI:-0} not supported" ;;
 esac
 

@@ -98,7 +98,7 @@ esac
 if [[ ! ${_DISTUTILS_R1} ]]; then
 
 [[ ${EAPI} == 6 ]] && inherit eutils xdg-utils
-[[ ${EAPI} == [67] ]] && inherit eapi8-dosym
+[[ ${EAPI} == [678] ]] && inherit eapi8-dosym
 inherit multiprocessing toolchain-funcs
 
 if [[ ! ${DISTUTILS_SINGLE_IMPL} ]]; then
