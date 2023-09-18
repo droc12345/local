@@ -45,7 +45,7 @@ DEPEND="
 	sndio? ( media-sound/sndio:= )
 	tray? (
 		dev-libs/libdbusmenu[gtk3]
-		dev-libs/libappindicator
+		dev-libs/libayatana-appindicator
 	)
 	udev? ( virtual/libudev:= )
 	wifi? ( || ( sys-apps/util-linux net-wireless/rfkill ) )

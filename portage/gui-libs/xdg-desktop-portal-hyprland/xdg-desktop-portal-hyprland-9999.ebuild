@@ -46,15 +46,15 @@ BDEPEND="
 "
 
 src_configure() {
-	local emesonargs=()
+	local emesonargs=(--wrap-mode=default)
 
-	if use systemd; then
-		emesonargs+=(-Dsd-bus-provider=libsystemd)
-	elif use elogind; then
-		emesonargs+=(-Dsd-bus-provider=libelogind)
-	else
-		emesonargs+=(-Dsd-bus-provider=basu)
-	fi
+#	if use systemd; then
+#		emesonargs+=(-Dsd-bus-provider=libsystemd)
+#	elif use elogind; then
+#		emesonargs+=(-Dsd-bus-provider=libelogind)
+#	else
+#		emesonargs+=(-Dsd-bus-provider=basu)
+#	fi
 	meson_src_configure
 }
 
@@ -64,6 +64,6 @@ src_compile() {
 }
 
 src_install() {
-	meson_src_install
+	meson_src_install --skip-subprojects
 	dobin "${S}/hyprland-share-picker/build/hyprland-share-picker"
 }

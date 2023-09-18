@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: vala.eclass
@@ -6,35 +6,35 @@
 # gnome@gentoo.org
 # @AUTHOR:
 # Alexandre Rostovtsev <tetromino@gentoo.org>
-# @SUPPORTED_EAPIS: 7 8
+# @SUPPORTED_EAPIS: 1 2 3 4 5 6 7
 # @BLURB: Sets up the environment for using a specific version of vala.
 # @DESCRIPTION:
 # This eclass sets up commonly used environment variables for using a specific
-# version of dev-lang/vala to configure and build a package.  It is needed for
+# version of dev-lang/vala to configure and build a package. It is needed for
 # packages whose build systems assume the existence of certain unversioned vala
 # executables, pkgconfig files, etc., which Gentoo does not provide.
+#
+# This eclass provides one phase function: src_prepare.
 
-case ${EAPI} in
-	6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+inherit eutils multilib
+
+case "${EAPI:-0}" in
+	0)	die "EAPI=0 is not supported" ;;
+	1)	;;
+	*)	EXPORT_FUNCTIONS src_prepare ;;
 esac
 
-if [[ -z ${_VALA_ECLASS} ]] ; then
-_VALA_ECLASS=1
-
-inherit flag-o-matic
-
-# @ECLASS_VARIABLE: VALA_MIN_API_VERSION
+# @ECLASS-VARIABLE: VALA_MIN_API_VERSION
 # @DESCRIPTION:
-# Minimum vala API version (e.g. 0.56).
-VALA_MIN_API_VERSION=${VALA_MIN_API_VERSION:-0.56}
+# Minimum vala API version (e.g. 0.36).
+VALA_MIN_API_VERSION=${VALA_MIN_API_VERSION:-0.36}
 
-# @ECLASS_VARIABLE: VALA_MAX_API_VERSION
+# @ECLASS-VARIABLE: VALA_MAX_API_VERSION
 # @DESCRIPTION:
-# Maximum vala API version (e.g. 0.56).
+# Maximum vala API version (e.g. 0.36).
 VALA_MAX_API_VERSION=${VALA_MAX_API_VERSION:-0.56}
 
-# @ECLASS_VARIABLE: VALA_USE_DEPEND
+# @ECLASS-VARIABLE: VALA_USE_DEPEND
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # USE dependencies that vala must be built with (e.g. vapigen).
@@ -50,18 +50,17 @@ vala_api_versions() {
 	local minimal_supported_minor_version minor_version
 
 	# Dependency atoms are not generated for Vala versions older than 0.${minimal_supported_minor_version}.
-	minimal_supported_minor_version="56"
+	minimal_supported_minor_version="36"
 
 	for ((minor_version = ${VALA_MAX_API_VERSION#*.}; minor_version >= ${VALA_MIN_API_VERSION#*.}; minor_version = minor_version - 2)); do
-		if ((minor_version >= minimal_supported_minor_version)); then
+		# 0.38 was never in main tree; remove the special case once minimal_supported_minor_version >= 40
+		# 0.42 is EOL and removed from tree; remove special case once minimal_support_minor_version >= 44
+		if ((minor_version >= minimal_supported_minor_version)) && ((minor_version != 38)) && ((minor_version != 42)); then
 			echo "0.${minor_version}"
 		fi
 	done
 }
 
-# @FUNCTION: _vala_use_depend
-# @INTERNAL
-# @DESCRIPTION:
 # Outputs VALA_USE_DEPEND as a a USE-dependency string
 _vala_use_depend() {
 	local u="" vala_use
@@ -100,15 +99,14 @@ vala_depend() {
 # VALA_MAX_API_VERSION, VALA_MIN_API_VERSION, and VALA_USE_DEPEND.
 vala_best_api_version() {
 	local u v
-
 	u=$(_vala_use_depend)
 
 	for v in $(vala_api_versions); do
-		has_version -b "dev-lang/vala:${v}${u}" && echo "${v}" && return
+		has_version $([[ $EAPI == [1-6] ]] || echo -b) "dev-lang/vala:${v}${u}" && echo "${v}" && return
 	done
 }
 
-# @FUNCTION: vala_setup
+# @FUNCTION: vala_src_prepare
 # @USAGE: [--ignore-use] [--vala-api-version api_version]
 # @DESCRIPTION:
 # Sets up the environment variables and pkgconfig files for the
@@ -118,7 +116,7 @@ vala_best_api_version() {
 # Is a no-op if called without --ignore-use when USE=-vala.
 # Dies if the USE check is passed (or ignored) and a suitable vala
 # version is not available.
-vala_setup() {
+vala_src_prepare() {
 	local p d valafoo version ignore_use
 
 	while [[ $1 ]]; do
@@ -138,7 +136,7 @@ vala_setup() {
 	fi
 
 	if [[ ${version} ]]; then
-		has_version -b "dev-lang/vala:${version}" || die "No installed vala:${version}"
+		has_version $([[ $EAPI == [1-6] ]] || echo -b) "dev-lang/vala:${version}" || die "No installed vala:${version}"
 	else
 		version=$(vala_best_api_version)
 		[[ ${version} ]] || die "No installed vala in $(vala_depend)"
@@ -169,19 +167,6 @@ vala_setup() {
 			fi
 		done
 	done
-	: "${PKG_CONFIG_PATH:="${EPREFIX}/usr/$(get_libdir)/pkgconfig:${EPREFIX}/usr/share/pkgconfig"}"
+	: ${PKG_CONFIG_PATH:="${EPREFIX}/usr/$(get_libdir)/pkgconfig:${EPREFIX}/usr/share/pkgconfig"}
 	export PKG_CONFIG_PATH="${T}/pkgconfig:${PKG_CONFIG_PATH}"
-
-	# See bug #892708.
-	# Workaround for https://gitlab.gnome.org/GNOME/vala/-/issues/1408.
-	append-cflags $(test-flags-CC -Wno-incompatible-function-pointer-types)
 }
-
-# @FUNCTION: vala_src_prepare
-# @DESCRIPTION:
-# For backwards compatibility in EAPI 7.  Calls vala_setup.
-if [[ ${EAPI} == 7 ]]; then
-	vala_src_prepare() { vala_setup "$@"; }
-fi
-
-fi
