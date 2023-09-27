@@ -31,7 +31,7 @@ SLOT="${PYVER}"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 IUSE="
 	bluetooth build +ensurepip examples gdbm hardened libedit lto
-	+ncurses pgo +readline +sqlite +ssl test tk valgrind
+	+ncurses pgo +readline +sqlite +ssl test tk valgrind +xml
 "
 RESTRICT="!test? ( test )"
 
@@ -67,6 +67,7 @@ RDEPEND="
 		dev-tcltk/tix
 	)
 	!!<sys-apps/sandbox-2.21
+	xml? ( >=dev-libs/expat-2.1:= )
 "
 # bluetooth requires headers from bluez
 DEPEND="

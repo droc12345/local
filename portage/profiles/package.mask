@@ -193,7 +193,7 @@ sys-apps/hwids
 # Michał Górny <mgorny@gentoo.org> (2021-12-20)
 # Switches from deprecated stdlib distutils to vendored distutils
 # by default.  Masked for testing.  See tracker bug #822354.
->=dev-python/setuptools-60
+#>=dev-python/setuptools-60
 
 # Jonas Stein <jstein@gentoo.org> (2021-12-20)
 # Package is broken and obsolete.
