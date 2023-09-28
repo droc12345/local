@@ -25,9 +25,7 @@ KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~m68k ~mips ppc ppc64 ~riscv 
 
 RDEPEND="
 	>=dev-python/installer-0.5.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
-	' 3.{9..10})
+	>=dev-python/tomli-1.2.3[${PYTHON_USEDEP}]
 "
 
 distutils_enable_tests pytest

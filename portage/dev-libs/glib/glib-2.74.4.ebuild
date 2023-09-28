@@ -3,7 +3,7 @@
 
 EAPI=7
 PYTHON_REQ_USE="xml"
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{8..11} )
 
 inherit flag-o-matic gnome.org gnome2-utils linux-info meson-multilib multilib python-any-r1 toolchain-funcs xdg
 

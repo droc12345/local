@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} pypy3 )
+PYTHON_COMPAT=( python3_{8..11} pypy3 )
 PYTHON_REQ_USE="ssl(+),threads(+)"
 
 inherit bash-completion-r1 distutils-r1
