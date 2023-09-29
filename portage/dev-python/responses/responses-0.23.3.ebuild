@@ -24,9 +24,7 @@ RDEPEND="
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	<dev-python/requests-3[${PYTHON_USEDEP}]
 	>=dev-python/requests-2.30.0[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep '
-		dev-python/tomli[${PYTHON_USEDEP}]
-	' 3.{8..10})
+	dev-python/tomli[${PYTHON_USEDEP}]
 	dev-python/tomli-w[${PYTHON_USEDEP}]
 	<dev-python/urllib3-3[${PYTHON_USEDEP}]
 	>=dev-python/urllib3-1.25.10[${PYTHON_USEDEP}]
