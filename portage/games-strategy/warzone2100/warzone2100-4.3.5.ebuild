@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	media-libs/harfbuzz:=
 	media-libs/libogg
 	media-libs/libpng:=
-	media-libs/libsdl2[opengl,video]
+	media-libs/libsdl2[video]
 	media-libs/libtheora
 	media-libs/libvorbis
 	media-libs/openal
