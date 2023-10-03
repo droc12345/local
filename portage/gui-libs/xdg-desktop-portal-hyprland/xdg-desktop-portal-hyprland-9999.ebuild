@@ -21,11 +21,12 @@ SLOT="0"
 IUSE="elogind systemd"
 REQUIRED_USE="?? ( elogind systemd )"
 
+#	dev-qt/qtbase
+#	dev-qt/qtwayland:6
 DEPEND="
+	dev-cpp/sdbus-c++
 	dev-libs/inih
 	dev-libs/wayland
-	dev-qt/qtbase
-	dev-qt/qtwayland:6
 	media-libs/mesa
 	>=media-video/pipewire-0.3.41:=
 	x11-libs/libdrm

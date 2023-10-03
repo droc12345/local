@@ -11,13 +11,14 @@ SRC_URI="https://github.com/Kistler-Group/sdbus-cpp/archive/refs/tags/v${PV}.tar
 LICENSE="LGPL-2.1+ Nokia-Qt-LGPL-Exception-1.1" # Nothing to do with Qt but exception text is exactly the same.
 SLOT="0/1"
 KEYWORDS="~amd64"
-IUSE="doc +elogind systemd test tools"
-REQUIRED_USE="^^ ( elogind systemd )"
+IUSE="doc elogind systemd +basu test tools"
+REQUIRED_USE="^^ ( elogind systemd basu )"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
 	elogind? ( >=sys-auth/elogind-236 )
 	systemd? ( >=sys-apps/systemd-236:= )
+	basu? ( sys-libs/basu )
 	tools? ( dev-libs/expat )
 "
 
