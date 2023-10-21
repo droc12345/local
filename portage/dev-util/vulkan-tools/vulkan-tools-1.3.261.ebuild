@@ -24,7 +24,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 IUSE="cube wayland +X"
 
-REQUIRED_USE="cube? ( || ( X wayland ) )"
+# Cube demo only supports one window system at a time
+REQUIRED_USE="cube? ( ^^ ( X wayland ) )"
 
 BDEPEND="${PYTHON_DEPS}
 	cube? ( ~dev-util/glslang-${PV}:=[${MULTILIB_USEDEP}] )
@@ -49,9 +50,6 @@ pkg_setup() {
 	use cube && MULTILIB_CHOST_TOOLS+=(
 		/usr/bin/vkcube
 		/usr/bin/vkcubepp
-	)
-	use cube && use wayland && MULTILIB_CHOST_TOOLS+=(
-		/usr/bin/vkcube-wayland
 	)
 
 	python-any-r1_pkg_setup

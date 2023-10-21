@@ -1,10 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 MY_PN=Vulkan-Loader
-CMAKE_ECLASS="cmake"
 inherit flag-o-matic cmake-multilib toolchain-funcs
 
 if [[ ${PV} == *9999* ]]; then
@@ -12,9 +11,9 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_SUBMODULES=()
 	inherit git-r3
 else
-	SRC_URI="https://github.com/KhronosGroup/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
-	S="${WORKDIR}"/${MY_PN}-${PV}
+	SRC_URI="https://github.com/KhronosGroup/${MY_PN}/archive/sdk-${PV}.0.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc ~ppc64 ~riscv ~x86"
+	S="${WORKDIR}"/${MY_PN}-sdk-${PV}.0
 fi
 
 DESCRIPTION="Vulkan Installable Client Driver (ICD) Loader"
@@ -24,9 +23,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 IUSE="layers wayland X"
 
-BDEPEND=">=dev-util/cmake-3.10.2"
 DEPEND="
-	>=dev-util/vulkan-headers-${PV}
+	~dev-util/vulkan-headers-${PV}
 	wayland? ( dev-libs/wayland:=[${MULTILIB_USEDEP}] )
 	X? (
 		x11-libs/libX11:=[${MULTILIB_USEDEP}]
@@ -42,6 +40,8 @@ multilib_src_configure() {
 	fi
 
 	local mycmakeargs=(
+		-DCMAKE_C_FLAGS="${CFLAGS} -DNDEBUG"
+		-DCMAKE_CXX_FLAGS="${CXXFLAGS} -DNDEBUG"
 		-DCMAKE_SKIP_RPATH=ON
 		-DBUILD_TESTS=OFF
 		-DBUILD_LOADER=ON
@@ -49,6 +49,7 @@ multilib_src_configure() {
 		-DBUILD_WSI_XCB_SUPPORT=$(usex X)
 		-DBUILD_WSI_XLIB_SUPPORT=$(usex X)
 		-DVULKAN_HEADERS_INSTALL_DIR="${ESYSROOT}/usr"
+		-DENABLE_WERROR=OFF
 	)
 	cmake_src_configure
 }
@@ -57,9 +58,4 @@ multilib_src_install() {
 	keepdir /etc/vulkan/icd.d
 
 	cmake_src_install
-}
-
-pkg_postinst() {
-	einfo "USE=demos has been dropped as per upstream packaging"
-	einfo "vulkaninfo is now available in the dev-util/vulkan-tools package"
 }
