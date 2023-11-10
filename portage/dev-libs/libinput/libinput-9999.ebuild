@@ -26,7 +26,7 @@ RESTRICT="!test? ( test )"
 RDEPEND="
 	input_devices_wacom? ( >=dev-libs/libwacom-0.27:= )
 	>=dev-libs/libevdev-1.9.902
-	dev-python/python-libevdev
+	dev-python/libevdev
 	dev-python/pyudev
 	>=sys-libs/mtdev-1.1
 	virtual/libudev:=
