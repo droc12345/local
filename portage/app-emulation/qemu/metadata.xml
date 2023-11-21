@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>ajak@gentoo.org</email>
-		<name>John Helmert III</name>
-	</maintainer>
-	<maintainer type="person">
-		<email>sam@gentoo.org</email>
-		<name>Sam James</name>
-	</maintainer>
-	<maintainer type="person">
-		<email>tamiko@gentoo.org</email>
-		<name>Matthias Maier</name>
-	</maintainer>
-	<maintainer type="person">
-		<email>zlogene@gentoo.org</email>
-		<name>Mikle Kolyada</name>
-	</maintainer>
 	<maintainer type="project">
 		<email>virtualization@gentoo.org</email>
 		<name>Gentoo Virtualization Project</name>
+	</maintainer>
+	<maintainer type="person">
+		<email>dilfridge@gentoo.org</email>
+		<name>Andreas K. Hüttel</name>
 	</maintainer>
 	<use>
 		<flag name="accessibility">Adds support for braille displays using brltty</flag>
@@ -39,6 +27,7 @@
 		<pkg>net-libs/libiscsi</pkg> instead of indirectly via the Linux
 		block layer that <pkg>sys-block/open-iscsi</pkg> does.</flag>
 		<flag name="io-uring">Enable efficient I/O via <pkg>sys-libs/liburing</pkg>.</flag>
+		<flag name="keyutils">Support Linux keyrings via <pkg>sys-apps/keyutils</pkg></flag>
 		<flag name="multipath">Enable multipath persistent reservation passthrough via
 		<pkg>sys-fs/multipath-tools</pkg>.</flag>
 		<flag name="ncurses">Enable the ncurses-based console</flag>
@@ -47,6 +36,7 @@
 		<flag name="pin-upstream-blobs">Pin the versions of BIOS firmware to the version included in the upstream release.
 		This is needed to sanely support migration/suspend/resume/snapshotting/etc... of instances.
 		When the blobs are different, random corruption/bugs/crashes/etc... may be observed.</flag>
+		<flag name="pipewire">Enable pipewire output for sound emulation</flag>
 		<flag name="plugins">Enable qemu plugin API via shared library loading.</flag>
 		<flag name="pulseaudio">Enable pulseaudio output for sound emulation</flag>
 		<flag name="rbd">Enable rados block device backend support, see https://docs.ceph.com/en/mimic/rbd/qemu-rbd/</flag>
@@ -65,7 +55,6 @@
 		<flag name="usbredir">Use <pkg>sys-apps/usbredir</pkg> to redirect USB devices to another machine over TCP</flag>
 		<flag name="vde">Enable VDE-based networking</flag>
 		<flag name="vhost-net">Enable accelerated networking using vhost-net, see https://www.linux-kvm.org/page/VhostNet</flag>
-		<flag name="vhost-user-fs">Enable shared file system access using the FUSE protocol carried over virtio.</flag>
 		<flag name="virgl">Enable experimental Virgil 3d (virtual software GPU)</flag>
 		<flag name="virtfs">Enable VirtFS via virtio-9p-pci / fsdev. See https://wiki.qemu.org/Documentation/9psetup</flag>
 		<flag name="vte">Enable terminal support (<pkg>x11-libs/vte</pkg>) in the GTK+ interface</flag>
