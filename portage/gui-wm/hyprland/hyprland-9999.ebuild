@@ -71,10 +71,16 @@ src_configure() {
 
 src_install() {
 	meson_src_install --skip-subprojects
-	mkdir ${D}/usr/include/hyprland/wlroots
-	cp -r ${S}/subprojects/wlroots/include/wlr ${D}/usr/include/hyprland/wlroots
-	rm ${D}/usr/include/hyprland/wlroots/wlr/config.h.in
-	rm ${D}/usr/include/hyprland/wlroots/wlr/meson.build
-	rm ${D}/usr/include/hyprland/wlroots/wlr/version.h.in
-	cp ${S}-build/subprojects/wlroots/include/wlr/* ${D}/usr/include/hyprland/wlroots/wlr
+	meson_src_install --tags devel
+
+	#mkdir ${D}/usr/include/hyprland/wlroots
+	#cp -r ${S}/subprojects/wlroots/include/wlr ${D}/usr/include/hyprland/wlroots
+	#rm ${D}/usr/include/hyprland/wlroots/wlr/config.h.in
+	#rm ${D}/usr/include/hyprland/wlroots/wlr/meson.build
+	#rm ${D}/usr/include/hyprland/wlroots/wlr/version.h.in
+	#cp ${S}-build/subprojects/wlroots/include/wlr/* ${D}/usr/include/hyprland/wlroots/wlr
+	mkdir "${ED}"/usr/include/hyprland/wlroots || die
+	mv "${ED}"/usr/include/wlr "${ED}"/usr/include/hyprland/wlroots || die
+	# devel tag includes wlroots .pc and .a files still
+	rm -rf "${ED}"/usr/$(get_libdir)/ || die
 }

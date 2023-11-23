@@ -16,7 +16,7 @@ inherit lua-single meson systemd
 
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/pipewire/${PN}.git"
-	EGIT_BRANCH="next"
+	EGIT_BRANCH="master"
 	inherit git-r3
 else
 	SRC_URI="https://gitlab.freedesktop.org/pipewire/${PN}/-/archive/${PV}/${P}.tar.bz2"
