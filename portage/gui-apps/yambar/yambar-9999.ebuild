@@ -18,7 +18,7 @@ DESCRIPTION="Simplistic and highly configurable status panel for X and Wayland"
 HOMEPAGE="https://codeberg.org/dnkl/yambar"
 LICENSE="MIT"
 SLOT="0"
-IUSE="+core +alsa backlight battery +clock +cpu +disk-io dwl +foreign-toplevel +memory mpd +i3 +label +network +pipewire pulseaudio +removables river +script sway-xkb wayland X xkb xwindow"
+IUSE="+core +alsa backlight battery +clock +cpu +disk-io dwl +foreign-toplevel +memory mpd -i3 +label +network +pipewire pulseaudio +removables river +script sway-xkb wayland X xkb xwindow"
 REQUIRED_USE="
 	|| ( wayland X )
 	sway-xkb? ( wayland )
