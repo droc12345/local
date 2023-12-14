@@ -21,7 +21,7 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="system-wlroots X"
+IUSE="system-wlroots legacy-renderer X"
 
 DEPEND="
 	dev-libs/libevdev
@@ -63,6 +63,7 @@ src_configure() {
 	tc-is-gcc && [[ $(gcc-major-version) -ge 12 ]]  && [[ $(gcc-minor-version) -ge 1 ]] || die "hyprland needs gcc version >= 12.1 for C++23"
 	local emesonargs=(
 		--wrap-mode=default
+		$(meson_feature legacy-renderer legacy_renderer)
 		$(meson_feature system-wlroots use_system_wlroots)
 		$(meson_feature X xwayland)
 	)
