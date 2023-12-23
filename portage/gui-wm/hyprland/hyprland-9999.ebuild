@@ -85,3 +85,7 @@ src_install() {
 	# devel tag includes wlroots .pc and .a files still
 	rm -rf "${ED}"/usr/$(get_libdir)/ || die
 }
+
+pkg_postinst() {
+	setcap 'cap_sys_nice=eip' /usr/bin/Hyprland
+}
