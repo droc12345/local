@@ -48,6 +48,7 @@ DEPEND="
 
 RDEPEND="
 	${DEPEND}
+	dev-cpp/tomlplusplus
 	x11-misc/xkeyboard-config
 "
 
