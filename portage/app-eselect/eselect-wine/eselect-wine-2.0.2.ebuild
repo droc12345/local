@@ -30,12 +30,12 @@ src_install() {
 	EOF
 
 	# links for building, e.g. wineasio (bug #657748)
-	dosym -r /etc/eselect/wine/wine /usr/lib/wine
-	dosym -r /etc/eselect/wine/include /usr/include/wine
+	dosym8 -r /etc/eselect/wine/wine /usr/lib/wine
+	dosym8 -r /etc/eselect/wine/include /usr/include/wine
 
 	# not required, but useful for e.g. binfmt that's not looking in PATH
 	# (not doing this for everything as it gets troublesome to track)
-	dosym -r /etc/eselect/wine/bin/wine /usr/bin/wine
+	dosym8 -r /etc/eselect/wine/bin/wine /usr/bin/wine
 
 	einstalldocs
 }
