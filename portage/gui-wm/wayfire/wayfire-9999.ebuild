@@ -34,7 +34,7 @@ DEPEND="
 	media-libs/freetype:=[X?]
 	x11-libs/libdrm
 	x11-libs/gtk+:3=[wayland,X?]
-	x11-libs/cairo:=[X?,svg]
+	x11-libs/cairo:=[X?]
 	x11-libs/libxkbcommon:=[X?]
 	x11-libs/pixman
 	X? ( x11-libs/libxcb )
