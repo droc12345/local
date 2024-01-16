@@ -39,7 +39,7 @@ DEPEND="${COMMON_DEPEND}
 	keymap? ( dev-util/gperf )
 	virtual/os-headers
 	virtual/pkgconfig
-	>=sys-devel/make-3.82-r4
+	>=dev-build/make-3.82-r4
 	>=sys-kernel/linux-headers-${KV_min}
 	doc? ( >=dev-util/gtk-doc-1.18 )
 	app-text/docbook-xml-dtd:4.2

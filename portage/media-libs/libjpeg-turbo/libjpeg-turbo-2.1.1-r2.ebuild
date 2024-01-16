@@ -23,7 +23,7 @@ ASM_DEPEND="|| ( dev-lang/nasm dev-lang/yasm )"
 COMMON_DEPEND="!media-libs/jpeg:0
 	!media-libs/jpeg:62"
 
-BDEPEND=">=dev-util/cmake-3.16.5
+BDEPEND=">=dev-build/cmake-3.16.5
 	amd64? ( ${ASM_DEPEND} )
 	x86? ( ${ASM_DEPEND} )
 	amd64-linux? ( ${ASM_DEPEND} )

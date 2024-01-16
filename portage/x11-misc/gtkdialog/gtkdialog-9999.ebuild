@@ -24,11 +24,11 @@ DEPEND="${RDEPEND}"
 src_configure() {
 	local emesonargs=(
 		"-Ddocs=$(usex docs true false)"
-		"-Dvte=$(usex vte true false)"
 		--wrap-mode=default
 	)
 	meson_src_configure
 }
+#		"-Dvte=$(usex vte true false)"
 
 src_install() {
 	meson_src_install

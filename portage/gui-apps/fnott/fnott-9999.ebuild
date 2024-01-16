@@ -34,7 +34,7 @@ BDEPEND="
 	app-text/scdoc
 	dev-libs/tllist
 	dev-libs/wayland-protocols
-	dev-util/ninja
+	dev-build/ninja
 	sys-libs/ncurses
 "
 src_configure() {

@@ -37,7 +37,7 @@ sys-devel/flex
 sys-devel/gcc
 sys-devel/gettext
 sys-devel/gnuconfig
-sys-devel/make
+dev-build/make
 sys-devel/patch
 virtual/editor
 virtual/libc

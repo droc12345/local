@@ -78,7 +78,14 @@ DEPEND="!!sys-devel/llvm:0"
 # @INTERNAL
 # @DESCRIPTION:
 # Correct values of LLVM slots, newest first.
-declare -g -r _LLVM_KNOWN_SLOTS=( {17..8} )
+declare -g -r _LLVM_KNOWN_SLOTS=( {18..8} )
+
+# @ECLASS_VARIABLE: LLVM_ECLASS_SKIP_PKG_SETUP
+# @INTERNAL
+# @DESCRIPTION:
+# If set to a non-empty value, llvm_pkg_setup will not perform LLVM version
+# check, nor set PATH.  Useful for bootstrap-prefix.sh, where AppleClang has
+# unparseable version numbers, which are irrelevant anyway.
 
 # @FUNCTION: get_llvm_slot
 # @USAGE: [-b|-d] [<max_slot>]
@@ -167,6 +174,37 @@ get_llvm_prefix() {
 	echo "${prefix}/usr/lib/llvm/$(get_llvm_slot "${@}")"
 }
 
+# @FUNCTION: llvm_tuple_to_target
+# @USAGE: [<tuple>]
+# @DESCRIPTION:
+# Translate a tuple into a target suitable for LLVM_TARGETS.
+# Defaults to ${CHOST} if not specified.
+llvm_tuple_to_target() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	case ${1:-${CHOST}} in
+		aarch64*) echo "AArch64";;
+		amdgcn*) echo "AMDGPU";;
+		arc*) echo "ARC";;
+		arm*) echo "ARM";;
+		avr*) echo "AVR";;
+		bpf*) echo "BPF";;
+		csky*) echo "CSKY";;
+		loong*) echo "LoongArch";;
+		m68k*) echo "M68k";;
+		mips*) echo "Mips";;
+		msp430*) echo "MSP430";;
+		nvptx*) echo "NVPTX";;
+		powerpc*) echo "PowerPC";;
+		riscv*) echo "RISCV";;
+		sparc*) echo "Sparc";;
+		s390*) echo "SystemZ";;
+		x86_64*|i?86*) echo "X86";;
+		xtensa*) echo "Xtensa";;
+		*) die "Unknown LLVM target for tuple ${1:-${CHOST}}"
+	esac
+}
+
 # @FUNCTION: llvm_fix_clang_version
 # @USAGE: <variable-name>...
 # @DESCRIPTION:
@@ -242,6 +280,10 @@ llvm_fix_tool_path() {
 llvm_pkg_setup() {
 	debug-print-function ${FUNCNAME} "${@}"
 
+	if [[ ${LLVM_ECLASS_SKIP_PKG_SETUP} ]]; then
+		return
+	fi
+
 	if [[ ${MERGE_TYPE} != binary ]]; then
 		LLVM_SLOT=$(get_llvm_slot "${LLVM_MAX_SLOT}")
 
@@ -249,6 +291,12 @@ llvm_pkg_setup() {
 		# keep in sync with profiles/features/llvm/make.defaults!
 		llvm_fix_tool_path ADDR2LINE AR AS LD NM OBJCOPY OBJDUMP RANLIB
 		llvm_fix_tool_path READELF STRINGS STRIP
+
+		# Set LLVM_CONFIG to help Meson (bug #907965) but only do it
+		# for empty ESYSROOT (as a proxy for "are we cross-compiling?").
+		if [[ -z ${ESYSROOT} ]] ; then
+			llvm_fix_tool_path LLVM_CONFIG
+		fi
 
 		local prefix=${ESYSROOT}
 		local llvm_path=${prefix}/usr/lib/llvm/${LLVM_SLOT}/bin

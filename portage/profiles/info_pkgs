@@ -14,7 +14,7 @@ sys-libs/musl
 sys-devel/binutils
 sys-devel/binutils-config
 sys-devel/libtool
-sys-devel/make
+dev-build/make
 dev-lang/python
 dev-lang/perl
 dev-lang/rust

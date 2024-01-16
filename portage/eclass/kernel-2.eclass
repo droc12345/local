@@ -582,7 +582,7 @@ if [[ ${ETYPE} == sources ]]; then
 		sys-devel/bc
 		sys-devel/bison
 		sys-devel/flex
-		sys-devel/make
+		dev-build/make
 		>=sys-libs/ncurses-5.2
 		virtual/libelf
 		virtual/pkgconfig
