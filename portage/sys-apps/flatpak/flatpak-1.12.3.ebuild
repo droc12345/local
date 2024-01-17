@@ -51,7 +51,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 # pyparsing version pinned for https://bugs.gentoo.org/825230
 BDEPEND="
-	>=sys-devel/automake-1.13.4
+	>=dev-build/automake-1.13.4
 	>=sys-devel/gettext-0.18.2
 	virtual/pkgconfig
 	dev-util/gdbus-codegen

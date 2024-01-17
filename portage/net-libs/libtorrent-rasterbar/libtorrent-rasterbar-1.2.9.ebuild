@@ -39,7 +39,7 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
-	sys-devel/libtool
+	dev-build/libtool
 "
 
 src_prepare() {

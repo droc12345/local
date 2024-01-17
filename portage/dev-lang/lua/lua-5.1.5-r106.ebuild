@@ -19,7 +19,7 @@ COMMON_DEPEND="
 	!dev-lang/lua:0"
 DEPEND="${COMMON_DEPEND}"
 RDEPEND="${COMMON_DEPEND}"
-BDEPEND="sys-devel/libtool"
+BDEPEND="dev-build/libtool"
 
 MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/lua${SLOT}/luaconf.h

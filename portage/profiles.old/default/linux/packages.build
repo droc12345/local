@@ -16,8 +16,8 @@ app-shells/bash:0
 net-misc/rsync
 net-misc/wget
 sys-devel/autoconf
-sys-devel/automake
-sys-devel/libtool
+dev-build/automake
+dev-build/libtool
 sys-apps/baselayout
 sys-apps/makedev
 sys-apps/coreutils

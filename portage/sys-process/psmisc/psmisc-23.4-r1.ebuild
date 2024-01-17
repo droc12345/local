@@ -19,7 +19,7 @@ RDEPEND="!=app-i18n/man-pages-l10n-4.0.0-r0
 	nls? ( virtual/libintl )
 	selinux? ( sys-libs/libselinux )"
 DEPEND="${RDEPEND}"
-BDEPEND=">=sys-devel/libtool-2.2.6b
+BDEPEND=">=dev-build/libtool-2.2.6b
 	nls? ( sys-devel/gettext )"
 
 DOCS=( AUTHORS ChangeLog NEWS README )

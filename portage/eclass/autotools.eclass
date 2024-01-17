@@ -72,8 +72,8 @@ inherit libtool
 # WANT value by using a colon:  <PV>:<WANT_AUTOMAKE>
 _LATEST_AUTOMAKE=( 1.16.2-r1:1.16 )
 
-_automake_atom="sys-devel/automake"
-_autoconf_atom="sys-devel/autoconf"
+_automake_atom="dev-build/automake"
+_autoconf_atom="dev-build/autoconf"
 if [[ -n ${WANT_AUTOMAKE} ]]; then
 	case ${WANT_AUTOMAKE} in
 		# Even if the package doesn't use automake, we still need to depend
@@ -83,12 +83,12 @@ if [[ -n ${WANT_AUTOMAKE} ]]; then
 		latest)
 			# Use SLOT deps if we can.  For EAPI=0, we get pretty close.
 			if [[ ${EAPI:-0} != 0 ]] ; then
-				_automake_atom="|| ( `printf '>=sys-devel/automake-%s:%s ' ${_LATEST_AUTOMAKE[@]/:/ }` )"
+				_automake_atom="|| ( `printf '>=dev-build/automake-%s:%s ' ${_LATEST_AUTOMAKE[@]/:/ }` )"
 			else
-				_automake_atom="|| ( `printf '>=sys-devel/automake-%s ' ${_LATEST_AUTOMAKE[@]/%:*}` )"
+				_automake_atom="|| ( `printf '>=dev-build/automake-%s ' ${_LATEST_AUTOMAKE[@]/%:*}` )"
 			fi
 			;;
-		*)      _automake_atom="=sys-devel/automake-${WANT_AUTOMAKE}*" ;;
+		*)      _automake_atom="=dev-build/automake-${WANT_AUTOMAKE}*" ;;
 	esac
 	export WANT_AUTOMAKE
 fi
@@ -96,15 +96,15 @@ fi
 if [[ -n ${WANT_AUTOCONF} ]] ; then
 	case ${WANT_AUTOCONF} in
 		none)       _autoconf_atom="" ;; # some packages don't require autoconf at all
-		2.1)        _autoconf_atom="~sys-devel/autoconf-2.13" ;;
+		2.1)        _autoconf_atom="~dev-build/autoconf-2.13" ;;
 		# if you change the "latest" version here, change also autotools_env_setup
-		latest|2.5) _autoconf_atom=">=sys-devel/autoconf-2.69" ;;
+		latest|2.5) _autoconf_atom=">=dev-build/autoconf-2.69" ;;
 		*)          die "Invalid WANT_AUTOCONF value '${WANT_AUTOCONF}'" ;;
 	esac
 	export WANT_AUTOCONF
 fi
 
-_libtool_atom=">=sys-devel/libtool-2.4"
+_libtool_atom=">=dev-build/libtool-2.4"
 if [[ -n ${WANT_LIBTOOL} ]] ; then
 	case ${WANT_LIBTOOL} in
 		none)   _libtool_atom="" ;;
@@ -494,7 +494,7 @@ autotools_env_setup() {
 					hv_args="-b"
 					;;
 			esac
-			ROOT=/ has_version ${hv_args} "=sys-devel/automake-${pv}*" && export WANT_AUTOMAKE="${pv}" && break
+			ROOT=/ has_version ${hv_args} "=dev-build/automake-${pv}*" && export WANT_AUTOMAKE="${pv}" && break
 		done
 		[[ ${WANT_AUTOMAKE} == "latest" ]] && \
 			die "Cannot find the latest automake! Tried ${_LATEST_AUTOMAKE[*]}"

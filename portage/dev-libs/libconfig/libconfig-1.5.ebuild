@@ -16,7 +16,7 @@ KEYWORDS="amd64 ~arm ~arm64 ~ia64 ~mips ppc ~ppc64 s390 sparc x86 ~x86-linux"
 IUSE="+cxx examples static-libs"
 
 DEPEND="
-	sys-devel/libtool
+	dev-build/libtool
 	sys-devel/bison"
 
 PATCHES=( "${FILESDIR}/${PN}-1.5-out-of-source-build.patch" )

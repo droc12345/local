@@ -64,8 +64,8 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40.1
 	>=sys-devel/gettext-0.19
 	doc? ( >=dev-util/gtk-doc-1 )
-	>=sys-devel/libtool-2.2
-	>=sys-devel/automake-1.11
+	>=dev-build/libtool-2.2
+	>=dev-build/automake-1.11
 	dev-util/gtk-doc-am"  # due to our call to eautoreconf below (bug #386453)
 
 DOCS="AUTHORS ChangeLog* HACKING NEWS README*"

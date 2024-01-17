@@ -26,7 +26,7 @@ LICENSE="vim"
 SLOT="0"
 IUSE="nls acl minimal"
 
-BDEPEND="sys-devel/autoconf"
+BDEPEND="dev-build/autoconf"
 # Avoid icon file collision, bug #673880
 RDEPEND="!!<app-editors/gvim-8.1.0648"
 PDEPEND="!minimal? ( app-vim/gentoo-syntax )"

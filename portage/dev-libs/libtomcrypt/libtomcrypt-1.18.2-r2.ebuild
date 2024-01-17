@@ -25,7 +25,7 @@ IUSE="+gmp +libtommath tomsfastmath"
 REQUIRED_USE="|| ( gmp libtommath tomsfastmath )"
 
 BDEPEND="
-	sys-devel/libtool
+	dev-build/libtool
 	virtual/pkgconfig
 "
 DEPEND="

@@ -18,7 +18,7 @@ IUSE="static-libs"
 # libltdl doesn't have a testsuite.
 RESTRICT="test"
 
-RDEPEND="!<sys-devel/libtool-2.4.3-r2:2"
+RDEPEND="!<dev-build/libtool-2.4.3-r2:2"
 BDEPEND="app-arch/xz-utils"
 
 S="${WORKDIR}/${MY_P}/libltdl"

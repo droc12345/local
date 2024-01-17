@@ -21,7 +21,7 @@ RDEPEND="
 	dev-libs/libffi:=
 	dev-libs/libltdl:=
 	dev-libs/libunistring:0=
-	sys-devel/libtool
+	dev-build/libtool
 	sys-libs/ncurses:0=
 	sys-libs/readline:0=
 	virtual/libcrypt:="

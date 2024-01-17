@@ -13,7 +13,7 @@ SLOT="0/${PV}"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 IUSE="static-libs"
 
-DEPEND="sys-devel/libtool"
+DEPEND="dev-build/libtool"
 RDEPEND="!sys-apps/rescan-scsi-bus"
 
 src_configure() {

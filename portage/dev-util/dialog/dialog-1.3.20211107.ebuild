@@ -18,7 +18,7 @@ IUSE="examples minimal nls unicode"
 RDEPEND=">=sys-libs/ncurses-5.2-r5:=[unicode(+)?]"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
-BDEPEND="!minimal? ( sys-devel/libtool )
+BDEPEND="!minimal? ( dev-build/libtool )
 	virtual/pkgconfig"
 
 src_prepare() {

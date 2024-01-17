@@ -72,7 +72,7 @@ DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	dev-lang/yasm
 	dev-util/intltool
-	sys-devel/automake"
+	dev-build/automake"
 
 PATCHES=(
 	# Remove libdvdnav duplication and call it on the original instead.

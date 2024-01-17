@@ -82,7 +82,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 # configure runs the Lua interpreter
 BDEPEND="
-	sys-devel/autoconf
+	dev-build/autoconf
 	virtual/pkgconfig
 	lua? ( ${LUA_DEPS} )
 	nls? ( sys-devel/gettext )

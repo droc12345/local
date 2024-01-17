@@ -44,7 +44,7 @@ fi
 RESTRICT="mirror"
 
 DEPEND="
-	>=sys-devel/autoconf-2.13:2.1
+	>=dev-build/autoconf-2.13:2.1
 	dev-lang/python:2.7
 	>=dev-lang/perl-5.6
 	dev-lang/yasm

@@ -76,7 +76,7 @@ DEPEND="
 	>=dev-util/intltool-0.40.1
 	sys-apps/findutils
 	>=sys-devel/gettext-0.19
-	>=sys-devel/libtool-2.2
+	>=dev-build/libtool-2.2
 	virtual/pkgconfig
 "
 

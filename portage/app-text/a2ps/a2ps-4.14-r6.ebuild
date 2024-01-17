@@ -79,7 +79,7 @@ src_prepare() {
 	# specify encoding explicitly, bug #695918
 	eapply "${FILESDIR}"/${P}-texinfo-6.7-encoding.patch
 
-	# fix building with sys-devel/automake >= 1.12, bug 420503
+	# fix building with dev-build/automake >= 1.12, bug 420503
 	rm -f {.,ogonkify}/aclocal.m4 || die
 	sed -i \
 		-e '/^AM_C_PROTOTYPES/d' \

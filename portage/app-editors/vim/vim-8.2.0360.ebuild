@@ -54,7 +54,7 @@ RDEPEND="
 
 DEPEND="
 	${RDEPEND}
-	sys-devel/autoconf
+	dev-build/autoconf
 	nls? ( sys-devel/gettext )
 "
 

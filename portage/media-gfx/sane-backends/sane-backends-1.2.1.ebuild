@@ -171,7 +171,7 @@ DEPEND="
 "
 BDEPEND="
 	${PYTHON_DEPS}
-	sys-devel/autoconf-archive
+	dev-build/autoconf-archive
 	sys-devel/gettext
 	virtual/pkgconfig
 "

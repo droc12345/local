@@ -73,7 +73,7 @@ RDEPEND="
 	tcl? ( dev-lang/tcl:0= )
 "
 DEPEND="${RDEPEND}
-	sys-devel/autoconf
+	dev-build/autoconf
 	virtual/pkgconfig
 	nls? ( sys-devel/gettext )
 "

@@ -5,10 +5,10 @@
 # @MAINTAINER:
 # <base-system@gentoo.org>
 # @SUPPORTED_EAPIS: 6 7
-# @BLURB: Common code for sys-devel/autoconf ebuilds
+# @BLURB: Common code for dev-build/autoconf ebuilds
 # @DESCRIPTION:
 # This eclass contains the common phase functions migrated from
-# sys-devel/autoconf eblits.
+# dev-build/autoconf eblits.
 
 case ${EAPI:-0} in
 	[0-5])
