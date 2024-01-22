@@ -16,7 +16,7 @@ IUSE="iconv test"
 RESTRICT="!test? ( test )"
 
 BDEPEND="
-	>=dev-util/netsurf-buildsystem-1.7-r1
+	>=dev-build/netsurf-buildsystem-1.7-r1
 	test? (	dev-lang/perl )
 "
 

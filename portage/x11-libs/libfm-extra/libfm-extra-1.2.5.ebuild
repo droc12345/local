@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/intltool-0.40
 	virtual/pkgconfig
 	sys-devel/gettext
-	dev-util/gtk-doc-am
+	dev-build/gtk-doc-am
 	!!<=x11-libs/libfm-1.2.3"
 
 S="${WORKDIR}"/${MY_P}

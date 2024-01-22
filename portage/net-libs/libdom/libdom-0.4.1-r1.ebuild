@@ -31,7 +31,7 @@ DEPEND="${RDEPEND}
 		dev-perl/Switch
 	)"
 BDEPEND="
-	dev-util/netsurf-buildsystem
+	dev-build/netsurf-buildsystem
 	virtual/pkgconfig"
 
 REQUIRED_USE="test? ( xml )"

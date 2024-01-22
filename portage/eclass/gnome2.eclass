@@ -79,7 +79,7 @@ gnome2_src_configure() {
 	local g2conf=()
 
 	# We consider packages installing gtk-doc to be handled by adding
-	# DEPEND="dev-util/gtk-doc-am" which provides tools to relink URLs in
+	# DEPEND="dev-build/gtk-doc-am" which provides tools to relink URLs in
 	# documentation to already installed documentation.  This decision also
 	# greatly helps with constantly broken doc generation.
 	# Remember to drop 'doc' USE flag from your package if it was only used to

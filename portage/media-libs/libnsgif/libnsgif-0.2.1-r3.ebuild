@@ -15,7 +15,7 @@ KEYWORDS="~alpha amd64 ~arm arm64 ~hppa ~ia64 ~ppc ppc64 ~riscv x86"
 IUSE=""
 
 BDEPEND="
-	>=dev-util/netsurf-buildsystem-1.7-r1
+	>=dev-build/netsurf-buildsystem-1.7-r1
 	virtual/pkgconfig
 "
 

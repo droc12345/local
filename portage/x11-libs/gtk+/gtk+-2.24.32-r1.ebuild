@@ -58,7 +58,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	dev-libs/gobject-introspection-common
 	dev-util/glib-utils
-	>=dev-util/gtk-doc-am-1.20
+	>=dev-build/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18.3[${MULTILIB_USEDEP}]
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
 	!aqua? ( x11-base/xorg-proto )

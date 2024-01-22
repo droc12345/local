@@ -19,7 +19,7 @@ RDEPEND="
 	>=dev-libs/libwapcaplet-0.2.2-r1"
 DEPEND="${RDEPEND}
 	dev-util/gperf
-	dev-util/netsurf-buildsystem
+	dev-build/netsurf-buildsystem
 	virtual/pkgconfig"
 
 PATCHES=( "${FILESDIR}"/${PN}-0.1.3-parallel-build.patch )

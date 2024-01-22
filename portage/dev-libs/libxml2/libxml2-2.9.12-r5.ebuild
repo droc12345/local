@@ -42,7 +42,7 @@ RESTRICT="!test? ( test )"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 BDEPEND="
-	dev-util/gtk-doc-am
+	dev-build/gtk-doc-am
 	virtual/pkgconfig
 	verify-sig? ( app-crypt/openpgp-keys-danielveillard )
 "

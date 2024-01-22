@@ -19,7 +19,7 @@ RESTRICT="!test? ( test )"
 DEPEND="
 	test? ( >=dev-libs/check-0.9.11 )"
 BDEPEND="
-	>=dev-util/netsurf-buildsystem-1.7-r1"
+	>=dev-build/netsurf-buildsystem-1.7-r1"
 
 PATCHES=(
 	# bug 664288

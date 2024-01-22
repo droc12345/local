@@ -22,7 +22,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	test? ( dev-lang/perl )"
 BDEPEND="
-	>=dev-util/netsurf-buildsystem-1.7-r1
+	>=dev-build/netsurf-buildsystem-1.7-r1
 	virtual/pkgconfig"
 
 src_prepare() {

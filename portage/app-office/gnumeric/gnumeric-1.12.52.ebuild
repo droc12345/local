@@ -52,7 +52,7 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	app-text/docbook-xml-dtd:4.5
 	app-text/yelp-tools
-	dev-util/gtk-doc-am
+	dev-build/gtk-doc-am
 	>=dev-util/intltool-0.35.0
 	virtual/pkgconfig"
 

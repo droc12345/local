@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~riscv ~x86"
 IUSE=""
 
 BDEPEND="
-	dev-util/netsurf-buildsystem
+	dev-build/netsurf-buildsystem
 	virtual/pkgconfig"
 
 _emake() {
