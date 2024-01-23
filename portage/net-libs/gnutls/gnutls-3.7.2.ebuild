@@ -38,7 +38,7 @@ BDEPEND=">=virtual/pkgconfig-0-r1
 	doc? ( dev-util/gtk-doc )
 	nls? ( sys-devel/gettext )
 	tools? ( sys-devel/autogen )
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( dev-debug/valgrind )
 	test-full? (
 		app-crypt/dieharder
 		>=app-misc/datefudge-1.22

@@ -35,7 +35,7 @@ RDEPEND="
 DEPEND+=" dev-libs/wayland-protocols"
 
 BDEPEND="
-	sys-devel/bmake
+	dev-build/bmake
 	virtual/pkgconfig
 "
 

@@ -33,7 +33,7 @@ SLOT="0"
 RDEPEND="
 	video_cards_intel? ( >=x11-libs/libpciaccess-0.13.1-r1:=[${MULTILIB_USEDEP}] )"
 DEPEND="${RDEPEND}
-	valgrind? ( dev-util/valgrind )"
+	valgrind? ( dev-debug/valgrind )"
 
 multilib_src_configure() {
 	local emesonargs=(

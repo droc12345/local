@@ -24,13 +24,13 @@ BDEPEND="
 			dev-python/commonmark[${PYTHON_USEDEP}]
 			dev-python/recommonmark[${PYTHON_USEDEP}]
 			dev-python/sphinx[${PYTHON_USEDEP}]
-			>=dev-python/sphinx_rtd_theme-0.2.4[${PYTHON_USEDEP}]
+			>=dev-python/sphinx-rtd-theme-0.2.4[${PYTHON_USEDEP}]
 		')
-		>=app-doc/doxygen-1.8.3
+		>=app-text/doxygen-1.8.3
 		>=media-gfx/graphviz-2.38.0
 	)
 "
-#	test? ( dev-util/valgrind )
+#	test? ( dev-debug/valgrind )
 RDEPEND="
 	input_devices_wacom? ( >=dev-libs/libwacom-0.27 )
 	>=dev-libs/libevdev-1.9.902
@@ -45,7 +45,7 @@ python_check_deps() {
 	has_version -b "dev-python/commonmark[${PYTHON_USEDEP}]" && \
 	has_version -b "dev-python/recommonmark[${PYTHON_USEDEP}]" && \
 	has_version -b "dev-python/sphinx[${PYTHON_USEDEP}]" && \
-	has_version -b ">=dev-python/sphinx_rtd_theme-0.2.4[${PYTHON_USEDEP}]"
+	has_version -b ">=dev-python/sphinx-rtd-theme-0.2.4[${PYTHON_USEDEP}]"
 }
 
 pkg_setup() {
@@ -78,7 +78,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	pkgname="dev-python/python-libevdev"
+	pkgname="dev-python/libevdev"
 	if [[ -z "${REPLACING_VERSIONS}" ]] && ! has_version "${pkgname}" ; then
 		einfo "${pkgname} must be installed to use the"
 		einfo "libinput measure and libinput replay tools."

@@ -19,7 +19,7 @@ IUSE="debug doc examples static-libs"
 
 BDEPEND="${PYTHON_DEPS}
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen[dot] )
+	doc? ( app-text/doxygen[dot] )
 "
 
 S="${WORKDIR}/${PN}/source"

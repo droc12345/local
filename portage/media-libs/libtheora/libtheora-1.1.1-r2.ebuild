@@ -26,7 +26,7 @@ RDEPEND="
 	)"
 DEPEND="${RDEPEND}"
 BDEPEND="
-	doc? ( app-doc/doxygen )
+	doc? ( app-text/doxygen )
 	virtual/pkgconfig"
 
 S=${WORKDIR}/${P/_}

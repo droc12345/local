@@ -31,7 +31,7 @@ DEPEND="${COMMON_DEPEND}
 	app-arch/xz-utils
 	sys-apps/groff
 	doc? (
-		app-doc/doxygen
+		app-text/doxygen
 		media-gfx/graphviz
 	)
 	nls? (

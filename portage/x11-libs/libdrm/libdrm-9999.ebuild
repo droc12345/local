@@ -34,7 +34,7 @@ SLOT="0"
 RDEPEND="
 	video_cards_intel? ( >=x11-libs/libpciaccess-0.13.1-r1:=[${MULTILIB_USEDEP}] )"
 DEPEND="${RDEPEND}
-	valgrind? ( dev-util/valgrind )"
+	valgrind? ( dev-debug/valgrind )"
 BDEPEND="${PYTHON_DEPS}
 	$(python_gen_any_dep 'dev-python/docutils[${PYTHON_USEDEP}]')"
 

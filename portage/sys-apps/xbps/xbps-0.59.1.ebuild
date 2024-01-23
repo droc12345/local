@@ -27,7 +27,7 @@ BDEPEND="
 	${COMMON_DEPEND}
 	virtual/pkgconfig
 	doc? (
-		 app-doc/doxygen
+		 app-text/doxygen
 		 media-gfx/graphviz
 	)
 "

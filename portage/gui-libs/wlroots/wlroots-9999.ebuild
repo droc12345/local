@@ -52,7 +52,7 @@ RDEPEND="
 "
 BDEPEND="
 	>=dev-libs/wayland-protocols-1.25
-	>=dev-util/meson-0.58.1
+	>=dev-build/meson-0.58.1
 	virtual/pkgconfig
 "
 

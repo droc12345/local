@@ -242,7 +242,7 @@ x11-libs/colord-gtk doc
 # Qt libraries; see https://github.com/ProtonMail/proton-bridge/issues/16
 # The qt module itself apparently can be made to build against system Qt5
 # but making it do so while vendored is a non-trivial task.
-mail-mta/protonmail-bridge gui
+mail-mta/proton-mail-bridge gui
 
 # Michał Górny <mgorny@gentoo.org> (2020-09-27)
 # The respective dependencies are masked for removal.
@@ -292,7 +292,7 @@ net-fs/samba test
 
 # Mike Gilbert <floppym@gentoo.org> (2020-04-23)
 # Tests are very sensitive to the host environment.
-dev-util/meson test
+dev-build/meson test
 
 # Alfredo Tupone <tupone@gentoo.org> (2020-04-04)
 # Ada support is not yet ready for sys-devel/gcc
@@ -337,7 +337,7 @@ dev-libs/hidapi fox
 sci-mathematics/gsl-shell fox
 
 # Michał Górny <mgorny@gentoo.org> (2019-12-04)
-# Packages requiring dev-python/ipython to build the docs and still
+# Packages requiring dev-python/IPython to build the docs and still
 # supporting Python 2.7.  This can be resolved long term via either
 # using any-r1 API to build docs or cond-deps.
 dev-python/matplotlib doc
@@ -441,7 +441,7 @@ dev-python/paramiko server
 # and compiler/binutils combinations.)
 sys-devel/binutils cet
 sys-devel/binutils-hppa64 cet
-sys-devel/gdb cet
+dev-debug/gdb cet
 sys-libs/binutils-libs cet
 sys-libs/glibc cet
 sys-devel/gcc cet
@@ -652,7 +652,7 @@ x11-libs/cairo gles2-only
 
 # Kacper Kowalik <xarthisius@gentoo.org> (2013-05-19)
 # Fails to build, haven't had time to debug
-app-doc/doxygen sqlite
+app-text/doxygen sqlite
 
 # Bernard Cafarelli <voyageur@gentoo.org> (2013-04-04)
 # Broken for now (segmentation fault on play)

@@ -15,7 +15,7 @@ SLOT="0/5"
 KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos"
 IUSE="cpu_flags_x86_rdrand doc static-libs threads"
 
-BDEPEND="doc? ( >=app-doc/doxygen-1.8.13 )"
+BDEPEND="doc? ( >=app-text/doxygen-1.8.13 )"
 
 MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/json-c/config.h

@@ -36,7 +36,7 @@ BDEPEND="
 	)
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
-	>=dev-util/meson-0.55.3
+	>=dev-build/meson-0.55.3
 "
 
 MULTILIB_CHOST_TOOLS=(

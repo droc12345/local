@@ -27,7 +27,7 @@ RDEPEND="
 	media-libs/mesa:=[egl(+),gles2,gbm(+)?]
 	x11-libs/libxkbcommon
 	x11-libs/pixman
-	tracing? ( dev-util/systemtap )
+	tracing? ( dev-debug/systemtap )
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

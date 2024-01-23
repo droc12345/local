@@ -26,7 +26,7 @@ RDEPEND="
 # Note: ${PYTHON_USEDEP} needs to go verbatim
 DEPEND="${RDEPEND}
 	test? ( dev-libs/check[${MULTILIB_USEDEP}] )
-	doc? ( app-doc/doxygen[dot] )
+	doc? ( app-text/doxygen[dot] )
 	dev-libs/libxslt
 	${PYTHON_DEPS}
 	$(python_gen_any_dep \

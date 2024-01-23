@@ -25,7 +25,7 @@ IUSE="doc test"
 DEPEND="test? ( dev-libs/check[${MULTILIB_USEDEP}] )"
 BDEPEND="
 	${PYTHON_DEPS}
-	doc? ( app-doc/doxygen )
+	doc? ( app-text/doxygen )
 	virtual/pkgconfig
 "
 RESTRICT="!test? ( test )"

@@ -29,7 +29,7 @@ DEPEND="
 
 BDEPEND="
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen[dot] )
+	doc? ( app-text/doxygen[dot] )
 "
 
 S="${WORKDIR}/sdbus-cpp-${PV}"

@@ -29,7 +29,7 @@ DEPEND="${COMMON_DEPEND}
 # Need a newer binutils-config that'll reset include/lib symlinks for us.
 RDEPEND="${COMMON_DEPEND}
 	>=sys-devel/binutils-config-5
-	nls? ( !<sys-devel/gdb-7.10-r1[nls] )"
+	nls? ( !<dev-debug/gdb-7.10-r1[nls] )"
 
 S="${WORKDIR}/${MY_P}"
 

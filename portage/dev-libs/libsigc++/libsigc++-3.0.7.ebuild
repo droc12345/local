@@ -16,7 +16,7 @@ RESTRICT="!test? ( test )"
 
 BDEPEND="
 	doc? (
-		app-doc/doxygen[dot]
+		app-text/doxygen[dot]
 		dev-lang/perl
 		dev-libs/libxslt
 	)

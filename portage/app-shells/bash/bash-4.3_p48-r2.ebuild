@@ -46,7 +46,7 @@ DEPEND=">=sys-libs/ncurses-5.2-r2:0=
 RDEPEND="${DEPEND}
 	!<sys-apps/portage-2.1.6.7_p1"
 # We only need yacc when the .y files get patched (bash42-005)
-BDEPEND="virtual/yacc"
+BDEPEND="app-alternatives/yacc"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-4.3-mapfile-improper-array-name-validation.patch

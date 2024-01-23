@@ -83,25 +83,25 @@ fi
 # Will accept "true", "false", "optional", "forceoptional". If set to "false",
 # do nothing.
 # Otherwise, add "+handbook" to IUSE, add the appropriate dependency, and let
-# KF5DocTools generate and install the handbook from docbook file(s) found in
+# KFkde-frameworks/extra-cmake-modulesDocTools generate and install the handbook from docbook file(s) found in
 # ECM_HANDBOOK_DIR. However if !handbook, disable build of ECM_HANDBOOK_DIR
 # in CMakeLists.txt.
-# If set to "optional", build with -DCMAKE_DISABLE_FIND_PACKAGE_KF5DocTools=ON
-# when !handbook. In case package requires KF5KDELibs4Support, see next:
-# If set to "forceoptional", remove a KF5DocTools dependency from the root
+# If set to "optional", build with -DCMAKE_DISABLE_FIND_PACKAGE_KFkde-frameworks/extra-cmake-modulesDocTools=ON
+# when !handbook. In case package requires KFkde-frameworks/extra-cmake-modulesKDELibs4Support, see next:
+# If set to "forceoptional", remove a KFkde-frameworks/extra-cmake-modulesDocTools dependency from the root
 # CMakeLists.txt in addition to the above.
 : ${ECM_HANDBOOK:=false}
 
 # @ECLASS-VARIABLE: ECM_HANDBOOK_DIR
 # @DESCRIPTION:
 # Specifies the directory containing the docbook file(s) relative to ${S} to
-# be processed by KF5DocTools (kdoctools_install).
+# be processed by KFkde-frameworks/extra-cmake-modulesDocTools (kdoctools_install).
 : ${ECM_HANDBOOK_DIR:=doc}
 
 # @ECLASS-VARIABLE: ECM_PO_DIRS
 # @DESCRIPTION:
 # Specifies directories of l10n files relative to ${S} to be processed by
-# KF5I18n (ki18n_install). If IUSE nls exists and is disabled then disable
+# KFkde-frameworks/extra-cmake-modulesI18n (ki18n_install). If IUSE nls exists and is disabled then disable
 # build of these directories in CMakeLists.txt.
 : ${ECM_PO_DIRS:="po poqm"}
 
@@ -124,12 +124,12 @@ fi
 # "forceoptional-recursive".
 # Default value is "false", except for CATEGORY=kde-frameworks where it is
 # set to "true". If set to "false", do nothing.
-# For any other value, add "test" to IUSE and DEPEND on dev-qt/qttest:5.
-# If set to "optional", build with -DCMAKE_DISABLE_FIND_PACKAGE_Qt5Test=ON
+# For any other value, add "test" to IUSE and DEPEND on dev-qt/qttest:kde-frameworks/extra-cmake-modules.
+# If set to "optional", build with -DCMAKE_DISABLE_FIND_PACKAGE_Qtkde-frameworks/extra-cmake-modulesTest=ON
 # when USE=!test.
-# If set to "forceoptional", punt Qt5Test dependency and ignore "autotests",
+# If set to "forceoptional", punt Qtkde-frameworks/extra-cmake-modulesTest dependency and ignore "autotests",
 # "test", "tests" subdirs from top-level CMakeLists.txt when USE=!test.
-# If set to "forceoptional-recursive", punt Qt5Test dependencies and make
+# If set to "forceoptional-recursive", punt Qtkde-frameworks/extra-cmake-modulesTest dependencies and make
 # autotest(s), unittest(s) and test(s) subdirs from *any* CMakeLists.txt in
 # ${S} and below conditional on BUILD_TESTING when USE=!test. This is always
 # meant as a short-term fix and creates ${T}/${P}-tests-optional.patch to
@@ -143,24 +143,24 @@ fi
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Minimum version of Frameworks to require. Default value for kde-frameworks
-# is ${PV} and 5.64.0 baseline for everything else. This is not going to be
+# is ${PV} and kde-frameworks/extra-cmake-modules.64.0 baseline for everything else. This is not going to be
 # changed unless we also bump EAPI, which usually implies (rev-)bumping.
-# Version will later be used to differentiate between KF5/Qt5 and KF6/Qt6.
+# Version will later be used to differentiate between KFkde-frameworks/extra-cmake-modules/Qtkde-frameworks/extra-cmake-modules and KF6/Qt6.
 if [[ ${CATEGORY} = kde-frameworks ]]; then
 	: ${KFMIN:=$(ver_cut 1-2)}
 fi
-: ${KFMIN:=5.82.0}
+: ${KFMIN:=kde-frameworks/extra-cmake-modules.82.0}
 
 # @ECLASS-VARIABLE: KFSLOT
 # @INTERNAL
 # @DESCRIPTION:
 # KDE Frameworks and Qt slot dependency, implied by KFMIN version.
-: ${KFSLOT:=5}
+: ${KFSLOT:=kde-frameworks/extra-cmake-modules}
 
 case ${ECM_NONGUI} in
 	true) ;;
 	false)
-		# gui applications need breeze or oxygen for basic iconset, bug #564838
+		# gui applications need breeze or oxygen for basic iconset, bug #kde-frameworks/extra-cmake-modules64838
 		RDEPEND+=" || (
 			kde-frameworks/breeze-icons:*
 			kde-frameworks/oxygen-icons:*
@@ -223,7 +223,7 @@ case ${ECM_QTHELP} in
 		IUSE+=" doc"
 		COMMONDEPEND+=" doc? ( dev-qt/qt-docs:${KFSLOT} )"
 		BDEPEND+=" doc? (
-			>=app-doc/doxygen-1.8.13-r1
+			>=app-text/doxygen-1.8.13-r1
 			dev-qt/qthelp:${KFSLOT}
 		)"
 		;;
@@ -446,7 +446,7 @@ ecm_src_prepare() {
 		# always install unconditionally for kconfigwidgets - if you use
 		# language X as system language, and there is a combobox with language
 		# names, the translated language name for language Y is taken from
-		# /usr/share/locale/Y/kf5_entry.desktop
+		# /usr/share/locale/Y/kfkde-frameworks/extra-cmake-modules_entry.desktop
 		[[ ${PN} != kconfigwidgets ]] && _ecm_strip_handbook_translations
 	fi
 
@@ -504,12 +504,12 @@ ecm_src_configure() {
 		cmakeargs+=( -DBUILD_TESTING=OFF )
 
 		if [[ ${ECM_TEST} = optional ]] ; then
-			cmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_Qt5Test=ON )
+			cmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_Qtkde-frameworks/extra-cmake-modulesTest=ON )
 		fi
 	fi
 
 	if [[ ${ECM_HANDBOOK} = optional ]] ; then
-		cmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_KF5DocTools=$(usex !handbook) )
+		cmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_KFkde-frameworks/extra-cmake-modulesDocTools=$(usex !handbook) )
 	fi
 
 	if in_iuse designer && [[ ${ECM_DESIGNERPLUGIN} = true ]]; then

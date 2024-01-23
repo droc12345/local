@@ -32,7 +32,7 @@ DEPEND="${RDEPEND}
 # Note: ${PYTHON_USEDEP} needs to go verbatim
 BDEPEND="${PYTHON_DEPS}
 	$(python_gen_any_dep '>=x11-base/xcb-proto-1.15[${PYTHON_USEDEP}]')
-	doc? ( app-doc/doxygen[dot] )
+	doc? ( app-text/doxygen[dot] )
 	test? ( dev-libs/libxslt )
 "
 

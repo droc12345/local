@@ -17,7 +17,7 @@ IUSE="custom-modes doc static-libs ${INTRINSIC_FLAGS}"
 
 BDEPEND="
 	doc? (
-		app-doc/doxygen
+		app-text/doxygen
 		media-gfx/graphviz
 	)
 "

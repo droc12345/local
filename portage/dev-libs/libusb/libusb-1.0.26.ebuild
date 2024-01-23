@@ -19,7 +19,7 @@ REQUIRED_USE="static-libs? ( !udev )"
 RDEPEND="udev? ( >=virtual/libudev-208:=[${MULTILIB_USEDEP}] )"
 DEPEND="${RDEPEND}
 	!udev? ( virtual/os-headers )"
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 multilib_src_configure() {
 	local myeconfargs=(

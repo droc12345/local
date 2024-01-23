@@ -8,9 +8,9 @@
 # @BLURB: helper functions to deal with SCons buildsystem
 # @DESCRIPTION:
 # This eclass provides a set of function to help developers sanely call
-# dev-util/scons and pass parameters to it.
+# dev-build/scons and pass parameters to it.
 #
-# As of dev-util/scons-3.0.1-r100, SCons supports Python 3.  Since
+# As of dev-build/scons-3.0.1-r100, SCons supports Python 3.  Since
 # SCons* files in build systems are written as Python, all packages
 # need to explicitly verify which versions of Python are supported
 # and use appropriate Python suite eclass to select the implementation.
@@ -114,9 +114,9 @@ inherit multiprocessing
 # -- ebuild variables setup --
 
 if [[ -n ${SCONS_MIN_VERSION} ]]; then
-	SCONS_DEPEND=">=dev-util/scons-${SCONS_MIN_VERSION}"
+	SCONS_DEPEND=">=dev-build/scons-${SCONS_MIN_VERSION}"
 else
-	SCONS_DEPEND="dev-util/scons"
+	SCONS_DEPEND="dev-build/scons"
 fi
 
 if [[ ${_PYTHON_ANY_R1} ]]; then

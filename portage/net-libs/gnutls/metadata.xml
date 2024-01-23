@@ -31,7 +31,7 @@
       Enable full test mode
     </flag>
     <flag name="valgrind">
-      Enable usage of <pkg>dev-util/valgrind</pkg> in debug
+      Enable usage of <pkg>dev-debug/valgrind</pkg> in debug
     </flag>
   </use>
   <slots>

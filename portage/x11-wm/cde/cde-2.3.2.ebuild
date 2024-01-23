@@ -34,7 +34,7 @@ DEPEND="
 	x11-libs/libX11
 	x11-libs/libXScrnSaver
 	x11-libs/motif
-	virtual/awk
+	app-alternatives/awk
 "
 
 RDEPEND="${DEPEND}
@@ -46,7 +46,7 @@ BDEPEND="
 	dev-lang/tcl
 	sys-devel/bison
 	sys-devel/m4
-	virtual/awk
+	app-alternatives/awk
 "
 
 PATCHES=( "${FILESDIR}/dtinfo-ppc.patch" )

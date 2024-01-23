@@ -18,7 +18,7 @@ RESTRICT="!test? ( test )"
 
 BDEPEND="sys-apps/help2man
 	app-alternatives/yacc
-	test? ( valgrind? ( dev-util/valgrind ) )"
+	test? ( valgrind? ( dev-debug/valgrind ) )"
 
 DOCS=(
 	AUTHORS

@@ -25,7 +25,7 @@ BDEPEND="
 	~dev-util/wayland-scanner-${PV}
 	virtual/pkgconfig
 	doc? (
-		>=app-doc/doxygen-1.6[dot]
+		>=app-text/doxygen-1.6[dot]
 		app-text/xmlto
 		>=media-gfx/graphviz-2.26.0
 	)

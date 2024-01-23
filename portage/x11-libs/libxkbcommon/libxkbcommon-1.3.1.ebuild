@@ -24,7 +24,7 @@ SLOT="0"
 
 BDEPEND="
 	sys-devel/bison
-	doc? ( app-doc/doxygen )
+	doc? ( app-text/doxygen )
 	test? ( ${PYTHON_DEPS} )
 	wayland? ( dev-util/wayland-scanner )
 "

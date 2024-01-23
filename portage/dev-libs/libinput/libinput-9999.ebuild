@@ -45,11 +45,11 @@ BDEPEND="
 			dev-python/sphinx[${PYTHON_USEDEP}]
 			>=dev-python/sphinx-rtd-theme-0.2.4[${PYTHON_USEDEP}]
 		')
-		>=app-doc/doxygen-1.8.3
+		>=app-text/doxygen-1.8.3
 		>=media-gfx/graphviz-2.38.0
 	)
 "
-#	test? ( dev-util/valgrind )
+#	test? ( dev-debug/valgrind )
 
 python_check_deps() {
 	python_has_version "dev-python/commonmark[${PYTHON_USEDEP}]" && \
@@ -88,7 +88,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	optfeature "measure and replay tools" dev-python/python-libevdev
+	optfeature "measure and replay tools" dev-python/libevdev
 	udev_reload
 }
 

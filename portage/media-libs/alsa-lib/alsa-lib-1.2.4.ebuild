@@ -17,7 +17,7 @@ IUSE="alisp debug doc python +thread-safety"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-BDEPEND="doc? ( >=app-doc/doxygen-1.2.6 )"
+BDEPEND="doc? ( >=app-text/doxygen-1.2.6 )"
 RDEPEND="python? ( ${PYTHON_DEPS} )
 	media-libs/alsa-topology-conf
 	media-libs/alsa-ucm-conf

@@ -28,7 +28,7 @@ DEPEND="dev-libs/glib:2
 	>=x11-libs/gtk+-3.20:3
 	libnotify? ( x11-libs/libnotify )"
 RDEPEND="${DEPEND}"
-BDEPEND="doc? ( app-doc/doxygen )
+BDEPEND="doc? ( app-text/doxygen )
 	test? ( dev-libs/check )
 	virtual/pkgconfig"
 

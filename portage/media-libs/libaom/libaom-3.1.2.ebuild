@@ -33,7 +33,7 @@ REQUIRED_USE="
 BDEPEND="abi_x86_32? ( dev-lang/yasm )
 	abi_x86_64? ( dev-lang/yasm )
 	abi_x86_x32? ( dev-lang/yasm )
-	doc? ( app-doc/doxygen )
+	doc? ( app-text/doxygen )
 "
 
 # the PATENTS file is required to be distributed with this package bug #682214

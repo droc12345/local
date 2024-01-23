@@ -16,7 +16,7 @@ IUSE="doc static-libs"
 
 RDEPEND=">=virtual/libiconv-0-r1[${MULTILIB_USEDEP}]"
 DEPEND="${RDEPEND}"
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 RESTRICT="test"
 

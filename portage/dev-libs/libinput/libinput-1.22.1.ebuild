@@ -21,7 +21,7 @@ RESTRICT="!test? ( test )"
 RDEPEND="
 	input_devices_wacom? ( >=dev-libs/libwacom-0.27:= )
 	>=dev-libs/libevdev-1.9.902
-	dev-python/python-libevdev
+	dev-python/libevdev
 	dev-python/pyudev
 	>=sys-libs/mtdev-1.1
 	virtual/libudev:=
@@ -40,11 +40,11 @@ BDEPEND="
 			dev-python/sphinx[${PYTHON_USEDEP}]
 			>=dev-python/sphinx-rtd-theme-0.2.4[${PYTHON_USEDEP}]
 		')
-		>=app-doc/doxygen-1.8.3
+		>=app-text/doxygen-1.8.3
 		>=media-gfx/graphviz-2.38.0
 	)
 "
-#	test? ( dev-util/valgrind )
+#	test? ( dev-debug/valgrind )
 
 PATCHES=(
 	"${FILESDIR}"/${P}-sphinx-6.patch
@@ -87,7 +87,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	optfeature "measure and replay tools" dev-python/python-libevdev
+	optfeature "measure and replay tools" dev-python/libevdev
 	udev_reload
 }
 

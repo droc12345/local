@@ -30,7 +30,7 @@ RDEPEND="x11-libs/libX11
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	x11-proto/xproto
-	doc? ( app-doc/doxygen
+	doc? ( app-text/doxygen
 		media-gfx/graphviz
 		dev-tex/pdftex )"
 

@@ -106,7 +106,7 @@ dlopen_lib() {
 #
 # This will return make (provided by system packages) for BSD userlands,
 # or bsdmake for Darwin userlands and pmake for the rest of userlands,
-# both of which are provided by sys-devel/pmake package.
+# both of which are provided by dev-build/pmake package.
 #
 # Note: the bsdmake for Darwin userland is with compatibility with MacOSX
 # default name.

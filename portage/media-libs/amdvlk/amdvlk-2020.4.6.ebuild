@@ -21,7 +21,7 @@ DEPEND="wayland? ( dev-libs/wayland[${MULTILIB_USEDEP}] )
 	${BUNDLED_LLVM_DEPEND}
 	>=dev-util/vulkan-headers-1.2.162"
 BDEPEND="${BUNDLED_LLVM_DEPEND}
-	dev-util/cmake"
+	dev-build/cmake"
 RDEPEND=" ${DEPEND}
 	x11-libs/libdrm[${MULTILIB_USEDEP}]
 	x11-libs/libXrandr[${MULTILIB_USEDEP}]

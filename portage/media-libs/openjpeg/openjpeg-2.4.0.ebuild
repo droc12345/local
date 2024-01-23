@@ -28,7 +28,7 @@ RDEPEND="
 	sys-libs/zlib:="
 DEPEND="${RDEPEND}"
 BDEPEND="
-	doc? ( app-doc/doxygen )"
+	doc? ( app-text/doxygen )"
 
 DOCS=( AUTHORS.md CHANGELOG.md NEWS.md README.md THANKS.md )
 

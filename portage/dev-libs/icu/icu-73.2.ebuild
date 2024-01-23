@@ -30,7 +30,7 @@ BDEPEND="
 	${PYTHON_DEPS}
 	dev-build/autoconf-archive
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen[dot] )
+	doc? ( app-text/doxygen[dot] )
 	verify-sig? ( >=sec-keys/openpgp-keys-icu-20221020 )
 "
 

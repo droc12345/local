@@ -31,7 +31,7 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/attrs[${PYTHON_USEDEP}]
 		dev-python/configobj[${PYTHON_USEDEP}]
-		dev-python/pysol_cards[${PYTHON_USEDEP}]
+		dev-python/pysol-cards[${PYTHON_USEDEP}]
 		dev-python/random2[${PYTHON_USEDEP}]
 		dev-python/six[${PYTHON_USEDEP}]
 		!minimal? (

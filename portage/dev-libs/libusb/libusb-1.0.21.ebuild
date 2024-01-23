@@ -16,7 +16,7 @@ IUSE="debug doc examples static-libs test udev"
 
 RDEPEND="udev? ( >=virtual/libudev-208:=[${MULTILIB_USEDEP},static-libs?] )"
 DEPEND="${RDEPEND}
-	doc? ( app-doc/doxygen )
+	doc? ( app-text/doxygen )
 	!udev? ( virtual/os-headers )"
 
 multilib_src_configure() {

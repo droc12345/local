@@ -16,7 +16,7 @@ IUSE="doc test"
 RESTRICT="!test? ( test )"
 
 DEPEND="test? ( dev-cpp/gtest )"
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 S="${WORKDIR}/gumbo-parser-${PV}"
 

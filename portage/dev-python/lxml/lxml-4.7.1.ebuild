@@ -31,7 +31,7 @@ BDEPEND="
 			dev-python/docutils[${PYTHON_USEDEP}]
 			dev-python/pygments[${PYTHON_USEDEP}]
 			dev-python/sphinx[${PYTHON_USEDEP}]
-			dev-python/sphinx_rtd_theme[${PYTHON_USEDEP}]
+			dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]
 		')
 	)
 	test? ( dev-python/cssselect[${PYTHON_USEDEP}] )
@@ -48,7 +48,7 @@ python_check_deps() {
 	has_version "dev-python/docutils[${PYTHON_USEDEP}]" &&
 	has_version "dev-python/pygments[${PYTHON_USEDEP}]" &&
 	has_version "dev-python/sphinx[${PYTHON_USEDEP}]" &&
-	has_version "dev-python/sphinx_rtd_theme[${PYTHON_USEDEP}]"
+	has_version "dev-python/sphinx-rtd-theme[${PYTHON_USEDEP}]"
 }
 
 python_prepare_all() {

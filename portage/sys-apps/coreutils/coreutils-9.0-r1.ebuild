@@ -39,7 +39,7 @@ BDEPEND="
 	test? (
 		dev-lang/perl
 		dev-perl/Expect
-		dev-util/strace
+		dev-debug/strace
 		${PYTHON_DEPS}
 	)
 "

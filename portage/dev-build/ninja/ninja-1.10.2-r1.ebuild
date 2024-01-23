@@ -29,7 +29,7 @@ BDEPEND="
 	dev-util/re2c
 	doc? (
 		app-text/asciidoc
-		app-doc/doxygen
+		app-text/doxygen
 		dev-libs/libxslt
 	)
 	test? ( dev-cpp/gtest )

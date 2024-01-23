@@ -16,7 +16,7 @@ IUSE="doc"
 
 RDEPEND="dev-libs/popt"
 DEPEND="${RDEPEND}"
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-0.2.6-iconv.patch

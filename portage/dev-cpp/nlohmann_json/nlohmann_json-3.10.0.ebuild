@@ -23,7 +23,7 @@ IUSE="doc test"
 # Tests only just added, large test suite, majority pass
 RESTRICT="test"
 
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 DOCS=( ChangeLog.md README.md )
 

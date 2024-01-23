@@ -17,8 +17,8 @@ IUSE="+installkernel static"
 PDEPEND="
 	installkernel? (
 		|| (
-			sys-kernel/installkernel-gentoo
-			sys-kernel/installkernel-systemd-boot
+			sys-kernel/installkernel
+			sys-kernel/installkernel-systemd
 		)
 	)"
 

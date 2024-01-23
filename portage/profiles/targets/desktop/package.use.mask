@@ -15,6 +15,6 @@ dev-qt/qtprintsupport gles2
 dev-qt/qtwebkit gles2
 dev-qt/qtwidgets gles2
 kde-apps/kdenlive gles2
-kde-frameworks/plasma gles2
+kde-plasma/libplasma gles2
 kde-plasma/kinfocenter gles2
 kde-plasma/kwin gles2

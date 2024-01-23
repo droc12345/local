@@ -27,7 +27,7 @@ DEPEND="
 	sys-libs/zlib
 	ssl? ( net-libs/gnutls:= )
 	jpeg? ( media-libs/libjpeg-turbo:= )
-	tracing? ( dev-util/systemtap )
+	tracing? ( dev-debug/systemtap )
 "
 RDEPEND="${DEPEND}"
 BDEPEND="

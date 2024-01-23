@@ -39,7 +39,7 @@ DEPEND="
 		x11-libs/libdrm
 	)
 	lz4? ( app-arch/lz4 )
-	systemtap? ( dev-util/systemtap )
+	systemtap? ( dev-debug/systemtap )
 	vaapi? ( media-libs/libva[wayland] )
 	ffmpeg? (
 		media-video/ffmpeg[x264,vaapi?]

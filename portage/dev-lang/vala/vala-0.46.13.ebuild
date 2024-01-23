@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 	dev-libs/libxslt
 	sys-devel/flex
 	virtual/pkgconfig
-	virtual/yacc
+	app-alternatives/yacc
 	test? (
 		dev-libs/dbus-glib
 		>=dev-libs/glib-2.26:2

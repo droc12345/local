@@ -12,7 +12,7 @@ SRC_URI="https://github.com/${PN}/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="dinput experimental +fluidsynth +munt new-dynarec +openal +qt5 +threads"
+IUSE="dinput experimental +fluidsynth +munt new-dynarec +openal +qtkde-frameworks/extra-cmake-modules +threads"
 
 DEPEND="
 	app-emulation/faudio
@@ -24,7 +24,7 @@ DEPEND="
 	media-libs/rtmidi
 	net-libs/libslirp
 	sys-libs/zlib
-	qt5? ( x11-libs/libXi )
+	qtkde-frameworks/extra-cmake-modules? ( x11-libs/libXi )
 "
 
 RDEPEND="
@@ -32,13 +32,13 @@ RDEPEND="
 	fluidsynth? ( media-sound/fluidsynth )
 	munt? ( media-libs/munt-mt32emu )
 	openal? ( media-libs/openal )
-	qt5? (
-		dev-qt/qtcore:5
-		dev-qt/qtgui:5
-		dev-qt/qtnetwork:5
-		dev-qt/qtopengl:5
-		dev-qt/qttranslations:5
-		dev-qt/qtwidgets:5
+	qtkde-frameworks/extra-cmake-modules? (
+		dev-qt/qtcore:kde-frameworks/extra-cmake-modules
+		dev-qt/qtgui:kde-frameworks/extra-cmake-modules
+		dev-qt/qtnetwork:kde-frameworks/extra-cmake-modules
+		dev-qt/qtopengl:kde-frameworks/extra-cmake-modules
+		dev-qt/qttranslations:kde-frameworks/extra-cmake-modules
+		dev-qt/qtwidgets:kde-frameworks/extra-cmake-modules
 		kde-frameworks/extra-cmake-modules
 	)
 "
@@ -47,7 +47,7 @@ BDEPEND="virtual/pkgconfig"
 
 src_configure() {
 	# LTO needs to be filtered
-	# See https://bugs.gentoo.org/854507
+	# See https://bugs.gentoo.org/8kde-frameworks/extra-cmake-modules4kde-frameworks/extra-cmake-modules07
 	filter-lto
 	append-flags -fno-strict-aliasing
 
@@ -64,7 +64,7 @@ src_configure() {
 		-DNEW_DYNAREC="$(usex new-dynarec)"
 		-DOPENAL="$(usex openal)"
 		-DPREFER_STATIC="OFF"
-		-DQT="$(usex qt5)"
+		-DQT="$(usex qtkde-frameworks/extra-cmake-modules)"
 		-DRELEASE="ON"
 	)
 

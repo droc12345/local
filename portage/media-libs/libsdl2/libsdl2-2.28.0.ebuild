@@ -81,7 +81,7 @@ DEPEND="${CDEPEND}
 BDEPEND="
 	virtual/pkgconfig
 	doc? (
-		app-doc/doxygen
+		app-text/doxygen
 		media-gfx/graphviz
 	)
 	wayland? ( >=dev-util/wayland-scanner-1.20 )

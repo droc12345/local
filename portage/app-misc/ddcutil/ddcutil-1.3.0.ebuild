@@ -38,7 +38,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="virtual/pkgconfig"
-# doc? ( app-doc/doxygen[dot] )
+# doc? ( app-text/doxygen[dot] )
 
 PATCHES=(
 	"${FILESDIR}"/${P}-no-werror.patch

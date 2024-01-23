@@ -29,7 +29,7 @@ IUSE="doc fox static-libs"
 RDEPEND="virtual/libusb:1[${MULTILIB_USEDEP}]
 	virtual/libudev:0[${MULTILIB_USEDEP}]"
 DEPEND="${RDEPEND}
-	doc? ( app-doc/doxygen )
+	doc? ( app-text/doxygen )
 	virtual/pkgconfig
 	fox? ( x11-libs/fox )"
 

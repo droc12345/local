@@ -16,7 +16,7 @@ IUSE="doc examples"
 # the tests are rather examples than tests, no point in running them
 RESTRICT="test"
 
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 S="${WORKDIR}/${PN}"
 

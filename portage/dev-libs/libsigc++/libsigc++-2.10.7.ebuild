@@ -16,7 +16,7 @@ RESTRICT="!test? ( test )"
 
 DEPEND="test? ( dev-libs/boost[${MULTILIB_USEDEP}] )"
 BDEPEND="sys-devel/m4
-	doc? ( app-doc/doxygen[dot] )"
+	doc? ( app-text/doxygen[dot] )"
 
 multilib_src_configure() {
 	filter-flags -fno-exceptions #84263

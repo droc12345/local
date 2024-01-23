@@ -22,7 +22,7 @@ DEPEND="
 	${RDEPEND}
 	virtual/pkgconfig
 	sys-devel/flex
-	virtual/yacc
+	app-alternatives/yacc
 "
 
 PATCHES=(

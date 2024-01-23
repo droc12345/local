@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="dev-util/scons
+DEPEND="dev-build/scons
     dev-libs/libsigc++:2
     dev-cpp/gtkmm:2.4
     dev-libs/expat"

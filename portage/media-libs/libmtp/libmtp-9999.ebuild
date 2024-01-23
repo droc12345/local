@@ -28,7 +28,7 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	>sys-devel/gettext-0.18.3
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen )"
+	doc? ( app-text/doxygen )"
 
 DOCS=( AUTHORS README TODO )
 

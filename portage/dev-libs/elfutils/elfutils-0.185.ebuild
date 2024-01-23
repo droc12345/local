@@ -28,7 +28,7 @@ RDEPEND=">=sys-libs/zlib-1.2.8-r1[static-libs?,${MULTILIB_USEDEP}]
 	!dev-libs/libelf
 "
 DEPEND="${RDEPEND}
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( dev-debug/valgrind )
 "
 BDEPEND="nls? ( sys-devel/gettext )
 	>=sys-devel/flex-2.5.4a

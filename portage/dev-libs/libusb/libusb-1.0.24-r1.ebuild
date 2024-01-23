@@ -17,7 +17,7 @@ RESTRICT="!test? ( test )"
 RDEPEND="udev? ( >=virtual/libudev-208:=[${MULTILIB_USEDEP},static-libs(-)?] )"
 DEPEND="${RDEPEND}
 	!udev? ( virtual/os-headers )"
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 PATCHES=(
 	"${FILESDIR}/${P}-multi_device_config_parsing.patch" #759814

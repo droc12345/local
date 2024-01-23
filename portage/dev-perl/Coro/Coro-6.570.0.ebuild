@@ -24,7 +24,7 @@ RDEPEND="
 	dev-perl/common-sense
 "
 DEPEND="
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( dev-debug/valgrind )
 "
 BDEPEND="
 	${RDEPEND}

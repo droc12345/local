@@ -48,7 +48,7 @@
 # 	!media-gfx/bar
 # "
 # DEPEND="${CDEPEND}
-# 	doc? ( app-doc/doxygen )
+# 	doc? ( app-text/doxygen )
 # "
 #
 # # bug 123456

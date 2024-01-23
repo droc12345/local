@@ -33,14 +33,14 @@ RESTRICT="!test? ( test )"
 DEPEND="
 	test? (
 		$(python_gen_any_dep '
-			dev-python/python-libevdev[${PYTHON_USEDEP}]
+			dev-python/libevdev[${PYTHON_USEDEP}]
 		')
 	)
 "
 RDEPEND=""
 
 python_check_deps() {
-	has_version -b "dev-python/python-libevdev[${PYTHON_USEDEP}]"
+	has_version -b "dev-python/libevdev[${PYTHON_USEDEP}]"
 }
 
 pkg_setup() {

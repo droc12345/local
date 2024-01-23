@@ -56,9 +56,9 @@ DEPEND="${RDEPEND}
 	>=dev-libs/libxslt-1.0
 	>=sys-devel/gettext-0.11
 	>=dev-build/gtk-doc-am-1.20
-	systemtap? ( >=dev-util/systemtap-1.3 )
+	systemtap? ( >=dev-debug/systemtap-1.3 )
 	test? (
-		sys-devel/gdb
+		dev-debug/gdb
 		${PYTHON_DEPS}
 		>=dev-util/gdbus-codegen-${PV}[${PYTHON_USEDEP}]
 		>=sys-apps/dbus-1.2.14 )

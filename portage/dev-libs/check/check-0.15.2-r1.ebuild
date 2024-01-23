@@ -23,7 +23,7 @@ RESTRICT="ppc? ( test )
 RDEPEND="subunit? ( dev-python/subunit[${MULTILIB_USEDEP}] )"
 DEPEND="${RDEPEND}
 	sys-apps/texinfo"
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 PATCHES=(
 	"${FILESDIR}"/check-0.14.0-r2-disable-automagic-dep.patch

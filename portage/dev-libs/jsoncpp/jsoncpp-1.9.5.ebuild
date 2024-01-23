@@ -20,7 +20,7 @@ RESTRICT="!test? ( test )"
 
 BDEPEND="
 	${PYTHON_DEPS}
-	doc? ( app-doc/doxygen )"
+	doc? ( app-text/doxygen )"
 RDEPEND=""
 
 src_configure() {

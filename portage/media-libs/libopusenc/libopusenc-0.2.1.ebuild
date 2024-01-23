@@ -16,7 +16,7 @@ BDEPEND="virtual/pkgconfig"
 RDEPEND=">=media-libs/opus-1.1:="
 DEPEND="
 	${RDEPEND}
-	doc? ( app-doc/doxygen[dot] )"
+	doc? ( app-text/doxygen[dot] )"
 
 src_configure() {
 	econf \

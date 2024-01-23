@@ -35,7 +35,7 @@ DEPEND="${RDEPEND}
 		dev-qt/qttest:5
 	)
 "
-BDEPEND="doc? ( app-doc/doxygen )"
+BDEPEND="doc? ( app-text/doxygen )"
 
 PATCHES=( "${FILESDIR}/${PN}-disable-pgp-test.patch" )
 

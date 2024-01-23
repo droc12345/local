@@ -25,7 +25,7 @@ RDEPEND="
 	dev-python/tomli[${PYTHON_USEDEP}]
 "
 BDEPEND="
-	!!<dev-python/setuptools_scm-2
+	!!<dev-python/setuptools-scm-2
 	test? (
 		dev-python/virtualenv[${PYTHON_USEDEP}]
 		dev-vcs/git

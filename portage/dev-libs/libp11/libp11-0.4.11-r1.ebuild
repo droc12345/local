@@ -16,7 +16,7 @@ RDEPEND="
 	dev-libs/openssl:0=[bindist(-)=]"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen )"
+	doc? ( app-text/doxygen )"
 
 src_configure() {
 	econf \

@@ -30,7 +30,7 @@ RDEPEND="media-libs/alsa-topology-conf
 	python? ( ${PYTHON_DEPS} )
 "
 DEPEND="${RDEPEND}"
-BDEPEND="doc? ( >=app-doc/doxygen-1.2.6 )"
+BDEPEND="doc? ( >=app-text/doxygen-1.2.6 )"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-1.1.6-missing_files.patch" # bug #652422

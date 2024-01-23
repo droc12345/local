@@ -75,7 +75,7 @@ COMMONDEPEND="
 	spell? ( >=app-text/enchant-1.0.0:= )
 	startup-notification? ( x11-libs/startup-notification )
 	svg? ( >=gnome-base/librsvg-2.39.0 )
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( dev-debug/valgrind )
 "
 
 DEPEND="${COMMONDEPEND}

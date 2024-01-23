@@ -43,7 +43,7 @@ DEPEND="
 
 BDEPEND="
 	virtual/pkgconfig
-	doc? ( app-doc/doxygen[dot] )
+	doc? ( app-text/doxygen[dot] )
 	!systemd? (
 		${PYTHON_DEPS}
 		$(python_gen_any_dep 'dev-python/jinja[${PYTHON_USEDEP}]')
