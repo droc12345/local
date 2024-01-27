@@ -41,8 +41,11 @@ src_install() {
 	meson_src_install --skip-subprojects
 }
 
+#		-Wno-error=stringop-overflow
+#		-Db_sanitize=address,undefined
 src_configure() {
 	local emesonargs=(
+		-Db_sanitize=address,undefined
 		--wrap-mode=default
 		$(meson_feature X xwayland)
 	)
