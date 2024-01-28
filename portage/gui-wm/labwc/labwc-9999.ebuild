@@ -21,7 +21,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+X +system-wlroots"
+IUSE="+X +system-wlroots asan"
 
 RDEPEND="
 	dev-libs/glib:2
@@ -45,10 +45,12 @@ src_install() {
 #		-Db_sanitize=address,undefined
 src_configure() {
 	local emesonargs=(
-		-Db_sanitize=address,undefined
 		--wrap-mode=default
 		$(meson_feature X xwayland)
 	)
+	if use asan; then
+		emesonargs+=(-Db_sanitize=address,undefined)
+	fi
 	if ! use system-wlroots; then
 		emesonargs+=(--force-fallback-for=wlroots)
 	fi
