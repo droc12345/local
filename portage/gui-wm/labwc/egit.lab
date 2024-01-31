@@ -1,0 +1,4 @@
+  959  grep EGIT ~/doc/*
+  964  sudo EGIT_OVERRIDE_COMMIT_LABWC_LABWC=21d816edb2b6f7824c567547f9e1dbf4987d9d01 emerge -1v labwc
+  967  sudo EGIT_OVERRIDE_COMMIT_LABWC_LABWC=21d816edb2b6f7824c567547f9e1dbf4987d9d01 emerge -1v labwc
+ 1005  h|grep EGIT >egit.lab
