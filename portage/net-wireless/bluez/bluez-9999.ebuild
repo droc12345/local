@@ -72,8 +72,7 @@ PATCHES=(
 	# https://github.com/bluez/bluez/issues/268
 	"${FILESDIR}"/${PN}-udevadm-path-r1.patch
 
-	# https://github.com/bluez/bluez/issues/267
-	"${FILESDIR}"/${PN}-5.63-musl-limits.patch
+	"${FILESDIR}"/${PN}-5.66-power-state-adapter-property.patch
 
 	# Fedora patches
 	# http://www.spinics.net/lists/linux-bluetooth/msg40136.html
@@ -113,7 +112,7 @@ src_prepare() {
 
 	# http://www.spinics.net/lists/linux-bluetooth/msg38490.html
 	if ! use systemd; then
-		eapply "${FILESDIR}"/0001-Allow-using-obexd-without-systemd-in-the-user-session-r2.patch
+		eapply "${FILESDIR}"/sysd.patch
 	fi
 
 	eautoreconf
