@@ -1,6 +1,8 @@
---- a/Makefile.obexd	2024-02-11 08:42:22.628633669 -0600
-+++ b/Makefile.obexd	2024-02-11 08:43:28.843393253 -0600
-@@ -8,10 +8,10 @@
+diff --git a/Makefile.obexd b/Makefile.obexd
+index 0e50b1fa4b..81456544d9 100644
+--- a/Makefile.obexd
++++ b/Makefile.obexd
+@@ -8,12 +8,10 @@ install-data-hook:
  
  uninstall-hook:
  	rm -f $(DESTDIR)$(SYSTEMD_USERUNITDIR)/dbus-org.bluez.obex.service
@@ -9,14 +11,33 @@
  dbussessionbusdir = $(DBUS_SESSIONBUSDIR)
  dbussessionbus_DATA = obexd/src/org.bluez.obex.service
 -endif
+-
+-EXTRA_DIST += obexd/src/org.bluez.obex.service
  
- EXTRA_DIST += obexd/src/org.bluez.obex.service
+ if OBEX
  
---- a/obexd/src/org.bluez.obex.service	2024-02-11 05:58:02.219018824 -0600
-+++ b/obexd/src/org.bluez.obex.service	2024-02-11 06:01:36.493206927 -0600
+diff --git a/configure.ac b/configure.ac
+index 5eb7ee0e0f..05c76dddbd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -457,6 +457,7 @@ AC_CONFIG_FILES(
+ 	mesh/bluetooth-meshd.rst
+ 	mesh/bluetooth-mesh.service
+ 	obexd/src/obex.service
++	obexd/src/org.bluez.obex.service
+ 	src/bluetoothd.rst
+ 	src/bluetooth.service
+ 	tools/bluetooth-logger.service
+diff --git a/obexd/src/org.bluez.obex.service b/obexd/src/org.bluez.obex.service.in
+similarity index 69%
+rename from obexd/src/org.bluez.obex.service
+rename to obexd/src/org.bluez.obex.service.in
+index a538088845..14c16d3e3c 100644
+--- a/obexd/src/org.bluez.obex.service
++++ b/obexd/src/org.bluez.obex.service.in
 @@ -1,4 +1,4 @@
  [D-BUS Service]
  Name=org.bluez.obex
 -Exec=/bin/false
-+Exec=/usr/libexec/bluetooth/obexd
++Exec=@exec_prefix@/bluetooth/obexd
  SystemdService=dbus-org.bluez.obex.service
