@@ -1,10 +1,11 @@
-# Copyright 2022-2023 Gentoo Authors
+# Copyright 2022-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 MULTILIB_COMPAT=( abi_x86_{32,64} )
-inherit autotools flag-o-matic multilib multilib-build toolchain-funcs wrapper
+inherit autotools flag-o-matic multilib multilib-build
+inherit prefix toolchain-funcs wrapper
 
 WINE_GECKO=2.47.2
 WINE_MONO=7.0.0
@@ -22,7 +23,8 @@ fi
 DESCRIPTION="Free implementation of Windows(tm) on Unix, without external patchsets"
 HOMEPAGE="
 	https://www.winehq.org/
-	https://gitlab.winehq.org/wine/wine/"
+	https://gitlab.winehq.org/wine/wine/
+"
 
 LICENSE="LGPL-2.1+ BSD-2 IJG MIT ZLIB gsm libpng2 libtiff"
 SLOT="${PV}"
@@ -32,10 +34,13 @@ IUSE="
 	+gstreamer kerberos ldap +mingw +mono netapi nls odbc openal
 	opencl +opengl osmesa pcap perl pulseaudio samba scanner +sdl
 	selinux +ssl +truetype udev udisks +unwind usb v4l +vkd3d +vulkan
-	+xcomposite xinerama"
+	+xcomposite xinerama
+"
+# bug #551124 for truetype
 REQUIRED_USE="
 	X? ( truetype )
-	crossdev-mingw? ( mingw )" # bug #551124 for truetype
+	crossdev-mingw? ( mingw )
+"
 
 # tests are non-trivial to run, can hang easily, don't play well with
 # sandbox, and several need real opengl/vulkan or network access
@@ -67,7 +72,8 @@ WINE_DLOPEN_DEPEND="
 	truetype? ( media-libs/freetype[${MULTILIB_USEDEP}] )
 	udisks? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	v4l? ( media-libs/libv4l[${MULTILIB_USEDEP}] )
-	vulkan? ( media-libs/vulkan-loader[${MULTILIB_USEDEP}] )"
+	vulkan? ( media-libs/vulkan-loader[${MULTILIB_USEDEP}] )
+"
 WINE_COMMON_DEPEND="
 	${WINE_DLOPEN_DEPEND}
 	X? (
@@ -94,7 +100,8 @@ WINE_COMMON_DEPEND="
 		!llvm-libunwind? ( sys-libs/libunwind:=[${MULTILIB_USEDEP}] )
 	)
 	usb? ( dev-libs/libusb:1[${MULTILIB_USEDEP}] )
-	vkd3d? ( >=app-emulation/vkd3d-1.2[${MULTILIB_USEDEP}] )"
+	vkd3d? ( >=app-emulation/vkd3d-1.2[${MULTILIB_USEDEP}] )
+"
 RDEPEND="
 	${WINE_COMMON_DEPEND}
 	app-emulation/wine-desktop-common
@@ -113,11 +120,13 @@ RDEPEND="
 	)
 	samba? ( net-fs/samba[winbind] )
 	selinux? ( sec-policy/selinux-wine )
-	udisks? ( sys-fs/udisks:2 )"
+	udisks? ( sys-fs/udisks:2 )
+"
 DEPEND="
 	${WINE_COMMON_DEPEND}
 	sys-kernel/linux-headers
-	X? ( x11-base/xorg-proto )"
+	X? ( x11-base/xorg-proto )
+"
 BDEPEND="
 	dev-lang/perl
 	sys-devel/binutils
@@ -125,7 +134,8 @@ BDEPEND="
 	sys-devel/flex
 	virtual/pkgconfig
 	mingw? ( !crossdev-mingw? ( dev-util/mingw64-toolchain[${MULTILIB_USEDEP}] ) )
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext )
+"
 IDEPEND=">=app-eselect/eselect-wine-2"
 
 QA_CONFIG_IMPL_DECL_SKIP=(
@@ -170,12 +180,30 @@ src_prepare() {
 
 	default
 
+	if tc-is-clang; then
+		if use mingw; then
+			# -mabi=ms was ignored by <clang:16 then turned error in :17
+			# if used without --target *-windows, then gets used in install
+			# phase despite USE=mingw, drop as a quick fix for now
+			sed -i '/MSVCRTFLAGS=/s/-mabi=ms//' configure.ac || die
+		else
+			# ./configure will fail, abort early
+			die "building ${PN} with clang is only supported with USE=mingw"
+		fi
+	fi
+
 	# ensure .desktop calls this variant + slot
 	sed -i "/^Exec=/s/wine /${P} /" loader/wine.desktop || die
+
+	# datadir is not where wine-mono is installed, so prefixy alternate paths
+	hprefixify -w /get_mono_path/ dlls/mscoree/metahost.c
 
 	# always update for patches (including user's wrt #432348)
 	eautoreconf
 	tools/make_requests || die # perl
+	# tip: if need more for user patches, with portage can e.g. do
+	# echo "post_src_prepare() { tools/make_specfiles || die; }" \
+	#     > /etc/portage/env/app-emulation/wine-vanilla
 }
 
 src_configure() {
@@ -267,6 +295,13 @@ src_configure() {
 			: "${CROSSCFLAGS:=$(
 				filter-flags '-fstack-protector*' #870136
 				filter-flags '-mfunction-return=thunk*' #878849
+
+				# -mavx with mingw-gcc has a history of obscure issues and
+				# disabling is seen as safer, e.g. `WINEARCH=win32 winecfg`
+				# crashes with -march=skylake >=wine-8.10, similar issues with
+				# znver4: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110273
+				append-cflags -mno-avx #912268
+
 				CC=${CROSSCC} test-flags-CC ${CFLAGS:--O2})}"
 			: "${CROSSLDFLAGS:=$(
 				filter-flags '-fuse-ld=*'
@@ -323,6 +358,14 @@ src_install() {
 }
 
 pkg_postinst() {
+	if use abi_x86_32 && { use opengl || use vulkan; } &&
+		has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'
+	then
+		ewarn "x11-drivers/nvidia-drivers is installed but is built without"
+		ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+		ewarn "applications under ${PN} will likely not be usable."
+	fi
+
 	eselect wine update --if-unset || die
 }
 

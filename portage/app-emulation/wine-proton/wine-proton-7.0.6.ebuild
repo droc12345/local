@@ -1,12 +1,12 @@
-# Copyright 2022-2023 Gentoo Authors
+# Copyright 2022-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 MULTILIB_COMPAT=( abi_x86_{32,64} )
 PYTHON_COMPAT=( python3_{10..12} )
-inherit autotools flag-o-matic multilib multilib-build python-any-r1
-inherit readme.gentoo-r1 toolchain-funcs wrapper
+inherit autotools flag-o-matic multilib multilib-build prefix
+inherit python-any-r1 readme.gentoo-r1 toolchain-funcs wrapper
 
 WINE_GECKO=2.47.3
 WINE_MONO=7.4.0
@@ -31,7 +31,8 @@ IUSE="
 	+abi_x86_32 +abi_x86_64 +alsa crossdev-mingw custom-cflags debug
 	+fontconfig +gecko +gstreamer llvm-libunwind +mono nls openal
 	osmesa perl pulseaudio +sdl selinux +ssl udev udisks +unwind usb
-	v4l +vkd3d +xcomposite xinerama"
+	v4l +vkd3d +xcomposite xinerama
+"
 
 # tests are non-trivial to run, can hang easily, don't play well with
 # sandbox, and several need real opengl/vulkan or network access
@@ -59,7 +60,8 @@ WINE_DLOPEN_DEPEND="
 	udisks? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	v4l? ( media-libs/libv4l[${MULTILIB_USEDEP}] )
 	xcomposite? ( x11-libs/libXcomposite[${MULTILIB_USEDEP}] )
-	xinerama? ( x11-libs/libXinerama[${MULTILIB_USEDEP}] )"
+	xinerama? ( x11-libs/libXinerama[${MULTILIB_USEDEP}] )
+"
 WINE_COMMON_DEPEND="
 	${WINE_DLOPEN_DEPEND}
 	x11-libs/libX11[${MULTILIB_USEDEP}]
@@ -78,7 +80,8 @@ WINE_COMMON_DEPEND="
 		!llvm-libunwind? ( sys-libs/libunwind:=[${MULTILIB_USEDEP}] )
 	)
 	usb? ( dev-libs/libusb:1[${MULTILIB_USEDEP}] )
-	vkd3d? ( >=app-emulation/vkd3d-1.2[${MULTILIB_USEDEP}] )"
+	vkd3d? ( >=app-emulation/vkd3d-1.2[${MULTILIB_USEDEP}] )
+"
 RDEPEND="
 	${WINE_COMMON_DEPEND}
 	app-emulation/wine-desktop-common
@@ -90,11 +93,13 @@ RDEPEND="
 		dev-perl/XML-LibXML
 	)
 	selinux? ( sec-policy/selinux-wine )
-	udisks? ( sys-fs/udisks:2 )"
+	udisks? ( sys-fs/udisks:2 )
+"
 DEPEND="
 	${WINE_COMMON_DEPEND}
 	sys-kernel/linux-headers
-	x11-base/xorg-proto"
+	x11-base/xorg-proto
+"
 BDEPEND="
 	${PYTHON_DEPS}
 	dev-lang/perl
@@ -103,7 +108,8 @@ BDEPEND="
 	sys-devel/flex
 	virtual/pkgconfig
 	nls? ( sys-devel/gettext )
-	!crossdev-mingw? ( dev-util/mingw64-toolchain[${MULTILIB_USEDEP}] )"
+	!crossdev-mingw? ( dev-util/mingw64-toolchain[${MULTILIB_USEDEP}] )
+"
 IDEPEND=">=app-eselect/eselect-wine-2"
 
 QA_CONFIG_IMPL_DECL_SKIP=(
@@ -152,16 +158,29 @@ src_prepare() {
 
 	default
 
+	if tc-is-clang; then
+		# -mabi=ms was ignored by <clang:16 then turned error in :17
+		# and it still gets used in install phase despite --with-mingw,
+		# drop as a quick fix for now which hopefully should be safe
+		sed -i '/MSVCRTFLAGS=/s/-mabi=ms//' configure.ac || die
+	fi
+
 	# ensure .desktop calls this variant + slot
 	sed -i "/^Exec=/s/wine /${P} /" loader/wine.desktop || die
 
 	# similarly to staging, append to `wine --version` for identification
 	sed -i "s/wine_build[^1]*1/& (Proton-${WINE_PV})/" configure.ac || die
 
+	# datadir is not where wine-mono is installed, so prefixy alternate paths
+	hprefixify -w /get_mono_path/ dlls/mscoree/metahost.c
+
 	# always update for patches (including user's wrt #432348)
 	eautoreconf
 	tools/make_requests || die # perl
 	dlls/winevulkan/make_vulkan -x vk.xml || die # python, needed for proton's
+	# tip: if need more for user patches, with portage can e.g. do
+	# echo "post_src_prepare() { tools/make_specfiles || die; }" \
+	#     > /etc/portage/env/app-emulation/wine-proton
 }
 
 src_configure() {
@@ -259,6 +278,13 @@ src_configure() {
 		: "${CROSSCFLAGS:=$(
 			filter-flags '-fstack-protector*' #870136
 			filter-flags '-mfunction-return=thunk*' #878849
+
+			# -mavx with mingw-gcc has a history of obscure issues and
+			# disabling is seen as safer, e.g. `WINEARCH=win32 winecfg`
+			# crashes with -march=skylake >=wine-8.10, similar issues with
+			# znver4: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110273
+			append-cflags -mno-avx #912268
+
 			CC=${CROSSCC} test-flags-CC ${CFLAGS:--O2})}"
 		: "${CROSSLDFLAGS:=$(
 			filter-flags '-fuse-ld=*'
@@ -318,6 +344,13 @@ pkg_preinst() {
 
 pkg_postinst() {
 	[[ -v WINE_HAD_ANY_SLOT ]] || readme.gentoo_print_elog
+
+	if use abi_x86_32 && has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'
+	then
+		ewarn "x11-drivers/nvidia-drivers is installed but is built without"
+		ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+		ewarn "applications under ${PN} will likely not be usable."
+	fi
 
 	eselect wine update --if-unset || die
 }

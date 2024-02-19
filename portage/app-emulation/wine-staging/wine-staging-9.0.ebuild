@@ -5,11 +5,11 @@ EAPI=8
 
 MULTILIB_COMPAT=( abi_x86_{32,64} )
 PYTHON_COMPAT=( python3_{10..12} )
-inherit autotools edo flag-o-matic optfeature multilib multilib-build
+inherit autotools edo flag-o-matic multilib multilib-build
 inherit prefix python-any-r1 toolchain-funcs wrapper
 
 WINE_GECKO=2.47.4
-WINE_MONO=9.0.0
+WINE_MONO=8.1.0
 WINE_P=wine-$(ver_cut 1-2)
 
 if [[ ${PV} == *9999 ]]; then
@@ -460,9 +460,6 @@ pkg_postinst() {
 		ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
 		ewarn "applications under ${PN} will likely not be usable."
 	fi
-
-	optfeature "/dev/hidraw* access used for *some* controllers (e.g. DualShock4)" \
-		games-util/game-device-udev-rules
 
 	eselect wine update --if-unset || die
 }

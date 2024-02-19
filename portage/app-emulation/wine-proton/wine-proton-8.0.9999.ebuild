@@ -1,15 +1,15 @@
-# Copyright 2022-2023 Gentoo Authors
+# Copyright 2022-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 MULTILIB_COMPAT=( abi_x86_{32,64} )
 PYTHON_COMPAT=( python3_{10..12} )
-inherit autotools flag-o-matic multilib multilib-build python-any-r1
-inherit readme.gentoo-r1 toolchain-funcs wrapper
+inherit autotools flag-o-matic multilib multilib-build prefix
+inherit python-any-r1 readme.gentoo-r1 toolchain-funcs wrapper
 
-WINE_GECKO=2.47.3
-WINE_MONO=7.4.1
+WINE_GECKO=2.47.4
+WINE_MONO=8.1.0
 WINE_PV=$(ver_rs 2 -)
 
 if [[ ${PV} == *9999 ]]; then
@@ -28,10 +28,11 @@ HOMEPAGE="https://github.com/ValveSoftware/wine/"
 LICENSE="LGPL-2.1+ BSD-2 IJG MIT OPENLDAP ZLIB gsm libpng2 libtiff"
 SLOT="${PV}"
 IUSE="
-	+abi_x86_32 +abi_x86_64 +alsa crossdev-mingw custom-cflags debug
+	+abi_x86_32 +abi_x86_64 +alsa crossdev-mingw custom-cflags
 	+fontconfig +gecko +gstreamer llvm-libunwind +mono nls osmesa
-	perl pulseaudio +sdl selinux +ssl udev udisks +unwind usb v4l
-	+xcomposite xinerama"
+	perl pulseaudio +sdl selinux +ssl +strip udev udisks +unwind
+	usb v4l video_cards_amdgpu +xcomposite xinerama
+"
 
 # tests are non-trivial to run, can hang easily, don't play well with
 # sandbox, and several need real opengl/vulkan or network access
@@ -59,11 +60,15 @@ WINE_DLOPEN_DEPEND="
 	udisks? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	v4l? ( media-libs/libv4l[${MULTILIB_USEDEP}] )
 	xcomposite? ( x11-libs/libXcomposite[${MULTILIB_USEDEP}] )
-	xinerama? ( x11-libs/libXinerama[${MULTILIB_USEDEP}] )"
+	xinerama? ( x11-libs/libXinerama[${MULTILIB_USEDEP}] )
+"
+# gcc: for -latomic with clang
 WINE_COMMON_DEPEND="
 	${WINE_DLOPEN_DEPEND}
+	sys-devel/gcc:*
 	x11-libs/libX11[${MULTILIB_USEDEP}]
 	x11-libs/libXext[${MULTILIB_USEDEP}]
+	x11-libs/libdrm[video_cards_amdgpu?,${MULTILIB_USEDEP}]
 	alsa? ( media-libs/alsa-lib[${MULTILIB_USEDEP}] )
 	gstreamer? (
 		dev-libs/glib:2[${MULTILIB_USEDEP}]
@@ -76,7 +81,8 @@ WINE_COMMON_DEPEND="
 		llvm-libunwind? ( sys-libs/llvm-libunwind[${MULTILIB_USEDEP}] )
 		!llvm-libunwind? ( sys-libs/libunwind:=[${MULTILIB_USEDEP}] )
 	)
-	usb? ( dev-libs/libusb:1[${MULTILIB_USEDEP}] )"
+	usb? ( dev-libs/libusb:1[${MULTILIB_USEDEP}] )
+"
 RDEPEND="
 	${WINE_COMMON_DEPEND}
 	app-emulation/wine-desktop-common
@@ -88,11 +94,13 @@ RDEPEND="
 		dev-perl/XML-LibXML
 	)
 	selinux? ( sec-policy/selinux-wine )
-	udisks? ( sys-fs/udisks:2 )"
+	udisks? ( sys-fs/udisks:2 )
+"
 DEPEND="
 	${WINE_COMMON_DEPEND}
 	sys-kernel/linux-headers
-	x11-base/xorg-proto"
+	x11-base/xorg-proto
+"
 BDEPEND="
 	${PYTHON_DEPS}
 	dev-lang/perl
@@ -101,7 +109,8 @@ BDEPEND="
 	sys-devel/flex
 	virtual/pkgconfig
 	nls? ( sys-devel/gettext )
-	!crossdev-mingw? ( dev-util/mingw64-toolchain[${MULTILIB_USEDEP}] )"
+	!crossdev-mingw? ( dev-util/mingw64-toolchain[${MULTILIB_USEDEP}] )
+"
 IDEPEND=">=app-eselect/eselect-wine-2"
 
 QA_CONFIG_IMPL_DECL_SKIP=(
@@ -113,8 +122,8 @@ QA_TEXTRELS="usr/lib/*/wine/i386-unix/*.so" # uses -fno-PIC -Wl,-z,notext
 PATCHES=(
 	"${FILESDIR}"/${PN}-7.0.4-musl.patch
 	"${FILESDIR}"/${PN}-7.0.4-noexecstack.patch
-	"${FILESDIR}"/${PN}-7.0.4-restore-menubuilder.patch
 	"${FILESDIR}"/${PN}-8.0.1c-unwind.patch
+	"${FILESDIR}"/${PN}-8.0.4-restore-menubuilder.patch
 )
 
 pkg_pretend() {
@@ -149,16 +158,33 @@ src_prepare() {
 
 	default
 
+	if tc-is-clang; then
+		# -mabi=ms was ignored by <clang:16 then turned error in :17
+		# and it still gets used in install phase despite --with-mingw,
+		# drop as a quick fix for now which hopefully should be safe
+		sed -i '/MSVCRTFLAGS=/s/-mabi=ms//' configure.ac || die
+
+		# needed by Valve's fsync patches if using clang (undef atomic_load_8)
+		sed -e '/^UNIX_LIBS.*=/s/$/ -latomic/' \
+			-i dlls/{ntdll,winevulkan}/Makefile.in || die
+	fi
+
 	# ensure .desktop calls this variant + slot
 	sed -i "/^Exec=/s/wine /${P} /" loader/wine.desktop || die
 
 	# similarly to staging, append to `wine --version` for identification
 	sed -i "s/wine_build[^1]*1/& (Proton-${WINE_PV})/" configure.ac || die
 
+	# datadir is not where wine-mono is installed, so prefixy alternate paths
+	hprefixify -w /get_mono_path/ dlls/mscoree/metahost.c
+
 	# always update for patches (including user's wrt #432348)
 	eautoreconf
 	tools/make_requests || die # perl
 	dlls/winevulkan/make_vulkan -x vk.xml || die # python, needed for proton's
+	# tip: if need more for user patches, with portage can e.g. do
+	# echo "post_src_prepare() { tools/make_specfiles || die; }" \
+	#     > /etc/portage/env/app-emulation/wine-proton
 }
 
 src_configure() {
@@ -175,6 +201,8 @@ src_configure() {
 		# upstream (Valve) doesn't really support misc configurations (e.g.
 		# adds vulkan code not always guarded by --with-vulkan), so force
 		# some major options that are typically needed by games either way
+		# TODO?: --without-mingw could make sense *if* using clang, assuming
+		# bug #912237 is resolved (consider when do USE=wow64 in proton-9)
 		--with-freetype
 		--with-mingw # needed by many, notably Blizzard titles
 		--with-opengl
@@ -196,6 +224,7 @@ src_configure() {
 
 		$(use_enable gecko mshtml)
 		$(use_enable mono mscoree)
+		$(use_enable video_cards_amdgpu amd_ags_x64)
 		--disable-tests
 		$(use_with alsa)
 		$(use_with fontconfig)
@@ -213,6 +242,8 @@ src_configure() {
 		$(use_with v4l v4l2)
 		$(use_with xcomposite)
 		$(use_with xinerama)
+
+		--without-vosk # unpackaged, file a bug if you need this
 	)
 
 	tc-ld-force-bfd # builds with non-bfd but broken at runtime (bug #867097)
@@ -256,10 +287,19 @@ src_configure() {
 
 		# use *FLAGS for mingw, but strip unsupported
 		: "${CROSSCFLAGS:=$(
-			# >=wine-7.21 configure.ac no longer adds -fno-strict by mistake
-			append-cflags '-fno-strict-aliasing'
+			# >=wine-7.21 <8.10's configure.ac does not pass -fno-strict when
+			# it should (can be removed when proton is rebased on >=8.10)
+			append-cflags -fno-strict-aliasing
+
 			filter-flags '-fstack-protector*' #870136
 			filter-flags '-mfunction-return=thunk*' #878849
+
+			# -mavx with mingw-gcc has a history of obscure issues and
+			# disabling is seen as safer, e.g. `WINEARCH=win32 winecfg`
+			# crashes with -march=skylake >=wine-8.10, similar issues with
+			# znver4: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110273
+			append-cflags -mno-avx #912268
+
 			CC=${CROSSCC} test-flags-CC ${CFLAGS:--O2})}"
 		: "${CROSSLDFLAGS:=$(
 			filter-flags '-fuse-ld=*'
@@ -305,11 +345,15 @@ src_install() {
 	# don't let portage try to strip PE files with the wrong
 	# strip executable and instead handle it here (saves ~120MB)
 	dostrip -x ${WINE_PREFIX}/wine/{i386,x86_64}-windows
-	use debug ||
-		find "${ED}"${WINE_PREFIX}/wine/*-windows -regex '.*\.\(a\|dll\|exe\)' \
-			-exec $(usex abi_x86_64 x86_64 i686)-w64-mingw32-strip --strip-unneeded {} + || die
 
-	dodoc ANNOUNCE AUTHORS README* documentation/README*
+	if use strip; then
+		ebegin "Stripping Windows (PE) binaries"
+		find "${ED}"${WINE_PREFIX}/wine/*-windows -regex '.*\.\(a\|dll\|exe\)' \
+			-exec $(usex abi_x86_64 x86_64 i686)-w64-mingw32-strip --strip-unneeded {} +
+		eend ${?} || die
+	fi
+
+	dodoc ANNOUNCE* AUTHORS README* documentation/README*
 	readme.gentoo_create_doc
 }
 
@@ -319,6 +363,13 @@ pkg_preinst() {
 
 pkg_postinst() {
 	[[ -v WINE_HAD_ANY_SLOT ]] || readme.gentoo_print_elog
+
+	if use abi_x86_32 && has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'
+	then
+		ewarn "x11-drivers/nvidia-drivers is installed but is built without"
+		ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+		ewarn "applications under ${PN} will likely not be usable."
+	fi
 
 	eselect wine update --if-unset || die
 }
