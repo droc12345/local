@@ -27,20 +27,20 @@ DEPEND="
 	dev-libs/libinput
 	gui-libs/gtk-layer-shell
 	media-libs/glm
-	media-libs/mesa:=[gles2,wayland,X?]
-	media-libs/libglvnd[X?]
+	media-libs/mesa:=[gles2]
+	media-libs/libglvnd
 	media-libs/libjpeg-turbo
 	media-libs/libpng
-	media-libs/freetype:=[X?]
+	media-libs/freetype
 	x11-libs/libdrm
-	x11-libs/gtk+:3=[wayland,X?]
-	x11-libs/cairo:=[X?]
-	x11-libs/libxkbcommon:=[X?]
+	x11-libs/gtk+:3
+	x11-libs/cairo
+	x11-libs/libxkbcommon
 	x11-libs/pixman
 	X? ( x11-libs/libxcb )
-	system-wfconfig? ( ~gui-libs/wf-config-9999:= )
+	system-wfconfig? ( gui-libs/wf-config )
 	!system-wfconfig? ( !gui-libs/wf-config )
-	system-wlroots? ( gui-libs/wlroots[X?] )
+	system-wlroots? ( gui-libs/wlroots )
 	!system-wlroots? ( !gui-libs/wlroots )
 "
 
@@ -56,9 +56,9 @@ BDEPEND="
 
 src_configure() {
 	sed -e "s:@EPREFIX@:${EPREFIX}:" \
-	    "${FILESDIR}"/wayfire-session > "${T}"/wayfire-session || die
+		"${FILESDIR}"/wayfire-session > "${T}"/wayfire-session || die
 	sed -e "s:@EPREFIX@:${EPREFIX}:" \
-	    "${FILESDIR}"/wayfire-session.desktop > "${T}"/wayfire-session.desktop || die
+		"${FILESDIR}"/wayfire-session.desktop > "${T}"/wayfire-session.desktop || die
 	local emesonargs=(
 		$(meson_feature system-wfconfig use_system_wfconfig)
 		$(meson_feature system-wlroots use_system_wlroots)

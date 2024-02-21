@@ -29,21 +29,21 @@ DEPEND="
 	dev-libs/wayland
 	gui-libs/gtk-layer-shell
 	media-libs/glm
-	media-libs/mesa:=[gles2,wayland,X?]
-	media-libs/libglvnd[X?]
+	media-libs/mesa
+	media-libs/libglvnd
 	media-libs/libjpeg-turbo
 	media-libs/libpng
-	media-libs/freetype:=[X?]
+	media-libs/freetype
 	>=x11-libs/libdrm-2.4.113:=
-	x11-libs/gtk+:3=[wayland,X?]
-	x11-libs/cairo:=[X?,svg(+)]
-	x11-libs/libxkbcommon:=[X?]
+	x11-libs/gtk+:3
+	x11-libs/cairo:=[svg(+)]
+	x11-libs/libxkbcommon
 	x11-libs/pixman
 	X? (
 		x11-libs/libxcb
 		x11-base/xwayland
 	)
-	system-wlroots? ( gui-libs/wlroots:=[X?] )
+	system-wlroots? ( gui-libs/wlroots )
 "
 
 RDEPEND="

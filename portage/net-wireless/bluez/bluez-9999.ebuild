@@ -72,7 +72,7 @@ PATCHES=(
 	# https://github.com/bluez/bluez/issues/268
 	"${FILESDIR}"/${PN}-udevadm-path-r1.patch
 
-	"${FILESDIR}"/${PN}-5.66-power-state-adapter-property.patch
+	#"${FILESDIR}"/${PN}-5.66-power-state-adapter-property.patch
 
 	# Fedora patches
 	# http://www.spinics.net/lists/linux-bluetooth/msg40136.html
@@ -111,9 +111,9 @@ src_prepare() {
 	default
 
 	# http://www.spinics.net/lists/linux-bluetooth/msg38490.html
-	if ! use systemd; then
-		eapply "${FILESDIR}"/sysd.patch
-	fi
+	#if ! use systemd; then
+	#	eapply "${FILESDIR}"/sysd.patch
+	#fi
 
 	eautoreconf
 

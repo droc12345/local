@@ -29,10 +29,17 @@ RDEPEND="
 	dev-libs/glib:2
 	dev-libs/libinput
 	dev-libs/libxml2:2
-	system-wlroots? ( gui-libs/wlroots[X?] )
-	x11-libs/cairo[X?]
-	x11-libs/libxkbcommon:=[X?]
-	x11-libs/pango[X?]
+	system-wlroots? ( gui-libs/wlroots )
+	x11-libs/cairo
+	x11-libs/libxkbcommon
+	x11-libs/pango
+	X? (
+		x11-base/xwayland
+		x11-libs/libxcb:0=
+		x11-libs/xcb-util-image
+		x11-libs/xcb-util-renderutil
+		x11-libs/xcb-util-wm
+	)
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
