@@ -11,6 +11,7 @@ HOMEPAGE="https://github.com/hyprwm/Hyprland"
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/hyprwm/Hyprland"
+	EGIT_COMMIT="b86ed02d8ae7c955e1f42cc27a19fe18d82c50b7"
 	#EGIT_COMMIT="7f47655f60be2c54dfa0e1758cbff20ab38217fc"
 else
 	MY_PV="${PV}beta"
