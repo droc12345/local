@@ -4,7 +4,7 @@
 EAPI=8
 
 LUA_COMPAT=( lua5-4 )
-PYTHON_COMPAT=( python{3_10,3_11} )
+PYTHON_COMPAT=( python3_{10,11,12} )
 
 inherit cmake linux-info lua-single python-any-r1 readme.gentoo-r1 xdg
 
@@ -14,16 +14,20 @@ SRC_URI="https://github.com/brndnmtthws/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.
 
 LICENSE="GPL-3 BSD LGPL-2.1 MIT"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~arm64 ~ppc ppc64 ~riscv sparc x86"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~ppc ~ppc64 ~riscv ~sparc ~x86"
 IUSE="apcupsd bundled-toluapp cmus curl doc extras hddtemp ical iconv imlib
 	intel-backlight iostats irc lua-cairo lua-imlib lua-rsvg math moc mpd
 	mysql ncurses nvidia +portmon pulseaudio rss systemd test thinkpad
 	truetype wayland webserver wifi X xinerama xmms2"
 RESTRICT="!test? ( test )"
 
+# Note: toluapp is bundled in conky since 1.11.2
+# Note: maintainer mode "-DMAINTAINER_MODE=yes" sets CMAKE_BUILD_TYPE Debug
+#       which creates debug symbols and enables "-DBUILD_TESTS" which also
+#       results in conky_core debug library getting installed
+
 COMMON_DEPEND="
 	curl? ( net-misc/curl )
-	>=media-libs/freetype-2
 	ical? ( dev-libs/libical:= )
 	iconv? ( virtual/libiconv )
 	imlib? ( media-libs/imlib2[X] )
@@ -41,6 +45,10 @@ COMMON_DEPEND="
 		dev-libs/glib:2
 	)
 	systemd? ( sys-apps/systemd )
+	truetype? (
+		x11-libs/libXft
+		>=media-libs/freetype-2
+	)
 	wayland? (
 		dev-libs/wayland
 		x11-libs/pango
@@ -52,9 +60,6 @@ COMMON_DEPEND="
 		x11-libs/libXdamage
 		x11-libs/libXfixes
 		x11-libs/libXext
-		truetype? (
-			x11-libs/libXft
-		)
 	)
 	xinerama? ( x11-libs/libXinerama )
 	xmms2? ( media-sound/xmms2 )
@@ -106,6 +111,7 @@ REQUIRED_USE="
 	lua-imlib? ( X  bundled-toluapp )
 	lua-rsvg? ( X  bundled-toluapp )
 	nvidia? ( X )
+	truetype? ( X )
 	xinerama? ( X )
 "
 
@@ -143,11 +149,13 @@ src_configure() {
 
 	if use X; then
 		mycmakeargs+=(
+			-DBUILD_ARGB=yes
 			-DBUILD_X11=yes
 			-DBUILD_XDAMAGE=yes
 			-DBUILD_XDBE=yes
 			-DBUILD_XFIXES=yes
 			-DBUILD_XSHAPE=yes
+			-DBUILD_XINPUT=yes
 			-DBUILD_MOUSE_EVENTS=yes
 			-DOWN_WINDOW=yes
 		)
@@ -158,8 +166,6 @@ src_configure() {
 	fi
 
 	mycmakeargs+=(
-		-DBUILD_ARGB=yes
-		-DOWN_WINDOW=yes
 		-DBUILD_APCUPSD=$(usex apcupsd)
 		-DBUILD_AUDACIOUS=no
 		-DBUILD_BUILTIN_CONFIG=yes
