@@ -2,4 +2,23 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # Adding this one, since it makes sense.
-USE="bzip2"
+#USE="bzip2"
+#------------- new
+# This just makes sense nowadays, if only for distfiles...
+#USE="lzma zstd"
+USE="bzip2 zstd"
+
+# make sure toolchain has sane defaults <toolchain@gentoo.org>
+USE="${USE} openmp"
+
+# bug 818376 (only on specific arches)
+LDFLAGS="-Wl,-O1 -Wl,--as-needed"
+
+# copied from merged-usr feature
+# Mike Gilbert <floppym@gentoo.org> (2022-08-31)
+# Avoid removing merged-usr symlinks.
+UNINSTALL_IGNORE="${UNINSTALL_IGNORE} /bin /lib /lib32 /lib64 /libx32 /sbin /usr/sbin"
+UNINSTALL_IGNORE="${UNINSTALL_IGNORE} /usr/lib/modules/*"
+
+# needed for llvm profiles
+BOOTSTRAP_USE="${BOOTSTRAP_USE} zstd"

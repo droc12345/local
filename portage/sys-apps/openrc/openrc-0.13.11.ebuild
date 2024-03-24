@@ -115,8 +115,8 @@ src_install() {
 	# disabled for now due to #270646
 	#mv "${ED}"/$(get_libdir)/lib{einfo,rc}* "${ED}"/usr/$(get_libdir)/ || die
 	#gen_usr_ldscript -a einfo rc
-	gen_usr_ldscript libeinfo.so
-	gen_usr_ldscript librc.so
+	##gen_usr_ldscript libeinfo.so
+	##gen_usr_ldscript librc.so
 
 	if ! use kernel_linux; then
 		keepdir /$(get_libdir)/rc/init.d
