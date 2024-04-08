@@ -4,7 +4,7 @@
 EAPI=8
 
 MY_PN=Vulkan-Tools
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{9..12} )
 inherit cmake-multilib python-any-r1
 
 if [[ ${PV} == *9999* ]]; then
@@ -12,9 +12,9 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_SUBMODULES=()
 	inherit git-r3
 else
-	SRC_URI="https://github.com/KhronosGroup/${MY_PN}/archive/vulkan-sdk-${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc ~ppc64 ~riscv"
-	S="${WORKDIR}"/${MY_PN}-vulkan-sdk-${PV}
+	SRC_URI="https://github.com/KhronosGroup/${MY_PN}/archive/vulkan-sdk-${PV}.0.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="amd64 arm arm64 ~loong ppc ppc64 ~riscv"
+	S="${WORKDIR}"/${MY_PN}-vulkan-sdk-${PV}.0
 fi
 
 DESCRIPTION="Official Vulkan Tools and Utilities for Windows, Linux, Android, and MacOS"
@@ -22,23 +22,24 @@ HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Tools"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="cube wayland X"
+IUSE="cube wayland +X"
+
+REQUIRED_USE="cube? ( || ( X wayland ) )"
 
 BDEPEND="${PYTHON_DEPS}
 	cube? ( ~dev-util/glslang-${PV}:=[${MULTILIB_USEDEP}] )
 "
 RDEPEND="
 	~dev-util/volk-${PV}:=[${MULTILIB_USEDEP}]
-	~media-libs/vulkan-loader-${PV}[${MULTILIB_USEDEP},wayland?,X?]
-	wayland? ( dev-libs/wayland[${MULTILIB_USEDEP}] )
+	~media-libs/vulkan-loader-${PV}:=[${MULTILIB_USEDEP},wayland?,X?]
+	wayland? ( dev-libs/wayland:=[${MULTILIB_USEDEP}] )
 	X? (
-		x11-libs/libX11[${MULTILIB_USEDEP}]
-		x11-libs/libxcb:=[${MULTILIB_USEDEP}]
+		x11-libs/libX11:=[${MULTILIB_USEDEP}]
+		x11-libs/libXrandr:=[${MULTILIB_USEDEP}]
 	)
 "
 DEPEND="${RDEPEND}
 	~dev-util/vulkan-headers-${PV}
-	X? ( x11-libs/libXrandr[${MULTILIB_USEDEP}] )
 "
 
 pkg_setup() {
@@ -71,15 +72,9 @@ multilib_src_configure() {
 		-DVULKAN_HEADERS_INSTALL_DIR="${ESYSROOT}/usr"
 	)
 
-	if use cube; then
-		if use X; then
-			mycmakeargs+=(-DCUBE_WSI_SELECTION=XCB)
-		elif use wayland; then
-			mycmakeargs+=(-DCUBE_WSI_SELECTION=WAYLAND)
-		else
-			mycmakeargs+=(-DCUBE_WSI_SELECTION=DISPLAY)
-		fi
-	fi
+	use cube && mycmakeargs+=(
+		-DCUBE_WSI_SELECTION=$(usex X XCB WAYLAND)
+	)
 
 	cmake_src_configure
 }
