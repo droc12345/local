@@ -293,13 +293,13 @@ multilib_src_install_all() {
 	fi
 
 	# Enable required wireplumber alsa and bluez monitors
-	if use sound-server; then
-		dodir /etc/wireplumber/main.lua.d
-		echo "alsa_monitor.enabled = true" > "${ED}"/etc/wireplumber/main.lua.d/89-gentoo-sound-server-enable-alsa-monitor.lua || die
-
-		dodir /etc/wireplumber/bluetooth.lua.d
-		echo "bluez_monitor.enabled = true" > "${ED}"/etc/wireplumber/bluetooth.lua.d/89-gentoo-sound-server-enable-bluez-monitor.lua || die
-	fi
+#	if use sound-server; then
+#		dodir /etc/wireplumber/main.lua.d
+#		echo "alsa_monitor.enabled = true" > "${ED}"/etc/wireplumber/main.lua.d/89-gentoo-sound-server-enable-alsa-monitor.lua || die
+#
+#		dodir /etc/wireplumber/bluetooth.lua.d
+#		echo "bluez_monitor.enabled = true" > "${ED}"/etc/wireplumber/bluetooth.lua.d/89-gentoo-sound-server-enable-bluez-monitor.lua || die
+#	fi
 
 	if ! use systemd; then
 		insinto /etc/xdg/autostart
