@@ -10,7 +10,7 @@
 # @BLURB: This eclass is created to avoid using non-portable GNUisms inside ebuilds
 
 case ${EAPI:-0} in
-	[567]) ;;
+	[5678]) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
