@@ -1,9 +1,13 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 inherit flag-o-matic toolchain-funcs
+
+# Uncomment if we have a patchset
+GENTOO_PATCH_DEV="sam"
+GENTOO_PATCH_VER="${PV}"
 
 # Official patchlevel
 # See ftp://ftp.cwru.edu/pub/bash/bash-4.2-patches/
@@ -28,8 +32,12 @@ patches() {
 }
 
 DESCRIPTION="The standard GNU Bourne again shell"
-HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
+HOMEPAGE="https://tiswww.case.edu/php/chet/bash/bashtop.html"
 SRC_URI="mirror://gnu/bash/${MY_P}.tar.gz $(patches)"
+
+if [[ -n ${GENTOO_PATCH_VER} ]] ; then
+	SRC_URI+=" https://dev.gentoo.org/~${GENTOO_PATCH_DEV}/distfiles/${CATEGORY}/${PN}/${PN}-${GENTOO_PATCH_VER}-patches.tar.xz"
+fi
 
 LICENSE="GPL-3"
 SLOT="${MY_PV}"
@@ -42,17 +50,17 @@ LIB_DEPEND=">=sys-libs/ncurses-5.2-r2[static-libs(+)]
 RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )"
 DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )"
-# We only need yacc when the .y files get patched (bash42-005)
-BDEPEND="app-alternatives/yacc"
+# We only need bison (yacc) when the .y files get patched (bash42-005)
+BDEPEND="sys-devel/bison"
 
 S="${WORKDIR}/${MY_P}"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-4.2-execute-job-control.patch # bug #383237
-	"${FILESDIR}"/${PN}-4.2-parallel-build.patch
-	"${FILESDIR}"/${PN}-4.2-no-readline.patch
-	"${FILESDIR}"/${PN}-4.2-read-retry.patch # bug #447810
-	"${FILESDIR}"/${PN}-4.2-speed-up-read-N.patch
+	"${WORKDIR}"/${PN}-${GENTOO_PATCH_VER}-patches/${PN}-4.2-execute-job-control.patch # bug #383237
+	"${WORKDIR}"/${PN}-${GENTOO_PATCH_VER}-patches/${PN}-4.2-parallel-build.patch
+	"${WORKDIR}"/${PN}-${GENTOO_PATCH_VER}-patches/${PN}-4.2-no-readline.patch
+	"${WORKDIR}"/${PN}-${GENTOO_PATCH_VER}-patches/${PN}-4.2-read-retry.patch # bug #447810
+	"${WORKDIR}"/${PN}-${GENTOO_PATCH_VER}-patches/${PN}-4.2-speed-up-read-N.patch
 )
 
 pkg_setup() {
@@ -66,6 +74,10 @@ pkg_setup() {
 
 src_unpack() {
 	unpack ${MY_P}.tar.gz
+
+	if [[ -n ${GENTOO_PATCH_VER} ]] ; then
+		unpack ${PN}-${GENTOO_PATCH_VER}-patches.tar.xz
+	fi
 }
 
 src_prepare() {
@@ -85,6 +97,13 @@ src_prepare() {
 }
 
 src_configure() {
+	# Upstream only test with Bison and require GNUisms like YYEOF and
+	# YYERRCODE. The former at least may be in POSIX soon:
+	# https://www.austingroupbugs.net/view.php?id=1269.
+	# configure warns on use of non-Bison but doesn't abort. The result
+	# may misbehave at runtime.
+	unset YACC
+
 	local myconf=(
 		--with-installed-readline=.
 

@@ -3,18 +3,24 @@
 
 EAPI=7
 
-inherit flag-o-matic toolchain-funcs
+inherit flag-o-matic toolchain-funcs prefix
 
 # Uncomment if we have a patchset
 GENTOO_PATCH_DEV="sam"
-GENTOO_PATCH_VER="${PV}-r2"
+GENTOO_PATCH_VER="${PV}"
 
 # Official patchlevel
-# See ftp://ftp.cwru.edu/pub/bash/bash-4.3-patches/
+# See ftp://ftp.cwru.edu/pub/bash/bash-5.0-patches/
 PLEVEL="${PV##*_p}"
 MY_PV="${PV/_p*}"
 MY_PV="${MY_PV/_/-}"
 MY_P="${PN}-${MY_PV}"
+is_release() {
+	case ${PV} in
+	*_alpha*|*_beta*|*_rc*) return 1 ;;
+	*) return 0 ;;
+	esac
+}
 [[ ${PV} != *_p* ]] && PLEVEL=0
 patches() {
 	local opt=${1} plevel=${2:-${PLEVEL}} pn=${3:-${PN}} pv=${4:-${MY_PV}}
@@ -32,38 +38,43 @@ patches() {
 }
 
 # The version of readline this bash normally ships with.
-READLINE_VER="6.3"
+READLINE_VER="8.0"
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="https://tiswww.case.edu/php/chet/bash/bashtop.html"
-SRC_URI="mirror://gnu/bash/${MY_P}.tar.gz $(patches)"
-[[ ${PV} == *_rc* ]] && SRC_URI+=" ftp://ftp.cwru.edu/pub/bash/${MY_P}.tar.gz"
+if is_release ; then
+	SRC_URI="mirror://gnu/bash/${MY_P}.tar.gz $(patches)"
+else
+	SRC_URI="ftp://ftp.cwru.edu/pub/bash/${MY_P}.tar.gz"
+fi
 
 if [[ -n ${GENTOO_PATCH_VER} ]] ; then
 	SRC_URI+=" https://dev.gentoo.org/~${GENTOO_PATCH_DEV}/distfiles/${CATEGORY}/${PN}/${PN}-${GENTOO_PATCH_VER}-patches.tar.xz"
 fi
 
 LICENSE="GPL-3"
-SLOT="${MY_PV}"
-KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~s390 sparc x86"
+SLOT="0"
+KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x64-solaris"
 IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline"
 
-DEPEND=">=sys-libs/ncurses-5.2-r2:0=
+DEPEND="
+	>=sys-libs/ncurses-5.2-r2:0=
+	nls? ( virtual/libintl )
 	readline? ( >=sys-libs/readline-${READLINE_VER}:0= )
-	nls? ( virtual/libintl )"
-RDEPEND="${DEPEND}
-	!<sys-apps/portage-2.1.6.7_p1"
+"
+RDEPEND="
+	${DEPEND}
+"
 # We only need bison (yacc) when the .y files get patched (bash42-005)
 BDEPEND="sys-devel/bison"
 
-PATCHES=(
-	"${WORKDIR}"/${P}-r2-patches/${PN}-4.3-mapfile-improper-array-name-validation.patch
-	"${WORKDIR}"/${P}-r2-patches/${PN}-4.3-arrayfunc.patch
-	"${WORKDIR}"/${P}-r2-patches/${PN}-4.3-protos.patch
-	"${WORKDIR}"/${P}-r2-patches/${PN}-4.4-popd-offset-overflow.patch # bug #600174
-)
-
 S="${WORKDIR}/${MY_P}"
+
+PATCHES=(
+	# Patches from Chet sent to bashbug ml
+	"${WORKDIR}"/${PN}-${GENTOO_PATCH_VER}-patches/${PN}-5.0-history-append.patch
+	"${WORKDIR}"/${PN}-${GENTOO_PATCH_VER}-patches/${PN}-5.0-syslog-history-extern.patch
+)
 
 pkg_setup() {
 	# bug #7332
@@ -92,17 +103,21 @@ src_prepare() {
 	[[ ${PLEVEL} -gt 0 ]] && eapply -p0 $(patches -s)
 
 	# Clean out local libs so we know we use system ones w/releases.
-	if [[ ${PV} != *_rc* ]] ; then
+	if is_release ; then
 		rm -rf lib/{readline,termcap}/* || die
 		touch lib/{readline,termcap}/Makefile.in || die # for config.status
 		sed -ri -e 's:\$[{(](RL|HIST)_LIBSRC[)}]/[[:alpha:]_-]*\.h::g' Makefile.in || die
 	fi
 
+	# Prefixify hardcoded path names. No-op for non-prefix.
+	hprefixify pathnames.h.in
+
 	# Avoid regenerating docs after patches, bug #407985
 	sed -i -r '/^(HS|RL)USER/s:=.*:=:' doc/Makefile.in || die
 	touch -r . doc/* || die
 
-	default
+	eapply -p0 "${PATCHES[@]}"
+	eapply_user
 }
 
 src_configure() {
@@ -114,8 +129,7 @@ src_configure() {
 	unset YACC
 
 	local myconf=(
-		--docdir='$(datarootdir)'/doc/${PF}
-		--htmldir='$(docdir)/html'
+		--disable-profiling
 
 		# Force linking with system curses ... the bundled termcap lib
 		# sucks bad compared to ncurses.  For the most part, ncurses
@@ -123,14 +137,13 @@ src_configure() {
 		# ncurses in one or two small places :(.
 		--with-curses
 
-		$(use_with afs)
-		$(use_enable net net-redirections)
-		--disable-profiling
 		$(use_enable mem-scramble)
-		$(use_with mem-scramble bash-malloc)
+		$(use_enable net net-redirections)
 		$(use_enable readline)
-		$(use_enable readline history)
 		$(use_enable readline bang-history)
+		$(use_enable readline history)
+		$(use_with afs)
+		$(use_with mem-scramble bash-malloc)
 	)
 
 	# For descriptions of these, see config-top.h
@@ -142,7 +155,6 @@ src_configure() {
 		-DSYS_BASH_LOGOUT=\'\""${EPREFIX}"/etc/bash/bash_logout\"\' \
 		-DNON_INTERACTIVE_LOGIN_SHELLS \
 		-DSSH_SOURCE_BASHRC \
-		-DUSE_MKTEMP -DUSE_MKSTEMP \
 		$(use bashlogger && echo -DSYSLOG_HISTORY)
 
 	# Don't even think about building this statically without
@@ -158,9 +170,9 @@ src_configure() {
 	# be safe.
 	# Exact cached version here doesn't really matter as long as it
 	# is at least what's in the DEPEND up above.
-	export ac_cv_rl_version=${READLINE_VER}
+	export ac_cv_rl_version=${READLINE_VER%%_*}
 
-	if [[ ${PV} != *_rc* ]] ; then
+	if is_release ; then
 		# Use system readline only with released versions.
 		myconf+=( --with-installed-readline=. )
 	fi
@@ -193,15 +205,80 @@ src_compile() {
 }
 
 src_install() {
-	into /
-	newbin bash bash-${SLOT}
+	local d f
 
-	newman doc/bash.1 bash-${SLOT}.1
-	newman doc/builtins.1 builtins-${SLOT}.1
+	default
 
-	insinto /usr/share/info
-	newins doc/bashref.info bash-${SLOT}.info
-	dosym bash-${SLOT}.info /usr/share/info/bashref-${SLOT}.info
+	dodir /bin
+	mv "${ED}"/usr/bin/bash "${ED}"/bin/ || die
+	dosym bash /bin/rbash
 
-	dodoc README NEWS AUTHORS CHANGES COMPAT Y2K doc/FAQ doc/INTRO
+	insinto /etc/bash
+	doins "${FILESDIR}"/bash_logout
+	doins "$(prefixify_ro "${FILESDIR}"/bashrc)"
+
+	keepdir /etc/bash/bashrc.d
+
+	insinto /etc/skel
+	for f in bash{_logout,_profile,rc} ; do
+		newins "${FILESDIR}"/dot-${f} .${f}
+	done
+
+	local sed_args=(
+		-e 's:#GNU#@::'
+		-e '/#@/d'
+	)
+
+	if ! use readline ; then
+		# bug #432338
+		sed_args+=(
+			-e '/^shopt -s histappend/s:^:#:'
+			-e 's:use_color=true:use_color=false:'
+		)
+	fi
+
+	sed -i \
+		"${sed_args[@]}" \
+		"${ED}"/etc/skel/.bashrc \
+		"${ED}"/etc/bash/bashrc || die
+
+	if use plugins ; then
+		exeinto /usr/$(get_libdir)/bash
+		doexe $(echo examples/loadables/*.o | sed 's:\.o::g')
+
+		insinto /usr/include/bash-plugins
+		doins *.h builtins/*.h include/*.h lib/{glob/glob.h,tilde/tilde.h}
+	fi
+
+	if use examples ; then
+		for d in examples/{functions,misc,scripts,startup-files} ; do
+			exeinto /usr/share/doc/${PF}/${d}
+			docinto ${d}
+			for f in ${d}/* ; do
+				if [[ ${f##*/} != PERMISSION ]] && [[ ${f##*/} != *README ]] ; then
+					doexe ${f}
+				else
+					dodoc ${f}
+				fi
+			done
+		done
+	fi
+
+	doman doc/*.1
+	newdoc CWRU/changelog ChangeLog
+	dosym bash.info /usr/share/info/bashref.info
+}
+
+pkg_preinst() {
+	if [[ -e ${EROOT}/etc/bashrc ]] && [[ ! -d ${EROOT}/etc/bash ]] ; then
+		mkdir -p "${EROOT}"/etc/bash
+		mv -f "${EROOT}"/etc/bashrc "${EROOT}"/etc/bash/
+	fi
+}
+
+pkg_postinst() {
+	# If /bin/sh does not exist, provide it
+	if [[ ! -e ${EROOT}/bin/sh ]] ; then
+		ln -sf bash "${EROOT}"/bin/sh
+	fi
 }
