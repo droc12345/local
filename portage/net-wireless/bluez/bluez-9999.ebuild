@@ -71,6 +71,7 @@ PATCHES=(
 	# https://bugs.gentoo.org/539844
 	# https://github.com/bluez/bluez/issues/268
 	"${FILESDIR}"/${PN}-udevadm-path-r1.patch
+	"${FILESDIR}"/bluez-5.73-configure-cups.patch
 
 	#"${FILESDIR}"/${PN}-5.66-power-state-adapter-property.patch
 
