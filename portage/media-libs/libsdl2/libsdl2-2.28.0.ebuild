@@ -36,8 +36,8 @@ CDEPEND="
 	alsa? ( >=media-libs/alsa-lib-1.0.27.2[${MULTILIB_USEDEP}] )
 	dbus? ( >=sys-apps/dbus-1.6.18-r1[${MULTILIB_USEDEP}] )
 	fcitx4? ( app-i18n/fcitx:4 )
-	gles1? ( media-libs/mesa[${MULTILIB_USEDEP},gles1] )
-	gles2? ( >=media-libs/mesa-9.1.6[${MULTILIB_USEDEP},gles2] )
+	gles1? ( media-libs/mesa[${MULTILIB_USEDEP}] )
+	gles2? ( >=media-libs/mesa-9.1.6[${MULTILIB_USEDEP}] )
 	ibus? ( app-i18n/ibus )
 	jack? ( virtual/jack[${MULTILIB_USEDEP}] )
 	kms? (
@@ -59,7 +59,7 @@ CDEPEND="
 	udev? ( >=virtual/libudev-208:=[${MULTILIB_USEDEP}] )
 	wayland? (
 		>=dev-libs/wayland-1.20[${MULTILIB_USEDEP}]
-		>=media-libs/mesa-9.1.6[${MULTILIB_USEDEP},egl(+),gles2,wayland]
+		>=media-libs/mesa-9.1.6[${MULTILIB_USEDEP},egl(+),wayland]
 		>=x11-libs/libxkbcommon-0.2.0[${MULTILIB_USEDEP}]
 	)
 	X? (

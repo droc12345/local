@@ -27,7 +27,7 @@ DEPEND="
 	dev-libs/libinput
 	gui-libs/gtk-layer-shell
 	media-libs/glm
-	media-libs/mesa:=[gles2]
+	media-libs/mesa
 	media-libs/libglvnd
 	media-libs/libjpeg-turbo
 	media-libs/libpng

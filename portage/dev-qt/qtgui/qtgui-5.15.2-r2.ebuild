@@ -42,7 +42,7 @@ COMMON_DEPEND="
 		x11-libs/libdrm
 	)
 	evdev? ( sys-libs/mtdev )
-	gles2-only? ( media-libs/mesa[gles2] )
+	gles2-only? ( media-libs/mesa )
 	!gles2-only? ( virtual/opengl )
 	jpeg? ( virtual/jpeg:0 )
 	libinput? (
