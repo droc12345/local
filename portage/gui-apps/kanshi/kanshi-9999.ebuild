@@ -21,6 +21,7 @@ SLOT="0"
 IUSE="+man +ipc"
 
 RDEPEND="
+	dev-libs/libscfg
 	dev-libs/wayland
 	man? ( ~app-text/scdoc-9999 )
 	ipc? ( dev-libs/libvarlink )
