@@ -13,7 +13,7 @@
 # Broken multilib dependencies.
 net-im/mattermost-desktop-bin
 net-im/skypeforlinux
-net-im/slack-bin
+net-im/slack
 
 # Pawel Hajdan jr <phajdan.jr@gentoo.org> (07 Oct 2012)
 # V8 upstream said they won't support x32, bug #423815

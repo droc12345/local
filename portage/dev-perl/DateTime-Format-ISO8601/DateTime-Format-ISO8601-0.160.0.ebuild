@@ -29,6 +29,6 @@ BDEPEND="${RDEPEND}
 		>=virtual/perl-CPAN-Meta-2.120.900
 		virtual/perl-File-Spec
 		>=virtual/perl-Test-Simple-1.302.15
-		>=dev-perl/Test2-Suite-0.0.72
+		>=perl-core/Test2-Suite-0.0.72
 	)
 "

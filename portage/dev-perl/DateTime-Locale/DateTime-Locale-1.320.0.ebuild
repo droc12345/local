@@ -40,6 +40,6 @@ BDEPEND="${RDEPEND}
 		dev-perl/Test-File-ShareDir
 		>=virtual/perl-Test-Simple-1.302.15
 		dev-perl/Test2-Plugin-NoWarnings
-		dev-perl/Test2-Suite
+		perl-core/Test2-Suite
 	)
 "

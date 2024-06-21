@@ -21,7 +21,7 @@ BDEPEND="${RDEPEND}
 	virtual/perl-ExtUtils-MakeMaker
 	test? (
 		dev-perl/Capture-Tiny
-		>=dev-perl/Test2-Suite-0.0.72
+		>=perl-core/Test2-Suite-0.0.72
 		dev-perl/Test-Script
 	)
 "

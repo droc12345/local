@@ -20,7 +20,7 @@ BDEPEND="${RDEPEND}
 	virtual/perl-ExtUtils-MakeMaker
 	test? (
 		>=virtual/perl-Test-Simple-1.302.15
-		>=dev-perl/Test2-Suite-0.0.60
+		>=perl-core/Test2-Suite-0.0.60
 	)
 "
 

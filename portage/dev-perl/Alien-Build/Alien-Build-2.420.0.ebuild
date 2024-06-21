@@ -35,7 +35,7 @@ RDEPEND="
 BDEPEND="${RDEPEND}
 	test? (
 		dev-perl/Devel-Hide
-		>=dev-perl/Test2-Suite-0.0.60
+		>=perl-core/Test2-Suite-0.0.60
 		!minimal? (
 			dev-perl/Alien-Base-ModuleBuild
 			dev-perl/Sort-Versions

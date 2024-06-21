@@ -3,24 +3,27 @@
 
 EAPI=8
 
-DIST_AUTHOR=DROLSKY
-DIST_VERSION=0.09
+DIST_AUTHOR=EXODIST
+DIST_VERSION=0.000144
 inherit perl-module
 
-DESCRIPTION="Fail if tests warn"
+DESCRIPTION="A rich set of tools built upon the Test2 framework"
 SLOT="0"
 KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris"
 
 RDEPEND="
 	virtual/perl-Carp
-	>=virtual/perl-Test-Simple-1.302.167
-	virtual/perl-parent
+	virtual/perl-Data-Dumper
+	virtual/perl-Exporter
+	>=dev-perl/Importer-0.24.0
+	>=dev-perl/Module-Pluggable-2.700.0
+	virtual/perl-Scalar-List-Utils
+	dev-perl/Scope-Guard
+	>=dev-perl/Sub-Info-0.2.0
+	>=perl-core/Term-Table-0.13.0
+	>=virtual/perl-Test-Simple-1.302.176
+	virtual/perl-Time-HiRes
 "
 BDEPEND="${RDEPEND}
 	virtual/perl-ExtUtils-MakeMaker
-	test? (
-		virtual/perl-File-Spec
-		dev-perl/IPC-Run3
-		perl-core/Test2-Suite
-	)
 "

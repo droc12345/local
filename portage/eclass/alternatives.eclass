@@ -42,7 +42,7 @@
 # consider using this unless you are want to do something special.
 
 case ${EAPI} in
-	[5-7]) ;;
+	[5-8]) ;;
 	*)     die "EAPI=${EAPI:-0} is not supported" ;;
 esac
 

@@ -24,6 +24,6 @@ BDEPEND="${RDEPEND}
 	virtual/perl-ExtUtils-CBuilder
 	>=virtual/perl-ExtUtils-MakeMaker-6.520.0
 	test? (
-		>=dev-perl/Test2-Suite-0.0.60
+		>=perl-core/Test2-Suite-0.0.60
 	)
 "
