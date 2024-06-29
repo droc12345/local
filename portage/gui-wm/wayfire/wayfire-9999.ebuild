@@ -39,9 +39,7 @@ DEPEND="
 	x11-libs/pixman
 	X? ( x11-libs/libxcb )
 	system-wfconfig? ( gui-libs/wf-config )
-	!system-wfconfig? ( !gui-libs/wf-config )
 	system-wlroots? ( gui-libs/wlroots )
-	!system-wlroots? ( !gui-libs/wlroots )
 "
 
 RDEPEND="
