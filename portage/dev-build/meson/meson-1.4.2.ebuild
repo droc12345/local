@@ -95,6 +95,10 @@ python_prepare_all() {
 	# Broken due to python2 script created by python_wrapper_setup
 	rm -r "test cases/frameworks/1 boost" || die
 
+	# The 1.4.2 tarball accidentally contains some untracked files from git master:
+	# - subprojects/bar-0.1/Cargo.toml
+	rm -r "test cases/rust/25 cargo lock/"
+
 	distutils-r1_python_prepare_all
 }
 
@@ -181,6 +185,6 @@ python_install_all() {
 	if [[ ${PV} = *9999* ]]; then
 		DESTDIR="${ED}" eninja -C docs/builddir install
 	else
-		newman "${DISTDIR}"/meson-reference-${MY_PV}.3 meson-reference.3
+		newman "${DISTDIR}"/meson-reference-${PV}.3 meson-reference.3
 	fi
 }
