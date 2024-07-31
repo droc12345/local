@@ -15,7 +15,7 @@ SRC_URI="http://launchpad.net/${MY_PN}/${MM_PV}/${PV}/+download/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="crypt xcomposite desktop_manager"
+IUSE="crypt xcomposite X wayland desktop_manager"
 
 RDEPEND="
 	dev-libs/dbus-glib
@@ -26,8 +26,10 @@ RDEPEND="
 	sys-apps/dbus
 	x11-libs/cairo
 	x11-libs/pango
-	x11-libs/gtkglext
-	x11-libs/libXrender
+	X? (
+		x11-libs/gtkglext
+		x11-libs/libXrender
+	)
 	x11-libs/gtk+:3
 	crypt? ( sys-libs/glibc )
 	xcomposite? (
@@ -51,6 +53,8 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
+		$(use X && echo "-Denable-x11-support=ON" || echo "-Denable-x11-support=OFF")
+		$(use wayland && echo "-Denable-wayland-support=ON" || echo "-Denable-wayland-support=OFF")
 		$(use desktop_manager && echo "-Denable-desktop-manager=ON" || echo "-Denable-desktop-manager=OFF")
 		-DCMAKE_INSTALL_MANDIR="/usr/share/man/${PV}"
 	)
