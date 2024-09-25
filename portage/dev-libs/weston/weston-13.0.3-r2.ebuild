@@ -9,7 +9,7 @@ if [[ ${PV} = 9999* ]]; then
 	EXPERIMENTAL="true"
 fi
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{10..12} )
 inherit meson python-any-r1 readme.gentoo-r1 xdg-utils ${GIT_ECLASS}
 
 DESCRIPTION="Wayland reference compositor"
@@ -49,14 +49,14 @@ RDEPEND="
 	>=x11-libs/pixman-0.25.2
 	x11-misc/xkeyboard-config
 	drm? (
-		media-libs/libdisplay-info
+		=media-libs/libdisplay-info-0.1*
 		>=media-libs/mesa-17.1[gbm(+)]
 		>=sys-libs/mtdev-1.1.0
 		>=virtual/udev-136
 	)
 	editor? ( x11-libs/pango )
 	examples? ( x11-libs/pango )
-	gles2? ( media-libs/libglvnd )
+	gles2? ( media-libs/mesa[gles2(+),wayland] )
 	jpeg? ( media-libs/libjpeg-turbo:0= )
 	lcms? ( >=media-libs/lcms-2.9:2 )
 	pipewire? ( >=media-video/pipewire-0.3:= )
@@ -85,13 +85,18 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
-	>=dev-libs/wayland-protocols-1.33
+	>=dev-libs/wayland-protocols-1.24
 "
 BDEPEND="
 	${PYTHON_DEPS}
 	dev-util/wayland-scanner
 	virtual/pkgconfig
 "
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-neatvnc-0.8.patch
+	"${FILESDIR}"/${PN}-musl-basename.patch
+)
 
 src_configure() {
 	local emesonargs=(
@@ -121,7 +126,6 @@ src_configure() {
 		$(meson_use examples demo-clients)
 		-Dsimple-clients=$(usex examples damage,dmabuf-v4l,im,shm,touch$(usex gles2 ,dmabuf-egl,egl "") "")
 		$(meson_use resize-optimization resize-pool)
-		$(meson_use test tests)
 		-Dtest-junit-xml=false
 		"${myconf[@]}"
 	)

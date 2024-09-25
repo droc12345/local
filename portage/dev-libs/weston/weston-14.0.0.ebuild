@@ -49,7 +49,7 @@ RDEPEND="
 	>=x11-libs/pixman-0.25.2
 	x11-misc/xkeyboard-config
 	drm? (
-		media-libs/libdisplay-info
+		<media-libs/libdisplay-info-0.3.0:=
 		>=media-libs/mesa-17.1[gbm(+)]
 		>=sys-libs/mtdev-1.1.0
 		>=virtual/udev-136
@@ -92,6 +92,10 @@ BDEPEND="
 	dev-util/wayland-scanner
 	virtual/pkgconfig
 "
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-kiosk-test.patch
+)
 
 src_configure() {
 	local emesonargs=(
