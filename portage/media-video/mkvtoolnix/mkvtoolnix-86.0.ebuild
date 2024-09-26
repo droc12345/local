@@ -73,6 +73,10 @@ if [[ ${PV} != *9999 ]] ; then
 	BDEPEND+="verify-sig? ( sec-keys/openpgp-keys-mkvtoolnix )"
 fi
 
+PATCHES=(
+	"${FILESDIR}"/mkvtoolnix-86.0-libfmt-11-fix.patch
+)
+
 src_prepare() {
 	default
 

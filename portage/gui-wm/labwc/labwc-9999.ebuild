@@ -29,6 +29,7 @@ IUSE="+X +system-wlroots"
 RDEPEND="
 	dev-libs/glib:2
 	dev-libs/libinput
+	dev-libs/libliftoff
 	dev-libs/libxml2:2
 	system-wlroots? ( gui-libs/wlroots )
 	x11-libs/cairo
