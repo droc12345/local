@@ -3,61 +3,39 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+# note: version <2.0 should be kept for longer given it's the
+# last version to support <wine-7.1 and <nvidia-drivers-510
+
 MULTILIB_ABIS="amd64 x86" # allow usage on /no-multilib/
 MULTILIB_COMPAT=( abi_x86_{32,64} )
-inherit flag-o-matic meson-multilib python-any-r1
+inherit flag-o-matic meson-multilib
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/doitsujin/dxvk.git"
-	EGIT_SUBMODULES=(
-		# picky about headers and is cross-compiled making -I/usr/include troublesome
-		include/{spirv,vulkan}
-		subprojects/libdisplay-info
-	)
 else
-	HASH_SPIRV=
-	HASH_VULKAN=
-	HASH_DISPLAYINFO=
-	SRC_URI="
-		https://github.com/doitsujin/dxvk/archive/refs/tags/v${PV}.tar.gz
-			-> ${P}.tar.gz
-		https://github.com/KhronosGroup/SPIRV-Headers/archive/${HASH_SPIRV}.tar.gz
-			-> spirv-headers-${HASH_SPIRV}.tar.gz
-		https://github.com/KhronosGroup/Vulkan-Headers/archive/${HASH_VULKAN}.tar.gz
-			-> vulkan-headers-${HASH_VULKAN}.tar.gz
-		https://gitlab.freedesktop.org/JoshuaAshton/libdisplay-info/-/archive/${HASH_DISPLAYINFO}/libdisplay-info-${HASH_DISPLAYINFO}.tar.bz2
-	"
-	KEYWORDS="-* ~amd64 ~x86"
+	SRC_URI="https://github.com/doitsujin/dxvk/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="-* amd64 x86"
 fi
 
 DESCRIPTION="Vulkan-based implementation of D3D9, D3D10 and D3D11 for Linux / Wine"
 HOMEPAGE="https://github.com/doitsujin/dxvk/"
 
-# setup_dxvk.sh is no longer provided, fetch old until a better solution
-SRC_URI+=" https://raw.githubusercontent.com/doitsujin/dxvk/cd21cd7fa3b0df3e0819e21ca700b7627a838d69/setup_dxvk.sh"
-
-LICENSE="ZLIB Apache-2.0 MIT"
+LICENSE="ZLIB"
 SLOT="0"
-IUSE="+abi_x86_32 crossdev-mingw +d3d8 +d3d9 +d3d10 +d3d11 +dxgi +strip"
+IUSE="+abi_x86_32 crossdev-mingw +d3d9 +d3d10 +d3d11 debug +dxgi"
 REQUIRED_USE="
-	|| ( d3d8 d3d9 d3d10 d3d11 dxgi )
-	d3d8? ( d3d9 )
+	|| ( d3d9 d3d10 d3d11 dxgi )
 	d3d10? ( d3d11 )
-	d3d11? ( dxgi )
-"
+	dxgi? ( d3d11 )"
 
 BDEPEND="
-	${PYTHON_DEPS}
 	dev-util/glslang
-	!crossdev-mingw? ( dev-util/mingw64-toolchain[${MULTILIB_USEDEP}] )
-"
+	!crossdev-mingw? ( dev-util/mingw64-toolchain[${MULTILIB_USEDEP}] )"
 
 PATCHES=(
+	"${FILESDIR}"/${PN}-1.10.3-gcc13.patch
 	"${FILESDIR}"/${PN}-1.10.3-wow64-setup.patch
-	"${FILESDIR}"/${PN}-2.3.1-gcc14.patch
-	"${FILESDIR}"/${PN}-2.4-d3d8-setup.patch
 )
 
 pkg_pretend() {
@@ -82,14 +60,6 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	if [[ ${PV} != 9999 ]]; then
-		rmdir include/{spirv,vulkan} subprojects/libdisplay-info || die
-		mv ../SPIRV-Headers-${HASH_SPIRV} include/spirv || die
-		mv ../Vulkan-Headers-${HASH_VULKAN} include/vulkan || die
-		mv ../libdisplay-info-${HASH_DISPLAYINFO} subprojects/libdisplay-info || die
-	fi
-	cp -- "${DISTDIR}"/setup_dxvk.sh . || die
-
 	default
 
 	sed -i "/^basedir=/s|=.*|=${EPREFIX}/usr/lib/${PN}|" setup_dxvk.sh || die
@@ -139,13 +109,12 @@ multilib_src_configure() {
 	local emesonargs=(
 		--prefix="${EPREFIX}"/usr/lib/${PN}
 		--{bin,lib}dir=x${MULTILIB_ABI_FLAG: -2}
-		--force-fallback-for=libdisplay-info # system's is ELF (unusable)
-		$(meson_use {,enable_}d3d8)
 		$(meson_use {,enable_}d3d9)
 		$(meson_use {,enable_}d3d10)
 		$(meson_use {,enable_}d3d11)
 		$(meson_use {,enable_}dxgi)
-		$(usev strip --strip) # portage won't strip .dll, so allow it here
+		$(usev !debug --strip) # portage won't strip .dll, so allow it here
+		-Denable_tests=false # needs wine/vulkan and is intended for manual use
 	)
 
 	meson_src_configure
@@ -158,6 +127,10 @@ multilib_src_install_all() {
 	find "${ED}" -type f -name '*.a' -delete || die
 }
 
+pkg_preinst() {
+	[[ -e ${EROOT}/usr/$(get_libdir)/dxvk/d3d11.dll ]] && DXVK_HAD_OVERLAY=
+}
+
 pkg_postinst() {
 	if [[ ! ${REPLACING_VERSIONS} ]]; then
 		elog "To enable ${PN} on a wine prefix, you can run the following command:"
@@ -165,18 +138,15 @@ pkg_postinst() {
 		elog "	WINEPREFIX=/path/to/prefix setup_dxvk.sh install --symlink"
 		elog
 		elog "See ${EROOT}/usr/share/doc/${PF}/README.md* for details."
-		elog "Note: setup_dxvk.sh is unofficially temporarily provided as it was"
-		elog "removed upstream, handling may change in the future."
-	fi
-
-	if use d3d8 && [[ ${REPLACING_VERSIONS##* } ]] &&
-		ver_test ${REPLACING_VERSIONS##* } -lt 2.4
-	then
-		elog
-		elog ">=${PN}-2.4 now provides d3d8.dll, to make use of it will need to"
-		elog "update old wine prefixes which is typically done by re-running:"
+	elif [[ -v DXVK_HAD_OVERLAY ]]; then
+		# temporary warning until this version is more widely used
+		elog "Gentoo's main repo ebuild for ${PN} uses different paths than most overlays."
+		elog "If you were using symbolic links in wine prefixes it may be necessary to"
+		elog "refresh them by re-running the command:"
 		elog
 		elog "	WINEPREFIX=/path/to/prefix setup_dxvk.sh install --symlink"
 		elog
+		elog "Also, if you were using /etc/${PN}.conf, ${PN} is no longer patched to load"
+		elog "it. See ${EROOT}/usr/share/doc/${PF}/README.md* for handling configs."
 	fi
 }

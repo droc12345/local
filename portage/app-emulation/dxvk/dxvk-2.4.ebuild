@@ -17,9 +17,9 @@ if [[ ${PV} == 9999 ]]; then
 		subprojects/libdisplay-info
 	)
 else
-	HASH_SPIRV=
-	HASH_VULKAN=
-	HASH_DISPLAYINFO=
+	HASH_SPIRV=8b246ff75c6615ba4532fe4fde20f1be090c3764
+	HASH_VULKAN=46dc0f6e514f5730784bb2cac2a7c731636839e8
+	HASH_DISPLAYINFO=275e6459c7ab1ddd4b125f28d0440716e4888078
 	SRC_URI="
 		https://github.com/doitsujin/dxvk/archive/refs/tags/v${PV}.tar.gz
 			-> ${P}.tar.gz
@@ -29,7 +29,7 @@ else
 			-> vulkan-headers-${HASH_VULKAN}.tar.gz
 		https://gitlab.freedesktop.org/JoshuaAshton/libdisplay-info/-/archive/${HASH_DISPLAYINFO}/libdisplay-info-${HASH_DISPLAYINFO}.tar.bz2
 	"
-	KEYWORDS="-* ~amd64 ~x86"
+	KEYWORDS="-* amd64 x86"
 fi
 
 DESCRIPTION="Vulkan-based implementation of D3D9, D3D10 and D3D11 for Linux / Wine"
