@@ -25,23 +25,16 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="+X +system-wlroots"
+IUSE=""
 
 RDEPEND="
 	dev-libs/glib:2
 	dev-libs/libinput
+	dev-libs/libliftoff
 	dev-libs/libxml2:2
-	system-wlroots? ( gui-libs/wlroots )
 	x11-libs/cairo
 	x11-libs/libxkbcommon
 	x11-libs/pango
-	X? (
-		x11-base/xwayland
-		x11-libs/libxcb:0=
-		x11-libs/xcb-util-image
-		x11-libs/xcb-util-renderutil
-		x11-libs/xcb-util-wm
-	)
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -57,11 +50,8 @@ src_install() {
 src_configure() {
 	local emesonargs=(
 		--wrap-mode=default
-		$(meson_feature X xwayland)
 	)
-	if ! use system-wlroots; then
-		emesonargs+=(--force-fallback-for=wlroots)
-	fi
+	emesonargs+=(--force-fallback-for=wlroots)
 
 	meson_src_configure
 }

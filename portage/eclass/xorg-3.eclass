@@ -59,6 +59,7 @@ fi
 
 EXPORTED_FUNCTIONS="src_prepare src_configure src_unpack src_compile src_install pkg_postinst pkg_postrm"
 case "${EAPI:-0}" in
+	8) ;;
 	7) ;;
 	*) die "EAPI=${EAPI} is not supported" ;;
 esac
