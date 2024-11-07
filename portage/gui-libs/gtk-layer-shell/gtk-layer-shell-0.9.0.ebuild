@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/wmww/${PN}"
 else
 	SRC_URI="https://github.com/wmww/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~alpha amd64 arm arm64 ~loong ~mips ppc ppc64 ~riscv ~sparc x86"
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~loong ~mips ~ppc ~ppc64 ~riscv ~sparc ~x86"
 fi
 
 DESCRIPTION="Library to create desktop components for Wayland using the Layer Shell protocol"
@@ -26,7 +26,7 @@ RESTRICT="!test? ( test )"
 REQUIRED_USE="vala? ( introspection )"
 
 DEPEND="
-	>=x11-libs/gtk+-3.24.39:3[introspection?,wayland]
+	x11-libs/gtk+:3[introspection?,wayland]
 	>=dev-libs/wayland-1.10.0
 	>=dev-libs/wayland-protocols-1.16
 "

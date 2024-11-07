@@ -75,6 +75,7 @@ DEPEND="${RDEPEND}
 
 src_configure() {
 	local emesonargs=(
+		--wrap-mode=default
 		-Dman-pages=enabled
 		-Dcava=disabled
 		$(meson_feature evdev libevdev)
