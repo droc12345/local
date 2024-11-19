@@ -10,9 +10,9 @@ HOMEPAGE="https://codeberg.org/vyivel/croissant.git"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
-#	EGIT_REPO_URI="https://github.com/labwc/labwc"
+	EGIT_REPO_URI="https://codeberg.org/vyivel/croissant"
 #	EGIT_COMMIT="ad15c0474db518ece55846ef624fa2d85358d89e"
-	EGIT_REPO_URI="file:///n/don/git/croissant"
+#	EGIT_REPO_URI="file:///n/don/git/croissant"
 else
 	COMMIT=64b6c37e7c2f6057000b36d530046b2b084283df
 	SRC_URI="https://github.com/labwc/labwc/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
