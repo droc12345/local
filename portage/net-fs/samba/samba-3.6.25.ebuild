@@ -20,9 +20,6 @@ IUSE="acl addns ads +aio avahi caps +client cluster cups debug dmapi doc example
 	swat syslog +winbind"
 
 DEPEND="dev-libs/popt
-	>=sys-libs/talloc-2.0.8-r1[${MULTILIB_USEDEP}]
-	>=sys-libs/tdb-1.2.13[${MULTILIB_USEDEP}]
-	>=sys-libs/tevent-0.9.19[${MULTILIB_USEDEP}]
 	>=virtual/libiconv-0-r1[${MULTILIB_USEDEP}]
 	ads? ( >=virtual/krb5-0-r1[${MULTILIB_USEDEP}] sys-fs/e2fsprogs
 		client? ( sys-apps/keyutils ) )

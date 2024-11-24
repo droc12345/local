@@ -21,7 +21,7 @@
 
 case "${EAPI:-0}" in
 	[0-4]) die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}" ;;
-	[5-7]) ;;
+	[5-8]) ;;
 	*)     die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}" ;;
 esac
 
@@ -32,7 +32,9 @@ fi
 if [[ ! ${_PYTHON_UTILS_R1} ]]; then
 
 [[ ${EAPI} == 5 ]] && inherit eutils multilib
-inherit toolchain-funcs
+[[ ${EAPI} == 7 ]] && inherit eapi8-dosym
+inherit multiprocessing toolchain-funcs
+#inherit toolchain-funcs
 
 # @ECLASS-VARIABLE: _PYTHON_ALL_IMPLS
 # @INTERNAL
@@ -41,7 +43,7 @@ inherit toolchain-funcs
 _PYTHON_ALL_IMPLS=(
 	pypy3
 	python2_7
-	python3_7 python3_8 python3_9
+	python3_7 python3_{8..13}
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -52,7 +54,7 @@ readonly _PYTHON_ALL_IMPLS
 _PYTHON_HISTORICAL_IMPLS=(
 	jython2_7
 	pypy pypy1_{8,9} pypy2_0
-	python2_{5,6}
+	python2_{5..7}
 	python3_{1..6}
 )
 readonly _PYTHON_HISTORICAL_IMPLS
@@ -124,7 +126,7 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				jython2_7|pypy|pypy1_[89]|pypy2_0|pypy3|python2_[5-7]|python3_[1-9])
+				jython2_7|pypy|pypy1_[89]|pypy2_0|pypy3|python2_[5-7]|python3_[1-9]|python3_10|python3_11|python3_12|python3_13)
 					;;
 				*)
 					if has "${i}" "${_PYTHON_ALL_IMPLS[@]}" \
@@ -149,7 +151,13 @@ _python_set_impls() {
 	done
 
 	if [[ ! ${supp[@]} ]]; then
-		die "No supported implementation in PYTHON_COMPAT."
+		# special-case python2_7 for python-any-r1
+		if [[ ${_PYTHON_ALLOW_PY27} ]] && has python2_7 "${PYTHON_COMPAT[@]}"
+		then
+			supp+=( python2_7 )
+		else
+			die "No supported implementation in PYTHON_COMPAT."
+		fi
 	fi
 
 	if [[ ${_PYTHON_SUPPORTED_IMPLS[@]} ]]; then
@@ -706,8 +714,12 @@ python_newexe() {
 	)
 
 	# install the wrapper
-	_python_ln_rel "${ED%/}"/usr/lib/python-exec/python-exec2 \
-		"${ED%/}/${wrapd}/${newfn}" || die
+	local dosym=dosym
+	[[ ${EAPI} == [678] ]] && dosym=dosym8
+	"${dosym}" -r /usr/lib/python-exec/python-exec2 "${wrapd}/${newfn}"
+
+#	_python_ln_rel "${ED%/}"/usr/lib/python-exec/python-exec2 \
+#		"${ED%/}/${wrapd}/${newfn}" || die
 
 	# don't use this at home, just call python_doscript() instead
 	if [[ ${_PYTHON_REWRITE_SHEBANG} ]]; then
@@ -1442,4 +1454,37 @@ python_generate_cffi_modules() {
 }
 
 _PYTHON_UTILS_R1=1
+
+# @FUNCTION: python_has_version
+# @USAGE: [-b|-d|-r] <atom>...
+# @DESCRIPTION:
+# A convenience wrapper for has_version() with verbose output and better
+# defaults for use in python_check_deps().
+#
+# The wrapper accepts -b/-d/-r options to indicate the root to perform
+# the lookup on.  Unlike has_version, the default is -b.
+#
+# The wrapper accepts multiple package specifications.  For the check
+# to succeed, *all* specified atoms must match.
+python_has_version() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	local root_arg=( -b )
+	case ${1} in
+		-b|-d|-r)
+			root_arg=( "${1}" )
+			shift
+			;;
+	esac
+
+	local pkg
+	for pkg; do
+		ebegin "    ${pkg}"
+		has_version "${root_arg[@]}" "${pkg}"
+		eend ${?} || return
+	done
+
+	return 0
+}
+
 fi

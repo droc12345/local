@@ -46,12 +46,12 @@ BDEPEND="
 	doc? ( app-text/doxygen[dot] )
 	!systemd? (
 		${PYTHON_DEPS}
-		$(python_gen_any_dep 'dev-python/jinja[${PYTHON_USEDEP}]')
+		$(python_gen_any_dep 'dev-python/jinja2[${PYTHON_USEDEP}]')
 	)
 "
 
 python_check_deps() {
-	python_has_version -b "dev-python/jinja[${PYTHON_USEDEP}]"
+	python_has_version -b "dev-python/jinja2[${PYTHON_USEDEP}]"
 }
 
 S="${WORKDIR}/sdbus-cpp-${PV}"

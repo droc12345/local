@@ -43,7 +43,7 @@ DEPEND="
 	${RDEPEND}
 	dev-util/vulkan-headers"
 BDEPEND="
-	$(python_gen_any_dep 'dev-python/jinja[${PYTHON_USEDEP}]')
+	$(python_gen_any_dep 'dev-python/jinja2[${PYTHON_USEDEP}]')
 	virtual/pkgconfig"
 
 PATCHES=(
@@ -53,7 +53,7 @@ PATCHES=(
 )
 
 python_check_deps() {
-	has_version "dev-python/jinja[${PYTHON_USEDEP}]"
+	has_version "dev-python/jinja2[${PYTHON_USEDEP}]"
 }
 
 src_unpack() {

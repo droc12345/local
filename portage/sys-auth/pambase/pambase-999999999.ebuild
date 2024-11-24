@@ -57,11 +57,11 @@ RDEPEND="
 "
 
 BDEPEND="$(python_gen_any_dep '
-		dev-python/jinja[${PYTHON_USEDEP}]
+		dev-python/jinja2[${PYTHON_USEDEP}]
 	')"
 
 python_check_deps() {
-	has_version -b "dev-python/jinja[${PYTHON_USEDEP}]"
+	has_version -b "dev-python/jinja2[${PYTHON_USEDEP}]"
 }
 
 src_configure() {

@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: python-any-r1.eclass
@@ -7,7 +7,8 @@
 # @AUTHOR:
 # Author: Michał Górny <mgorny@gentoo.org>
 # Based on work of: Krzysztof Pawlik <nelchael@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7
+# @SUPPORTED_EAPIS: 7 8
+# @PROVIDES: python-utils-r1
 # @BLURB: An eclass for packages having build-time dependency on Python.
 # @DESCRIPTION:
 # A minimal eclass for packages which need any Python interpreter
@@ -35,29 +36,25 @@
 # both.
 #
 # For more information, please see the Python Guide:
-# https://dev.gentoo.org/~mgorny/python-guide/
+# https://projects.gentoo.org/python/guide/
 
-case "${EAPI:-0}" in
-	[0-4]) die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}" ;;
-	[5-8]) ;;
-	*)     die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}" ;;
+case ${EAPI} in
+	5|6|7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ! ${_PYTHON_ANY_R1} ]]; then
+if [[ -z ${_PYTHON_ANY_R1_ECLASS} ]]; then
+_PYTHON_ANY_R1_ECLASS=1
 
-if [[ ${_PYTHON_R1} ]]; then
+if [[ ${_PYTHON_R1_ECLASS} ]]; then
 	die 'python-any-r1.eclass can not be used with python-r1.eclass.'
-elif [[ ${_PYTHON_SINGLE_R1} ]]; then
+elif [[ ${_PYTHON_SINGLE_R1_ECLASS} ]]; then
 	die 'python-any-r1.eclass can not be used with python-single-r1.eclass.'
 fi
 
 inherit python-utils-r1
 
-fi
-
-EXPORT_FUNCTIONS pkg_setup
-
-# @ECLASS-VARIABLE: PYTHON_COMPAT
+# @ECLASS_VARIABLE: PYTHON_COMPAT
 # @REQUIRED
 # @DESCRIPTION:
 # This variable contains a list of Python implementations the package
@@ -69,7 +66,7 @@ EXPORT_FUNCTIONS pkg_setup
 # PYTHON_COMPAT=( python{2_5,2_6,2_7} )
 # @CODE
 
-# @ECLASS-VARIABLE: PYTHON_COMPAT_OVERRIDE
+# @ECLASS_VARIABLE: PYTHON_COMPAT_OVERRIDE
 # @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -88,7 +85,7 @@ EXPORT_FUNCTIONS pkg_setup
 # PYTHON_COMPAT_OVERRIDE='pypy' emerge -1v dev-python/bar
 # @CODE
 
-# @ECLASS-VARIABLE: PYTHON_REQ_USE
+# @ECLASS_VARIABLE: PYTHON_REQ_USE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The list of USEflags required to be enabled on the Python
@@ -106,7 +103,7 @@ EXPORT_FUNCTIONS pkg_setup
 # || ( dev-lang/python:X.Y[gdbm,ncurses(-)?] ... )
 # @CODE
 
-# @ECLASS-VARIABLE: PYTHON_DEPS
+# @ECLASS_VARIABLE: PYTHON_DEPS
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # This is an eclass-generated Python dependency string for all
@@ -116,8 +113,7 @@ EXPORT_FUNCTIONS pkg_setup
 #
 # Example use:
 # @CODE
-# DEPEND="${RDEPEND}
-#	${PYTHON_DEPS}"
+# BDEPEND="${PYTHON_DEPS}"
 # @CODE
 #
 # Example value:
@@ -126,7 +122,7 @@ EXPORT_FUNCTIONS pkg_setup
 # 	dev-lang/python:2.6[gdbm] )
 # @CODE
 
-# @ECLASS-VARIABLE: PYTHON_USEDEP
+# @ECLASS_VARIABLE: PYTHON_USEDEP
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # An eclass-generated USE-dependency string for the currently tested
@@ -139,16 +135,16 @@ EXPORT_FUNCTIONS pkg_setup
 # Example use:
 # @CODE
 # python_check_deps() {
-# 	has_version "dev-python/foo[${PYTHON_USEDEP}]"
+# 	python_has_version "dev-python/foo[${PYTHON_USEDEP}]"
 # }
 # @CODE
 #
 # Example value:
 # @CODE
-# python_targets_python3_7(-),-python_single_target_python3_7(-)
+# python_targets_python3_7(-)
 # @CODE
 
-# @ECLASS-VARIABLE: PYTHON_SINGLE_USEDEP
+# @ECLASS_VARIABLE: PYTHON_SINGLE_USEDEP
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # An eclass-generated USE-dependency string for the currently tested
@@ -161,7 +157,7 @@ EXPORT_FUNCTIONS pkg_setup
 # Example use:
 # @CODE
 # python_check_deps() {
-# 	has_version "dev-python/bar[${PYTHON_SINGLE_USEDEP}]"
+# 	python_has_version "dev-python/bar[${PYTHON_SINGLE_USEDEP}]"
 # }
 # @CODE
 #
@@ -181,7 +177,7 @@ _python_any_set_globals() {
 		_python_export "${i}" PYTHON_PKG_DEP
 
 		# note: need to strip '=' slot operator for || deps
-		deps="${PYTHON_PKG_DEP/:0=/:0} ${deps}"
+		deps="${PYTHON_PKG_DEP/:=} ${deps}"
 	done
 	deps="|| ( ${deps})"
 
@@ -206,8 +202,6 @@ _python_any_set_globals() {
 _python_any_set_globals
 unset -f _python_any_set_globals
 
-if [[ ! ${_PYTHON_ANY_R1} ]]; then
-
 # @FUNCTION: python_gen_any_dep
 # @USAGE: <dependency-block>
 # @DESCRIPTION:
@@ -222,15 +216,15 @@ if [[ ! ${_PYTHON_ANY_R1} ]]; then
 #
 # Example use:
 # @CODE
-# DEPEND="$(python_gen_any_dep '
+# BDEPEND="$(python_gen_any_dep '
 #	dev-python/foo[${PYTHON_SINGLE_USEDEP}]
 #	|| ( dev-python/bar[${PYTHON_USEDEP}]
 #		dev-python/baz[${PYTHON_USEDEP}] )')"
 #
 # python_check_deps() {
-#	has_version "dev-python/foo[${PYTHON_SINGLE_USEDEP}]" \
-#		&& { has_version "dev-python/bar[${PYTHON_USEDEP}]" \
-#			|| has_version "dev-python/baz[${PYTHON_USEDEP}]"; }
+# 	python_has_version "dev-python/foo[${PYTHON_SINGLE_USEDEP}]" &&
+# 		{ python_has_version "dev-python/bar[${PYTHON_USEDEP}]" ||
+# 			python_has_version "dev-python/baz[${PYTHON_USEDEP}]"; }
 # }
 # @CODE
 #
@@ -240,73 +234,35 @@ if [[ ! ${_PYTHON_ANY_R1} ]]; then
 #	(
 #		dev-lang/python:3.7
 #		dev-python/foo[python_single_target_python3_7(-)]
-#		|| ( dev-python/bar[python_targets_python3_7(-),-python_single_target_python3_7(-)]
-#			dev-python/baz[python_targets_python3_7(-),-python_single_target_python3_7(-)] )
+#		|| ( dev-python/bar[python_targets_python3_7(-)
+#			dev-python/baz[python_targets_python3_7(-) )
 #	)
 #	(
 #		dev-lang/python:3.8
 #		dev-python/foo[python_single_target_python3_8(-)]
-#		|| ( dev-python/bar[python_targets_python3_8(-),-python_single_target_python3_8(-)]
-#			dev-python/baz[python_targets_python3_8(-),-python_single_target_python3_8(-)] )
+#		|| ( dev-python/bar[python_targets_python3_8(-)]
+#			dev-python/baz[python_targets_python3_8(-)] )
 #	)
 # )
 # @CODE
 python_gen_any_dep() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	local depstr=${1}
 	[[ ${depstr} ]] || die "No dependency string provided"
 
 	local i PYTHON_PKG_DEP out=
 	for i in "${_PYTHON_SUPPORTED_IMPLS[@]}"; do
-		local PYTHON_USEDEP="python_targets_${i}(-),-python_single_target_${i}(-)"
+		local PYTHON_USEDEP="python_targets_${i}(-)"
 		local PYTHON_SINGLE_USEDEP="python_single_target_${i}(-)"
 		_python_export "${i}" PYTHON_PKG_DEP
 
 		local i_depstr=${depstr//\$\{PYTHON_USEDEP\}/${PYTHON_USEDEP}}
 		i_depstr=${i_depstr//\$\{PYTHON_SINGLE_USEDEP\}/${PYTHON_SINGLE_USEDEP}}
 		# note: need to strip '=' slot operator for || deps
-		out="( ${PYTHON_PKG_DEP%=} ${i_depstr} ) ${out}"
+		out="( ${PYTHON_PKG_DEP%:=} ${i_depstr} ) ${out}"
 	done
 	echo "|| ( ${out})"
-}
-
-# @FUNCTION: _python_EPYTHON_supported
-# @USAGE: <epython>
-# @INTERNAL
-# @DESCRIPTION:
-# Check whether the specified implementation is supported by package
-# (specified in PYTHON_COMPAT). Calls python_check_deps() if declared.
-_python_EPYTHON_supported() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	local EPYTHON=${1}
-	local i=${EPYTHON/./_}
-
-	case "${i}" in
-		python*|jython*|pypy*)
-			;;
-		*)
-			ewarn "Invalid EPYTHON: ${EPYTHON}"
-			return 1
-			;;
-	esac
-
-	if has "${i}" "${_PYTHON_SUPPORTED_IMPLS[@]}"; then
-		if python_is_installed "${i}"; then
-			if declare -f python_check_deps >/dev/null; then
-				local PYTHON_USEDEP="python_targets_${i}(-),-python_single_target_${i}(-)"
-				local PYTHON_SINGLE_USEDEP="python_single_target_${i}(-)"
-				python_check_deps
-				return ${?}
-			fi
-
-			return 0
-		fi
-	elif ! has "${i}" "${_PYTHON_ALL_IMPLS[@]}"; then
-		ewarn "Invalid EPYTHON: ${EPYTHON}"
-	fi
-	return 1
 }
 
 # @FUNCTION: python_setup
@@ -316,7 +272,8 @@ _python_EPYTHON_supported() {
 #
 # This function will call python_check_deps() if defined.
 python_setup() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
+	_python_sanity_checks
 
 	# support developer override
 	if [[ ${PYTHON_COMPAT_OVERRIDE} ]]; then
@@ -332,43 +289,38 @@ python_setup() {
 
 		_python_export "${impls[0]}" EPYTHON PYTHON
 		_python_wrapper_setup
-		einfo "Using ${EPYTHON} to build"
+		einfo "Using ${EPYTHON} to build (via PYTHON_COMPAT_OVERRIDE)"
 		return
 	fi
 
 	# first, try ${EPYTHON}... maybe it's good enough for us.
-	if [[ ${EPYTHON} ]]; then
-		if _python_EPYTHON_supported "${EPYTHON}"; then
+	local epython_impl=${EPYTHON/./_}
+	if [[ ${epython_impl} ]]; then
+		if ! has "${epython_impl}" "${_PYTHON_SUPPORTED_IMPLS[@]}"; then
+			if ! has "${epython_impl}" "${_PYTHON_ALL_IMPLS[@]}"; then
+				ewarn "Invalid EPYTHON: ${EPYTHON}"
+			else
+				einfo "EPYTHON (${EPYTHON}) not supported by the package"
+			fi
+		elif _python_run_check_deps "${epython_impl}"; then
 			_python_export EPYTHON PYTHON
 			_python_wrapper_setup
-			einfo "Using ${EPYTHON} to build"
+			einfo "Using ${EPYTHON} to build (via EPYTHON)"
 			return
 		fi
 	fi
 
-	# then, try eselect-python
-	local variant i
-	for variant in '' '--python2' '--python3'; do
-		i=$(eselect python --show ${variant} 2>/dev/null)
-
-		if [[ ! ${i} ]]; then
-			# no eselect-python?
-			break
-		elif _python_EPYTHON_supported "${i}"; then
-			_python_export "${i}" EPYTHON PYTHON
-			_python_wrapper_setup
-			einfo "Using ${EPYTHON} to build"
-			return
-		fi
-	done
-
-	# fallback to best installed impl.
+	# fallback to the best installed impl.
 	# (reverse iteration over _PYTHON_SUPPORTED_IMPLS)
+	local i
 	for (( i = ${#_PYTHON_SUPPORTED_IMPLS[@]} - 1; i >= 0; i-- )); do
-		_python_export "${_PYTHON_SUPPORTED_IMPLS[i]}" EPYTHON PYTHON
-		if _python_EPYTHON_supported "${EPYTHON}"; then
+		local impl=${_PYTHON_SUPPORTED_IMPLS[i]}
+		# avoid checking EPYTHON twice
+		[[ ${impl} == ${epython_impl} ]] && continue
+		_python_export "${impl}" EPYTHON PYTHON
+		if _python_run_check_deps "${impl}"; then
 			_python_wrapper_setup
-			einfo "Using ${EPYTHON} to build"
+			einfo "Using ${EPYTHON} to build (via PYTHON_COMPAT iteration)"
 			return
 		fi
 	done
@@ -387,10 +339,11 @@ python_setup() {
 # In a binary package installs is a no-op. If you need Python in pkg_*
 # phases of a binary package, call python_setup directly.
 python-any-r1_pkg_setup() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ ${MERGE_TYPE} != binary ]] && python_setup
 }
 
-_PYTHON_ANY_R1=1
 fi
+
+EXPORT_FUNCTIONS pkg_setup

@@ -16,7 +16,7 @@ KEYWORDS="~x86 ~amd64"
 IUSE="aac flac mad vorbis wma"
 
 RDEPEND=">=media-sound/jack-audio-connection-kit-0.100.7
-		dev-python/eyeD3
+		dev-python/eyed3
 		dev-python/pygtk
 		media-libs/libsamplerate
 		media-libs/libsndfile
