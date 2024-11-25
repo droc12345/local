@@ -4,7 +4,7 @@
 EAPI=8
 
 MULTILIB_COMPAT=( abi_x86_{32,64} )
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 inherit autotools edo flag-o-matic multilib multilib-build
 inherit prefix python-any-r1 toolchain-funcs wrapper
 
@@ -23,13 +23,14 @@ else
 		https://github.com/wine-staging/wine-staging/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="-* ~amd64 ~x86"
 fi
-S="${WORKDIR}/${WINE_P}"
 
 DESCRIPTION="Free implementation of Windows(tm) on Unix, with Wine-Staging patchset"
 HOMEPAGE="
 	https://wiki.winehq.org/Wine-Staging
 	https://gitlab.winehq.org/wine/wine-staging/
 "
+
+S="${WORKDIR}/${WINE_P}"
 
 LICENSE="LGPL-2.1+ BSD-2 IJG MIT OPENLDAP ZLIB gsm libpng2 libtiff"
 SLOT="${PV}"
@@ -78,7 +79,7 @@ WINE_DLOPEN_DEPEND="
 	truetype? ( media-libs/freetype[${MULTILIB_USEDEP}] )
 	udisks? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	v4l? ( media-libs/libv4l[${MULTILIB_USEDEP}] )
-	vulkan? ( media-libs/vulkan-loader[${MULTILIB_USEDEP}] )
+	vulkan? ( media-libs/vulkan-loader[X?,${MULTILIB_USEDEP}] )
 "
 WINE_COMMON_DEPEND="
 	${WINE_DLOPEN_DEPEND}
@@ -324,7 +325,11 @@ src_configure() {
 	)
 
 	filter-lto # build failure
+	filter-flags -Wl,--gc-sections # runtime issues (bug #931329)
 	use custom-cflags || strip-flags # can break in obscure ways at runtime
+
+	# broken with gcc-15's c23 default (TODO: try w/o occasionally, bug #943849)
+	append-cflags -std=gnu17
 
 	# wine uses linker tricks unlikely to work with non-bfd/lld (bug #867097)
 	# (do self test until https://github.com/gentoo/gentoo/pull/28355)
@@ -336,10 +341,13 @@ src_configure() {
 		strip-unsupported-flags
 	fi
 
+	# >=wine-vanilla-9 has proper fixes and builds with gcc-14, but
+	# staging patchset is messier and would rather not have to worry
+	# about it (try to remove on bump now and then, bug #919758)
+	append-cflags $(test-flags-CC -Wno-error=incompatible-pointer-types)
+
 	if use mingw; then
 		use crossdev-mingw || PATH=${BROOT}/usr/lib/mingw64-toolchain/bin:${PATH}
-
-		filter-flags -fno-plt # build failure
 
 		# CROSSCC was formerly recognized by wine, thus been using similar
 		# variables (subject to change, esp. if ever make a mingw.eclass).
@@ -354,6 +362,12 @@ src_configure() {
 			CROSSCFLAGS="${CROSSCFLAGS:-$(
 				filter-flags '-fstack-protector*' #870136
 				filter-flags '-mfunction-return=thunk*' #878849
+
+				# some bashrc-mv users tend to do CFLAGS="${LDFLAGS}" and then
+				# strip-unsupported-flags miss these during compile-only tests
+				# (primarily done for 23.0 profiles' -z, not full coverage)
+				filter-flags '-Wl,-z,*'
+
 				CC=${mingwcc} test-flags-CC ${CFLAGS:--O2}
 			)}"
 
@@ -453,12 +467,20 @@ pkg_postinst() {
 		ewarn "work, be warned that it is not unusual that installers or other helpers"
 		ewarn "will attempt to use 32bit and fail. If do not want full USE=abi_x86_32,"
 		ewarn "note the experimental/WIP USE=wow64 can allow 32bit without multilib."
-	elif use abi_x86_32 && { use opengl || use vulkan; } &&
-		has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'
-	then
-		ewarn "x11-drivers/nvidia-drivers is installed but is built without"
-		ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
-		ewarn "applications under ${PN} will likely not be usable."
+	elif use abi_x86_32 && { use opengl || use vulkan; }; then
+		# difficult to tell what is needed from here, but try to warn
+		if has_version 'x11-drivers/nvidia-drivers'; then
+			if has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'; then
+				ewarn "x11-drivers/nvidia-drivers is installed but is built without"
+				ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+				ewarn "applications under ${PN} will likely not be usable."
+				ewarn "Multi-card setups may need this on media-libs/mesa as well."
+			fi
+		elif has_version 'media-libs/mesa[-abi_x86_32]'; then
+			ewarn "media-libs/mesa seems to be in use but is built without"
+			ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+			ewarn "applications under ${PN} will likely not be usable."
+		fi
 	fi
 
 	eselect wine update --if-unset || die

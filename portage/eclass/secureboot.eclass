@@ -44,7 +44,12 @@ case ${EAPI} in
 esac
 
 IUSE="secureboot"
-BDEPEND="secureboot? ( app-crypt/sbsigntoolsssss )"
+BDEPEND="
+	secureboot? (
+		app-crypt/sbsigntools
+		dev-libs/openssl
+	)
+"
 
 # @ECLASS_VARIABLE: SECUREBOOT_SIGN_KEY
 # @USER_VARIABLE

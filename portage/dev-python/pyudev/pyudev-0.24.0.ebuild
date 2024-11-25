@@ -49,5 +49,5 @@ python_prepare_all() {
 }
 
 pkg_postinst() {
-	optfeature "PyQt5 bindings" "dev-python/PyQt5"
+	optfeature "PyQt5 bindings" "dev-python/pyqt5"
 }

@@ -4,7 +4,7 @@
 # USE=gles2 in the following packages disables full OpenGL
 # Upstream does not test for that case and packages frequently
 # fail to build or run if set.
-dev-python/PyQt5 gles2
+dev-python/pyqt5 gles2
 dev-qt/qt3d gles2
 dev-qt/qtdatavis3d gles2
 dev-qt/qtdeclarative gles2

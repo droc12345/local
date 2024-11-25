@@ -23,14 +23,14 @@ RDEPEND="
 	dev-python/charset-normalizer[${PYTHON_USEDEP}]
 	<dev-python/idna-4[${PYTHON_USEDEP}]
 	<dev-python/urllib3-1.27[${PYTHON_USEDEP}]
-	socks5? ( >=dev-python/PySocks-1.5.6[${PYTHON_USEDEP}] )
+	socks5? ( >=dev-python/pysocks-1.5.6[${PYTHON_USEDEP}] )
 "
 
 BDEPEND="
 	test? (
 		dev-python/pytest-httpbin[${PYTHON_USEDEP}]
 		dev-python/pytest-mock[${PYTHON_USEDEP}]
-		>=dev-python/PySocks-1.5.6[${PYTHON_USEDEP}]
+		>=dev-python/pysocks-1.5.6[${PYTHON_USEDEP}]
 		!alpha? ( !hppa? ( !ia64? (
 			dev-python/trustme[${PYTHON_USEDEP}]
 		) ) )

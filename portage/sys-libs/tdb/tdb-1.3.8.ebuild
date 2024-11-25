@@ -19,7 +19,7 @@ IUSE="python +I-DO-NOT-EXIST-IN-PYTHON-ANY-R1"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-RDEPEND="!elibc_FreeBSD? ( dev-libs/libbsd[${MULTILIB_USEDEP}] )
+RDEPEND="
 	python? ( ${PYTHON_DEPS} )"
 DEPEND="
 	${RDEPEND}

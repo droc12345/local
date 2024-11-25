@@ -23,8 +23,8 @@ RESTRICT="!test? ( test )"
 # dependencies. Do not add them to RDEPEND. They should be unnecessary with
 # modern versions of python (>= 3.2).
 RDEPEND="
-	>=dev-python/PySocks-1.5.8[${PYTHON_USEDEP}]
-	<dev-python/PySocks-2.0[${PYTHON_USEDEP}]
+	>=dev-python/pysocks-1.5.8[${PYTHON_USEDEP}]
+	<dev-python/pysocks-2.0[${PYTHON_USEDEP}]
 	brotli? ( dev-python/brotlicffi[${PYTHON_USEDEP}] )
 "
 BDEPEND="

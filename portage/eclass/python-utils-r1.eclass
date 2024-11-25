@@ -42,6 +42,7 @@ _PYTHON_ALL_IMPLS=(
 	pypy3
 	python3_{10..13}
 	python3_13t
+	python2_{5..7}
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -137,10 +138,10 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				pypy3|python3_9|python3_1[0-3]|python3_13t)
+				pypy3|python3_9|python3_1[0-3]|python2_[5-7]|python3_13t)
 					;;
-				jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[5-7]|python3_[1-9])
-					#obsolete+=( "${i}" )
+				jython2_7|pypy|pypy1_[89]|pypy2_0|python3_[1-9])
+					obsolete+=( "${i}" )
 					;;
 				*)
 					if has "${i}" "${_PYTHON_ALL_IMPLS[@]}" \
