@@ -17,7 +17,7 @@ IUSE="static-libs native-cflags openmp"
 
 DEPEND="
 	openmp? (
-		|| ( >=sys-devel/gcc-4.2:*[openmp] sys-devel/clang-runtime:*[openmp] )
+		|| ( >=sys-devel/gcc-4.2:*[openmp] llvm-core/clang-runtime:*[openmp] )
 	)
 "
 RDEPEND="${DEPEND}"

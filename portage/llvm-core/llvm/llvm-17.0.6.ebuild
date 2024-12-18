@@ -63,12 +63,12 @@ BDEPEND="
 # installed means llvm-config there will take precedence.
 RDEPEND="
 	${RDEPEND}
-	!sys-devel/llvm:0
+	!llvm-core/llvm:0
 "
 PDEPEND="
 	llvm-core/llvm-common
 	llvm-core/llvm-toolchain-symlinks:${LLVM_MAJOR}
-	binutils-plugin? ( >=sys-devel/llvmgold-${LLVM_MAJOR} )
+	binutils-plugin? ( >=llvm-core/llvmgold-${LLVM_MAJOR} )
 "
 
 LLVM_COMPONENTS=( llvm cmake third-party )

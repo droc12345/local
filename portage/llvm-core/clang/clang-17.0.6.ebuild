@@ -22,7 +22,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	~sys-devel/llvm-${PV}:${LLVM_MAJOR}=[debug=,${MULTILIB_USEDEP}]
+	~llvm-core/llvm-${PV}:${LLVM_MAJOR}=[debug=,${MULTILIB_USEDEP}]
 	static-analyzer? ( dev-lang/perl:* )
 	xml? ( dev-libs/libxml2:2=[${MULTILIB_USEDEP}] )
 "
@@ -30,7 +30,7 @@ DEPEND="
 RDEPEND="
 	${PYTHON_DEPS}
 	${DEPEND}
-	>=sys-devel/clang-common-${PV}
+	>=llvm-core/clang-common-${PV}
 "
 BDEPEND="
 	${PYTHON_DEPS}
@@ -41,8 +41,8 @@ BDEPEND="
 	xml? ( virtual/pkgconfig )
 "
 PDEPEND="
-	~sys-devel/clang-runtime-${PV}
-	sys-devel/clang-toolchain-symlinks:${LLVM_MAJOR}
+	~llvm-core/clang-runtime-${PV}
+	llvm-core/clang-toolchain-symlinks:${LLVM_MAJOR}
 "
 
 LLVM_COMPONENTS=(
@@ -64,7 +64,7 @@ llvm.org_set_globals
 # 3. ${CHOST}-clang wrappers are always installed for all ABIs included
 #    in the current profile (i.e. alike supported by sys-devel/gcc).
 #
-# Therefore: use sys-devel/clang[${MULTILIB_USEDEP}] only if you need
+# Therefore: use llvm-core/clang[${MULTILIB_USEDEP}] only if you need
 # multilib clang* libraries (not runtime, not wrappers).
 
 pkg_setup() {
@@ -340,8 +340,8 @@ multilib_src_configure() {
 	fi
 
 	if tc-is-cross-compiler; then
-		has_version -b sys-devel/clang:${LLVM_MAJOR} ||
-			die "sys-devel/clang:${LLVM_MAJOR} is required on the build host."
+		has_version -b llvm-core/clang:${LLVM_MAJOR} ||
+			die "llvm-core/clang:${LLVM_MAJOR} is required on the build host."
 		local tools_bin=${BROOT}/usr/lib/llvm/${LLVM_MAJOR}/bin
 		mycmakeargs+=(
 			-DLLVM_TOOLS_BINARY_DIR="${tools_bin}"

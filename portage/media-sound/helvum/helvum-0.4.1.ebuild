@@ -129,7 +129,7 @@ KEYWORDS="~amd64"
 
 # Clang needed for bindgen
 BDEPEND="
-	<sys-devel/clang-$((${LLVM_MAX_SLOT} + 1))
+	<llvm-core/clang-$((${LLVM_MAX_SLOT} + 1))
 	virtual/pkgconfig
 	>=virtual/rust-1.70
 "
@@ -147,7 +147,7 @@ RDEPEND="${DEPEND}"
 QA_FLAGS_IGNORED="usr/bin/${PN}"
 
 llvm_check_deps() {
-	has_version -b "sys-devel/clang:${LLVM_SLOT}"
+	has_version -b "llvm-core/clang:${LLVM_SLOT}"
 }
 
 src_install() {

@@ -16,13 +16,13 @@ IUSE="+abi_x86_32 abi_x86_64 +clang debug test"
 RESTRICT="!test? ( test ) !clang? ( test )"
 
 DEPEND="
-	sys-devel/llvm:${LLVM_MAJOR}
+	llvm-core/llvm:${LLVM_MAJOR}
 "
 BDEPEND="
-	clang? ( sys-devel/clang )
+	clang? ( llvm-core/clang )
 	test? (
 		$(python_gen_any_dep ">=dev-python/lit-15[\${PYTHON_USEDEP}]")
-		=sys-devel/clang-${LLVM_VERSION}*:${LLVM_MAJOR}
+		=llvm-core/clang-${LLVM_VERSION}*:${LLVM_MAJOR}
 	)
 	!test? (
 		${PYTHON_DEPS}
@@ -49,7 +49,7 @@ pkg_setup() {
 	# Darwin Prefix builds do not have llvm installed yet, so rely on
 	# bootstrap-prefix to set the appropriate path vars to LLVM instead
 	# of using llvm_pkg_setup.
-	if [[ ${CHOST} != *-darwin* ]] || has_version sys-devel/llvm; then
+	if [[ ${CHOST} != *-darwin* ]] || has_version llvm-core/llvm; then
 		LLVM_MAX_SLOT=${LLVM_MAJOR} llvm_pkg_setup
 	fi
 

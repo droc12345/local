@@ -35,15 +35,15 @@ RESTRICT="
 "
 
 DEPEND="
-	sys-devel/llvm:${LLVM_MAJOR}
+	llvm-core/llvm:${LLVM_MAJOR}
 	virtual/libcrypt[abi_x86_32(-)?,abi_x86_64(-)?]
 "
 BDEPEND="
-	clang? ( sys-devel/clang )
+	clang? ( llvm-core/clang )
 	elibc_glibc? ( net-libs/libtirpc )
 	test? (
 		$(python_gen_any_dep ">=dev-python/lit-15[\${PYTHON_USEDEP}]")
-		=sys-devel/clang-${LLVM_VERSION}*:${LLVM_MAJOR}
+		=llvm-core/clang-${LLVM_VERSION}*:${LLVM_MAJOR}
 		sys-libs/compiler-rt:${LLVM_MAJOR}
 	)
 	!test? (
