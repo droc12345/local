@@ -8,7 +8,7 @@ LUA_COMPAT=( lua5-{1..2} )
 MY_PV="${PV/_/-}"
 MY_PV="${MY_PV/-beta/-test}"
 MY_P="${PN}-${MY_PV}"
-if [[ ${PV} = *9999 ]] ; then
+if [[ ${PV} = *9999* ]] ; then
 	if [[ ${PV%.9999} != ${PV} ]] ; then
 		EGIT_BRANCH="3.0.x"
 	fi
@@ -22,10 +22,12 @@ else
 	fi
 	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc ~ppc64 -sparc ~x86"
 fi
+
 inherit autotools flag-o-matic lua-single toolchain-funcs virtualx xdg
 
 DESCRIPTION="Media player and framework with support for most multimedia files and streaming"
 HOMEPAGE="https://www.videolan.org/vlc/"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="LGPL-2.1 GPL-2"
 SLOT="0/12-9" # vlc - vlccore
@@ -55,6 +57,7 @@ REQUIRED_USE="
 "
 BDEPEND="
 	>=sys-devel/gettext-0.19.8
+	sys-devel/flex
 	virtual/pkgconfig
 	lua? ( ${LUA_DEPS} )
 	amd64? ( dev-lang/yasm )
@@ -114,14 +117,12 @@ RDEPEND="
 	keyring? ( app-crypt/libsecret )
 	gstreamer? ( >=media-libs/gst-plugins-base-1.4.5:1.0 )
 	gui? (
-		dev-qt/qtcore:5
-		dev-qt/qtgui:5
-		dev-qt/qtsvg:5
-		dev-qt/qtwidgets:5
-		X? (
-			dev-qt/qtx11extras:5
-			x11-libs/libX11
-		)
+		dev-qt/qt5compat:6[qml]
+		dev-qt/qtbase:6=[gui,widgets]
+		dev-qt/qtdeclarative:6
+		dev-qt/qtsvg:6
+		kde-frameworks/kwindowsystem:6
+		X? ( x11-libs/libX11 )
 	)
 	ieee1394? (
 		sys-libs/libavc1394
@@ -192,7 +193,7 @@ RDEPEND="
 		gnome-base/librsvg:2
 		x11-libs/cairo
 	)
-	taglib? ( >=media-libs/taglib-1.9 )
+	taglib? ( media-libs/taglib:= )
 	theora? ( media-libs/libtheora )
 	tremor? ( media-libs/tremor )
 	truetype? (
@@ -236,8 +237,6 @@ PATCHES=(
 )
 
 DOCS=( AUTHORS THANKS NEWS README.md doc/fortunes.txt )
-
-S="${WORKDIR}/${MY_P}"
 
 pkg_setup() {
 	if use lua; then
@@ -284,6 +283,9 @@ src_prepare() {
 }
 
 src_configure() {
+	# bug #944778
+	unset LEX
+
 	local -x BUILDCC="$(tc-getBUILD_CC)"
 
 	local myeconfargs=(

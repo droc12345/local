@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="project">
 		<email>qt@gentoo.org</email>
@@ -7,12 +7,16 @@
 	</maintainer>
 	<use>
 		<flag name="localstorage">Build the LocalStorage import for QtQuick (requires QtSql)</flag>
-		<flag name="vulkan">Enable support for Vulkan</flag>
+		<flag name="network">Enable QtNetwork support</flag>
+		<flag name="opengl">Enable OpenGL support</flag>
+		<flag name="qmlls">Build the qmlls tool using <pkg>dev-qt/qtlanguageserver</pkg></flag>
+		<flag name="sql">Enable QtSQL support</flag>
 		<flag name="widgets">Enable QtWidgets support</flag>
 	</use>
 	<upstream>
 		<bugs-to>https://bugreports.qt.io/</bugs-to>
 		<doc>https://doc.qt.io/</doc>
+		<remote-id type="github">qt/qtdeclarative</remote-id>
 	</upstream>
 	<slots>
 		<subslots>
