@@ -6,12 +6,7 @@
 		<name>William Hubbs</name>
 	</maintainer>
 	<longdescription lang="en">
-		Go is a new systems programming language developed at google by
-		Rob Pike. It has garbage collection, coroutines, communication
-		channels and a clean syntax.  
+		This package is used only to boot strap <pkg>dev-lang/go</pkg>.
+		It is not meant to be used by end users directly.
 	</longdescription>
-	<upstream>
-		<remote-id type="cpe">cpe:/a:golang:go</remote-id>
-		<remote-id type="github">golang/go</remote-id>
-	</upstream>
 </pkgmetadata>
