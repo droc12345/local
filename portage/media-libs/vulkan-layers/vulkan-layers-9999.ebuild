@@ -4,7 +4,7 @@
 EAPI=8
 
 MY_PN=Vulkan-ValidationLayers
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 inherit cmake-multilib python-any-r1
 
 if [[ ${PV} == *9999* ]]; then
@@ -24,10 +24,10 @@ LICENSE="Apache-2.0"
 SLOT="0"
 IUSE="wayland X"
 
-RDEPEND="~dev-util/spirv-tools-${PV}:=[${MULTILIB_USEDEP}]"
+RDEPEND="~dev-util/spirv-tools-${PV}[${MULTILIB_USEDEP}]"
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
-	>=dev-cpp/robin-hood-hashing-3.11.5
+	>=dev-cpp/robin-hood-hashing-3.11.5-r2
 	~dev-util/glslang-${PV}:=[${MULTILIB_USEDEP}]
 	~dev-util/spirv-headers-${PV}
 	~dev-util/vulkan-headers-${PV}
