@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Gentoo Authors
+# Copyright 2022-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -17,9 +17,9 @@ if [[ ${PV} == 9999 ]]; then
 		subprojects/libdisplay-info
 	)
 else
-	HASH_SPIRV=
-	HASH_VULKAN=
-	HASH_DISPLAYINFO=
+	HASH_SPIRV=8b246ff75c6615ba4532fe4fde20f1be090c3764
+	HASH_VULKAN=46dc0f6e514f5730784bb2cac2a7c731636839e8
+	HASH_DISPLAYINFO=275e6459c7ab1ddd4b125f28d0440716e4888078
 	SRC_URI="
 		https://github.com/doitsujin/dxvk/archive/refs/tags/v${PV}.tar.gz
 			-> ${P}.tar.gz
@@ -29,7 +29,7 @@ else
 			-> vulkan-headers-${HASH_VULKAN}.tar.gz
 		https://gitlab.freedesktop.org/JoshuaAshton/libdisplay-info/-/archive/${HASH_DISPLAYINFO}/libdisplay-info-${HASH_DISPLAYINFO}.tar.bz2
 	"
-	KEYWORDS="-* ~amd64 ~x86"
+	KEYWORDS="-* amd64 x86"
 fi
 
 DESCRIPTION="Vulkan-based implementation of D3D9, D3D10 and D3D11 for Linux / Wine"
@@ -101,6 +101,12 @@ src_configure() {
 	# a safety (note that optimizing this further won't really help
 	# performance, GPU does the actual work)
 	filter-lto
+
+	# -mavx with mingw-gcc has a history of obscure issues and
+	# disabling is seen as safer, e.g. `WINEARCH=win32 winecfg`
+	# crashes with -march=skylake >=wine-8.10, similar issues with
+	# znver4: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110273
+	append-flags -mno-avx
 
 	if [[ ${CHOST} != *-mingw* ]]; then
 		if [[ ! -v MINGW_BYPASS ]]; then

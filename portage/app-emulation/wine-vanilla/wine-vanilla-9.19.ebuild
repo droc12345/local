@@ -4,11 +4,11 @@
 EAPI=8
 
 MULTILIB_COMPAT=( abi_x86_{32,64} )
-inherit autotools flag-o-matic multilib multilib-build
+inherit autotools flag-o-matic multilib multilib-build optfeature
 inherit prefix toolchain-funcs wrapper
 
 WINE_GECKO=2.47.4
-WINE_MONO=8.1.0
+WINE_MONO=9.3.0
 
 if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
@@ -17,7 +17,7 @@ else
 	(( $(ver_cut 2) )) && WINE_SDIR=$(ver_cut 1).x || WINE_SDIR=$(ver_cut 1).0
 	SRC_URI="https://dl.winehq.org/wine/source/${WINE_SDIR}/wine-${PV}.tar.xz"
 	S="${WORKDIR}/wine-${PV}"
-	KEYWORDS="-* amd64 x86"
+	KEYWORDS="-* ~amd64 ~x86"
 fi
 
 DESCRIPTION="Free implementation of Windows(tm) on Unix, without external patchsets"
@@ -30,11 +30,12 @@ LICENSE="LGPL-2.1+ BSD-2 IJG MIT OPENLDAP ZLIB gsm libpng2 libtiff"
 SLOT="${PV}"
 IUSE="
 	+X +abi_x86_32 +abi_x86_64 +alsa capi crossdev-mingw cups dos
-	llvm-libunwind custom-cflags +fontconfig +gecko gphoto2 +gstreamer
-	kerberos +mingw +mono netapi nls odbc opencl +opengl osmesa pcap
-	perl pulseaudio samba scanner +sdl selinux smartcard +ssl +strip
-	+truetype udev udisks +unwind usb v4l +vulkan wayland wow64
-	+xcomposite xinerama"
+	llvm-libunwind custom-cflags ffmpeg +fontconfig +gecko gphoto2
+	+gstreamer kerberos +mingw +mono netapi nls odbc opencl +opengl
+	osmesa pcap perl pulseaudio samba scanner +sdl selinux smartcard
+	+ssl +strip +truetype udev udisks +unwind usb v4l +vulkan wayland
+	wow64 +xcomposite xinerama
+"
 # bug #551124 for truetype
 # TODO?: wow64 can be done without mingw if using clang (needs bug #912237)
 REQUIRED_USE="
@@ -73,7 +74,7 @@ WINE_DLOPEN_DEPEND="
 	truetype? ( media-libs/freetype[${MULTILIB_USEDEP}] )
 	udisks? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	v4l? ( media-libs/libv4l[${MULTILIB_USEDEP}] )
-	vulkan? ( media-libs/vulkan-loader[X?,${MULTILIB_USEDEP}] )
+	vulkan? ( media-libs/vulkan-loader[X?,wayland?,${MULTILIB_USEDEP}] )
 "
 WINE_COMMON_DEPEND="
 	${WINE_DLOPEN_DEPEND}
@@ -83,6 +84,7 @@ WINE_COMMON_DEPEND="
 	)
 	alsa? ( media-libs/alsa-lib[${MULTILIB_USEDEP}] )
 	capi? ( net-libs/libcapi:=[${MULTILIB_USEDEP}] )
+	ffmpeg? ( media-video/ffmpeg:=[${MULTILIB_USEDEP}] )
 	gphoto2? ( media-libs/libgphoto2:=[${MULTILIB_USEDEP}] )
 	gstreamer? (
 		dev-libs/glib:2[${MULTILIB_USEDEP}]
@@ -246,6 +248,7 @@ src_configure() {
 		$(use_with alsa)
 		$(use_with capi)
 		$(use_with cups)
+		$(use_with ffmpeg)
 		$(use_with fontconfig)
 		$(use_with gphoto2 gphoto)
 		$(use_with gstreamer)
@@ -430,6 +433,9 @@ pkg_postinst() {
 			ewarn "applications under ${PN} will likely not be usable."
 		fi
 	fi
+
+	optfeature "/dev/hidraw* access used for *some* controllers (e.g. DualShock4)" \
+		games-util/game-device-udev-rules
 
 	eselect wine update --if-unset || die
 }

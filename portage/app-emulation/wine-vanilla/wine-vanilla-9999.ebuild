@@ -4,11 +4,11 @@
 EAPI=8
 
 MULTILIB_COMPAT=( abi_x86_{32,64} )
-inherit autotools flag-o-matic optfeature multilib multilib-build
+inherit autotools flag-o-matic multilib multilib-build optfeature
 inherit prefix toolchain-funcs wrapper
 
 WINE_GECKO=2.47.4
-WINE_MONO=9.0.0
+WINE_MONO=9.4.0
 
 if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
@@ -26,15 +26,16 @@ HOMEPAGE="
 	https://gitlab.winehq.org/wine/wine/
 "
 
-LICENSE="LGPL-2.1+ BSD-2 IJG MIT OPENLDAP ZLIB gsm libpng2 libtiff"
+LICENSE="LGPL-2.1+ BSD BSD-2 IJG MIT OPENLDAP ZLIB gsm libpng2 libtiff"
 SLOT="${PV}"
 IUSE="
 	+X +abi_x86_32 +abi_x86_64 +alsa capi crossdev-mingw cups dos
-	llvm-libunwind custom-cflags +fontconfig +gecko gphoto2 +gstreamer
-	kerberos +mingw +mono netapi nls odbc opencl +opengl osmesa pcap
-	perl pulseaudio samba scanner +sdl selinux smartcard +ssl +strip
-	+truetype udev udisks +unwind usb v4l +vulkan wayland wow64
-	+xcomposite xinerama"
+	llvm-libunwind custom-cflags ffmpeg +fontconfig +gecko gphoto2
+	+gstreamer kerberos +mingw +mono netapi nls odbc opencl +opengl
+	osmesa pcap perl pulseaudio samba scanner +sdl selinux smartcard
+	+ssl +strip +truetype udev udisks +unwind usb v4l +vulkan wayland
+	wow64 +xcomposite xinerama
+"
 # bug #551124 for truetype
 # TODO?: wow64 can be done without mingw if using clang (needs bug #912237)
 REQUIRED_USE="
@@ -73,7 +74,7 @@ WINE_DLOPEN_DEPEND="
 	truetype? ( media-libs/freetype[${MULTILIB_USEDEP}] )
 	udisks? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	v4l? ( media-libs/libv4l[${MULTILIB_USEDEP}] )
-	vulkan? ( media-libs/vulkan-loader[${MULTILIB_USEDEP}] )
+	vulkan? ( media-libs/vulkan-loader[X?,wayland?,${MULTILIB_USEDEP}] )
 "
 WINE_COMMON_DEPEND="
 	${WINE_DLOPEN_DEPEND}
@@ -83,6 +84,7 @@ WINE_COMMON_DEPEND="
 	)
 	alsa? ( media-libs/alsa-lib[${MULTILIB_USEDEP}] )
 	capi? ( net-libs/libcapi:=[${MULTILIB_USEDEP}] )
+	ffmpeg? ( media-video/ffmpeg:=[${MULTILIB_USEDEP}] )
 	gphoto2? ( media-libs/libgphoto2:=[${MULTILIB_USEDEP}] )
 	gstreamer? (
 		dev-libs/glib:2[${MULTILIB_USEDEP}]
@@ -96,7 +98,7 @@ WINE_COMMON_DEPEND="
 	smartcard? ( sys-apps/pcsc-lite[${MULTILIB_USEDEP}] )
 	udev? ( virtual/libudev:=[${MULTILIB_USEDEP}] )
 	unwind? (
-		llvm-libunwind? ( sys-libs/llvm-libunwind[${MULTILIB_USEDEP}] )
+		llvm-libunwind? ( llvm-runtimes/libunwind[${MULTILIB_USEDEP}] )
 		!llvm-libunwind? ( sys-libs/libunwind:=[${MULTILIB_USEDEP}] )
 	)
 	usb? ( dev-libs/libusb:1[${MULTILIB_USEDEP}] )
@@ -136,7 +138,7 @@ DEPEND="
 BDEPEND="
 	|| (
 		sys-devel/binutils
-		sys-devel/lld
+		llvm-core/lld
 	)
 	dev-lang/perl
 	sys-devel/bison
@@ -246,6 +248,7 @@ src_configure() {
 		$(use_with alsa)
 		$(use_with capi)
 		$(use_with cups)
+		$(use_with ffmpeg)
 		$(use_with fontconfig)
 		$(use_with gphoto2 gphoto)
 		$(use_with gstreamer)
@@ -278,7 +281,11 @@ src_configure() {
 	)
 
 	filter-lto # build failure
+	filter-flags -Wl,--gc-sections # runtime issues (bug #931329)
 	use custom-cflags || strip-flags # can break in obscure ways at runtime
+
+	# broken with gcc-15's c23 default (TODO: try w/o occasionally, bug #943849)
+	append-cflags -std=gnu17
 
 	# wine uses linker tricks unlikely to work with non-bfd/lld (bug #867097)
 	# (do self test until https://github.com/gentoo/gentoo/pull/28355)
@@ -293,8 +300,6 @@ src_configure() {
 	if use mingw; then
 		use crossdev-mingw || PATH=${BROOT}/usr/lib/mingw64-toolchain/bin:${PATH}
 
-		filter-flags -fno-plt # build failure
-
 		# CROSSCC was formerly recognized by wine, thus been using similar
 		# variables (subject to change, esp. if ever make a mingw.eclass).
 		local mingwcc_amd64=${CROSSCC:-${CROSSCC_amd64:-x86_64-w64-mingw32-gcc}}
@@ -308,6 +313,12 @@ src_configure() {
 			CROSSCFLAGS="${CROSSCFLAGS:-$(
 				filter-flags '-fstack-protector*' #870136
 				filter-flags '-mfunction-return=thunk*' #878849
+
+				# some bashrc-mv users tend to do CFLAGS="${LDFLAGS}" and then
+				# strip-unsupported-flags miss these during compile-only tests
+				# (primarily done for 23.0 profiles' -z, not full coverage)
+				filter-flags '-Wl,-z,*'
+
 				CC=${mingwcc} test-flags-CC ${CFLAGS:--O2}
 			)}"
 
@@ -407,12 +418,20 @@ pkg_postinst() {
 		ewarn "work, be warned that it is not unusual that installers or other helpers"
 		ewarn "will attempt to use 32bit and fail. If do not want full USE=abi_x86_32,"
 		ewarn "note the experimental/WIP USE=wow64 can allow 32bit without multilib."
-	elif use abi_x86_32 && { use opengl || use vulkan; } &&
-		has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'
-	then
-		ewarn "x11-drivers/nvidia-drivers is installed but is built without"
-		ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
-		ewarn "applications under ${PN} will likely not be usable."
+	elif use abi_x86_32 && { use opengl || use vulkan; }; then
+		# difficult to tell what is needed from here, but try to warn
+		if has_version 'x11-drivers/nvidia-drivers'; then
+			if has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'; then
+				ewarn "x11-drivers/nvidia-drivers is installed but is built without"
+				ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+				ewarn "applications under ${PN} will likely not be usable."
+				ewarn "Multi-card setups may need this on media-libs/mesa as well."
+			fi
+		elif has_version 'media-libs/mesa[-abi_x86_32]'; then
+			ewarn "media-libs/mesa seems to be in use but is built without"
+			ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+			ewarn "applications under ${PN} will likely not be usable."
+		fi
 	fi
 
 	optfeature "/dev/hidraw* access used for *some* controllers (e.g. DualShock4)" \

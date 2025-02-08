@@ -72,7 +72,7 @@ WINE_DLOPEN_DEPEND="
 	truetype? ( media-libs/freetype[${MULTILIB_USEDEP}] )
 	udisks? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	v4l? ( media-libs/libv4l[${MULTILIB_USEDEP}] )
-	vulkan? ( media-libs/vulkan-loader[${MULTILIB_USEDEP}] )
+	vulkan? ( media-libs/vulkan-loader[X?,${MULTILIB_USEDEP}] )
 "
 WINE_COMMON_DEPEND="
 	${WINE_DLOPEN_DEPEND}
@@ -96,7 +96,7 @@ WINE_COMMON_DEPEND="
 	scanner? ( media-gfx/sane-backends[${MULTILIB_USEDEP}] )
 	udev? ( virtual/libudev:=[${MULTILIB_USEDEP}] )
 	unwind? (
-		llvm-libunwind? ( sys-libs/llvm-libunwind[${MULTILIB_USEDEP}] )
+		llvm-libunwind? ( llvm-runtimes/libunwind[${MULTILIB_USEDEP}] )
 		!llvm-libunwind? ( sys-libs/libunwind:=[${MULTILIB_USEDEP}] )
 	)
 	usb? ( dev-libs/libusb:1[${MULTILIB_USEDEP}] )
@@ -257,14 +257,21 @@ src_configure() {
 
 	tc-ld-force-bfd # builds with non-bfd but broken at runtime (bug #867097)
 	filter-lto # build failure
-	use mingw || filter-flags -fno-plt # build failure
+	filter-flags -Wl,--gc-sections # runtime issues (bug #931329)
 	use custom-cflags || strip-flags # can break in obscure ways at runtime
 	use crossdev-mingw || PATH=${BROOT}/usr/lib/mingw64-toolchain/bin:${PATH}
+
+	# broken with gcc-15's c23 default (TODO: try w/o occasionally, bug #943849)
+	append-cflags -std=gnu17
 
 	# temporary workaround for tc-ld-force-bfd not yet enforcing with mold
 	# https://github.com/gentoo/gentoo/pull/28355
 	[[ $($(tc-getCC) ${LDFLAGS} -Wl,--version 2>/dev/null) == mold* ]] &&
 		append-ldflags -fuse-ld=bfd
+
+	# >=wine-vanilla-9 has proper fixes and builds with gcc-14, but
+	# would rather not have to worry about fixing old branches
+	append-cflags $(test-flags-CC -Wno-error=incompatible-pointer-types)
 
 	# build using upstream's way (--with-wine64)
 	# order matters: configure+compile 64->32, install 32->64
@@ -295,6 +302,11 @@ src_configure() {
 			: "${CROSSCFLAGS:=$(
 				filter-flags '-fstack-protector*' #870136
 				filter-flags '-mfunction-return=thunk*' #878849
+
+				# some bashrc-mv users tend to do CFLAGS="${LDFLAGS}" and then
+				# strip-unsupported-flags miss these during compile-only tests
+				# (primarily done for 23.0 profiles' -z, not full coverage)
+				filter-flags '-Wl,-z,*'
 
 				# -mavx with mingw-gcc has a history of obscure issues and
 				# disabling is seen as safer, e.g. `WINEARCH=win32 winecfg`
@@ -358,12 +370,20 @@ src_install() {
 }
 
 pkg_postinst() {
-	if use abi_x86_32 && { use opengl || use vulkan; } &&
-		has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'
-	then
-		ewarn "x11-drivers/nvidia-drivers is installed but is built without"
-		ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
-		ewarn "applications under ${PN} will likely not be usable."
+	if use abi_x86_32 && { use opengl || use vulkan; }; then
+		# difficult to tell what is needed from here, but try to warn
+		if has_version 'x11-drivers/nvidia-drivers'; then
+			if has_version 'x11-drivers/nvidia-drivers[-abi_x86_32]'; then
+				ewarn "x11-drivers/nvidia-drivers is installed but is built without"
+				ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+				ewarn "applications under ${PN} will likely not be usable."
+				ewarn "Multi-card setups may need this on media-libs/mesa as well."
+			fi
+		elif has_version 'media-libs/mesa[-abi_x86_32]'; then
+			ewarn "media-libs/mesa seems to be in use but is built without"
+			ewarn "USE=abi_x86_32 (ABI_X86=32), hardware acceleration with 32bit"
+			ewarn "applications under ${PN} will likely not be usable."
+		fi
 	fi
 
 	eselect wine update --if-unset || die
