@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Gentoo Authors
+# Copyright 2022-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -21,7 +21,7 @@ else
 	SRC_URI="
 		https://dl.winehq.org/wine/source/${WINE_SDIR}/${WINE_P}.tar.xz
 		https://github.com/wine-staging/wine-staging/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="-* ~amd64 ~x86"
+	KEYWORDS="amd64"
 fi
 
 DESCRIPTION="Free implementation of Windows(tm) on Unix, with Wine-Staging patchset"
