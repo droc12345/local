@@ -15,7 +15,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 else
 	SRC_URI="https://github.com/ninja-build/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~arm64-macos ~ppc-macos ~x64-macos ~x64-solaris"
+	KEYWORDS="~alpha amd64 arm arm64 hppa ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~arm64-macos ~ppc-macos ~x64-macos ~x64-solaris"
 fi
 
 GTEST_VER=1.14.0
@@ -42,6 +42,7 @@ PDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/ninja-cflags.patch
+	"${FILESDIR}"/${P}-restore-tests-bootstrap.patch
 )
 
 pkg_setup() {
@@ -65,14 +66,17 @@ bootstrap() {
 		local -x LDFLAGS=${BUILD_LDFLAGS}
 	fi
 
-	local bootstrap_args=(
+	local args=(
 		--with-python=python
 		--bootstrap
 		--verbose
-		$(usev test --gtest-source-dir="${WORKDIR}"/googletest-${GTEST_VER})
 	)
 
-	edo ${EPYTHON} configure.py "${bootstrap_args[@]}"
+	if use test; then
+		args+=( --gtest-source-dir="${WORKDIR}"/googletest-${GTEST_VER} )
+	fi
+
+	edo ${EPYTHON} configure.py "${args[@]}"
 }
 
 src_compile() {
