@@ -14,7 +14,7 @@ if [[ ${PV} = 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/glvnd/${PN}.git"
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
+	KEYWORDS="~alpha amd64 arm arm64 hppa ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86"
 	SRC_URI="https://gitlab.freedesktop.org/glvnd/${PN}/-/archive/v${PV}/${PN}-v${PV}.tar.bz2 -> ${P}.tar.bz2"
 	S=${WORKDIR}/${PN}-v${PV}
 fi
@@ -34,6 +34,8 @@ RDEPEND="
 	)"
 DEPEND="${RDEPEND}
 	X? ( x11-base/xorg-proto )"
+
+PATCHES=( "${FILESDIR}/${PN}-1.7.0-backport-pr291.patch" )
 
 src_prepare() {
 	default
