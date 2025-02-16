@@ -36,6 +36,9 @@ RESTRICT="test"
 src_configure() {
 	local emesonargs=(
 		-Ddefault_library=$(usex static-libs both shared)
+		-Dvenus=true
+		-Dvenus-validate=true
+		-Dvideo=true
 	)
 
 	meson_src_configure
