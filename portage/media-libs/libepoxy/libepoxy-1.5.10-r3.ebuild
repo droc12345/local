@@ -12,7 +12,7 @@ if [[ ${PV} = 9999* ]]; then
 	inherit git-r3
 else
 	SRC_URI="https://github.com/anholt/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
+	KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86"
 fi
 
 DESCRIPTION="Library for handling OpenGL function pointer management"
@@ -37,7 +37,7 @@ BDEPEND="${PYTHON_DEPS}
 	virtual/pkgconfig
 "
 
-PATCHES=( "${FILESDIR}"/libepoxy-1.5.10-use-opengl.pc-without-x.patch )
+PATCHES=( "${FILESDIR}"/libepoxy-1.5.10-libopengl-fallback.patch )
 
 multilib_src_configure() {
 	local emesonargs=(

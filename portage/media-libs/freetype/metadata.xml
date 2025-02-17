@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>polynomial-c@gentoo.org</email>
-		<name>Lars Wendler</name>
-	</maintainer>
 	<maintainer type="project">
 		<email>fonts@gentoo.org</email>
 		<name>Fonts</name>
 	</maintainer>
 	<use>
 		<flag name="adobe-cff">Use Adobe CFF as default font-renderer</flag>
-		<flag name="brotli">Enable brotli decompression support via <pkg>app-arch/brotli</pkg></flag>
 		<flag name="cleartype-hinting">Bytecode hinting mode for TrueType fonts that
 			activates subpixel hinting (a.k.a. ClearType hinting) by default</flag>
 		<flag name="bzip2">Support bzip2 compressed PCF fonts.</flag>
@@ -26,6 +21,8 @@
 	</use>
 	<upstream>
 		<remote-id type="cpe">cpe:/a:freetype:freetype</remote-id>
+		<remote-id type="github">freetype/freetype</remote-id>
 		<remote-id type="sourceforge">freetype</remote-id>
+		<remote-id type="freedesktop-gitlab">FreeType/FreeType</remote-id>
 	</upstream>
 </pkgmetadata>
