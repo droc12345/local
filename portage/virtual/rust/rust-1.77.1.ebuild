@@ -18,6 +18,6 @@ IUSE="rustfmt profiler"
 
 BDEPEND=""
 RDEPEND="|| (
-	~dev-lang/rust-bin-${PV}[profiler?,rustfmt?,${MULTILIB_USEDEP}]
-	~dev-lang/rust-${PV}[profiler?,rustfmt?,${MULTILIB_USEDEP}]
+	~dev-lang/rust-bin-${PV}[rustfmt?,${MULTILIB_USEDEP}]
+	~dev-lang/rust-${PV}[rustfmt?,${MULTILIB_USEDEP}]
 )"
