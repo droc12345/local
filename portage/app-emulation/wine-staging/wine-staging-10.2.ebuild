@@ -5,11 +5,11 @@ EAPI=8
 
 MULTILIB_COMPAT=( abi_x86_{32,64} )
 PYTHON_COMPAT=( python3_{10..13} )
-inherit autotools edo flag-o-matic multilib multilib-build
+inherit autotools edo flag-o-matic multilib multilib-build optfeature
 inherit prefix python-any-r1 toolchain-funcs wrapper
 
 WINE_GECKO=2.47.4
-WINE_MONO=8.1.0
+WINE_MONO=9.4.0
 WINE_P=wine-$(ver_cut 1-2)
 
 if [[ ${PV} == *9999 ]]; then
@@ -32,15 +32,15 @@ HOMEPAGE="
 
 S="${WORKDIR}/${WINE_P}"
 
-LICENSE="LGPL-2.1+ BSD-2 IJG MIT OPENLDAP ZLIB gsm libpng2 libtiff"
+LICENSE="LGPL-2.1+ BSD BSD-2 IJG MIT OPENLDAP ZLIB gsm libpng2 libtiff"
 SLOT="${PV}"
 IUSE="
 	+X +abi_x86_32 +abi_x86_64 +alsa capi crossdev-mingw cups +dbus dos
-	llvm-libunwind custom-cflags +fontconfig +gecko gphoto2 +gstreamer
-	kerberos +mingw +mono netapi nls opencl +opengl pcap perl
-	pulseaudio samba scanner +sdl selinux smartcard +ssl +strip
-	+truetype udev +unwind usb v4l +vulkan wayland wow64 +xcomposite
-	xinerama
+	llvm-libunwind custom-cflags ffmpeg +fontconfig +gecko gphoto2
+	+gstreamer kerberos +mingw +mono netapi nls odbc opencl +opengl
+	pcap perl pulseaudio samba scanner +sdl selinux smartcard +ssl
+	+strip +truetype udev +unwind usb v4l +vulkan wayland wow64
+	+xcomposite xinerama
 "
 # bug #551124 for truetype
 # TODO: wow64 can be done without mingw if using clang (needs bug #912237)
@@ -72,11 +72,12 @@ WINE_DLOPEN_DEPEND="
 	fontconfig? ( media-libs/fontconfig[${MULTILIB_USEDEP}] )
 	kerberos? ( virtual/krb5[${MULTILIB_USEDEP}] )
 	netapi? ( net-fs/samba[${MULTILIB_USEDEP}] )
+	odbc? ( dev-db/unixODBC[${MULTILIB_USEDEP}] )
 	sdl? ( media-libs/libsdl2[haptic,joystick,${MULTILIB_USEDEP}] )
 	ssl? ( net-libs/gnutls:=[${MULTILIB_USEDEP}] )
 	truetype? ( media-libs/freetype[${MULTILIB_USEDEP}] )
 	v4l? ( media-libs/libv4l[${MULTILIB_USEDEP}] )
-	vulkan? ( media-libs/vulkan-loader[X?,${MULTILIB_USEDEP}] )
+	vulkan? ( media-libs/vulkan-loader[X?,wayland?,${MULTILIB_USEDEP}] )
 "
 WINE_COMMON_DEPEND="
 	${WINE_DLOPEN_DEPEND}
@@ -86,6 +87,7 @@ WINE_COMMON_DEPEND="
 	)
 	alsa? ( media-libs/alsa-lib[${MULTILIB_USEDEP}] )
 	capi? ( net-libs/libcapi:=[${MULTILIB_USEDEP}] )
+	ffmpeg? ( media-video/ffmpeg:=[${MULTILIB_USEDEP}] )
 	gphoto2? ( media-libs/libgphoto2:=[${MULTILIB_USEDEP}] )
 	gstreamer? (
 		dev-libs/glib:2[${MULTILIB_USEDEP}]
@@ -135,21 +137,16 @@ DEPEND="
 	sys-kernel/linux-headers
 	X? ( x11-base/xorg-proto )
 "
-# gitapply.sh prefers git but can fallback to patch+extras
+# gitapply.sh "can" work without git but that is hardly tested
+# and known failing with some versions, so force real git
 BDEPEND="
 	${PYTHON_DEPS}
-	|| (
-		dev-vcs/git
-		(
-			sys-apps/gawk
-			sys-apps/util-linux
-		)
-	)
 	|| (
 		sys-devel/binutils
 		llvm-core/lld
 	)
 	dev-lang/perl
+	dev-vcs/git
 	sys-devel/bison
 	sys-devel/flex
 	virtual/pkgconfig
@@ -166,14 +163,12 @@ QA_CONFIG_IMPL_DECL_SKIP=(
 	__clear_cache # unused on amd64+x86 (bug #900334)
 	res_getservers # false positive
 )
-QA_FLAGS_IGNORED="usr/lib/.*/wine/.*-unix/odbc32.so" # has no compiled objects
 QA_TEXTRELS="usr/lib/*/wine/i386-unix/*.so" # uses -fno-PIC -Wl,-z,notext
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-7.17-noexecstack.patch
 	"${FILESDIR}"/${PN}-7.20-unwind.patch
 	"${FILESDIR}"/${PN}-8.13-rpath.patch
-	"${FILESDIR}"/${PN}-10.0-binutils2.44.patch
 )
 
 pkg_pretend() {
@@ -219,11 +214,6 @@ src_prepare() {
 	local patchinstallargs=(
 		--all
 		--no-autoconf
-		# patches known broken with USE=-mingw, retry occasionally (bug #921360)
-		$(usev !mingw '
-			-W winedevice-Default_Drivers
-			-W fltmgr.sys-FltBuildDefaultSecurityDescriptor
-		')
 		${MY_WINE_STAGING_CONF}
 	)
 
@@ -292,6 +282,7 @@ src_configure() {
 		$(use_with capi)
 		$(use_with cups)
 		$(use_with dbus)
+		$(use_with ffmpeg)
 		$(use_with fontconfig)
 		$(use_with gphoto2 gphoto)
 		$(use_with gstreamer)
@@ -319,6 +310,7 @@ src_configure() {
 		$(use_with wayland)
 		$(use_with xcomposite)
 		$(use_with xinerama)
+		$(usev !odbc ac_cv_lib_soname_odbc=)
 	)
 
 	filter-lto # build failure
@@ -337,11 +329,6 @@ src_configure() {
 			append-ldflags -fuse-ld=lld
 		strip-unsupported-flags
 	fi
-
-	# >=wine-vanilla-9 has proper fixes and builds with gcc-14, but
-	# staging patchset is messier and would rather not have to worry
-	# about it (try to remove on bump now and then, bug #919758)
-	append-cflags $(test-flags-CC -Wno-error=incompatible-pointer-types)
 
 	if use mingw; then
 		use crossdev-mingw || PATH=${BROOT}/usr/lib/mingw64-toolchain/bin:${PATH}
@@ -410,27 +397,10 @@ src_install() {
 	use abi_x86_32 && emake DESTDIR="${D}" -C ../build32 install
 	use abi_x86_64 && emake DESTDIR="${D}" -C ../build64 install # do last
 
-	# Ensure both wine64 and wine are available if USE=abi_x86_64 (wow64,
-	# -abi_x86_32, and/or EXTRA_ECONF could cause varying scenarios where
-	# one or the other could be missing and that is unexpected for users
-	# and some tools like winetricks)
-	if use abi_x86_64; then
-		if [[ -e ${ED}${WINE_PREFIX}/bin/wine64 && ! -e ${ED}${WINE_PREFIX}/bin/wine ]]; then
-			dosym wine64 ${WINE_PREFIX}/bin/wine
-			dosym wine64-preloader ${WINE_PREFIX}/bin/wine-preloader
-
-			# also install wine(1) man pages (incl. translations)
-			local man
-			for man in ../build64/loader/wine.*man; do
-				: "${man##*/wine}"
-				: "${_%.*}"
-				insinto ${WINE_DATADIR}/man/${_:+${_#.}/}man1
-				newins ${man} wine.1
-			done
-		elif [[ ! -e ${ED}${WINE_PREFIX}/bin/wine64 && -e ${ED}${WINE_PREFIX}/bin/wine ]]; then
-			dosym wine ${WINE_PREFIX}/bin/wine64
-			dosym wine-preloader ${WINE_PREFIX}/bin/wine64-preloader
-		fi
+	# "wine64" is no longer provided, but a keep symlink for old scripts
+	# TODO: remove the guard later, only useful for bisecting -9999
+	if [[ ! -e ${ED}${WINE_PREFIX}/bin/wine64 ]]; then
+		use abi_x86_64 && dosym wine ${WINE_PREFIX}/bin/wine64
 	fi
 
 	use perl || rm "${ED}"${WINE_DATADIR}/man/man1/wine{dump,maker}.1 \
@@ -479,6 +449,9 @@ pkg_postinst() {
 			ewarn "applications under ${PN} will likely not be usable."
 		fi
 	fi
+
+	optfeature "/dev/hidraw* access used for *some* controllers (e.g. DualShock4)" \
+		games-util/game-device-udev-rules
 
 	eselect wine update --if-unset || die
 }

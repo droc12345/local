@@ -43,6 +43,7 @@ RDEPEND="
 	app-arch/p7zip
 	app-arch/unzip
 	net-misc/wget
+	virtual/wine
 	x11-misc/xdg-utils
 	gui? ( || (
 		gnome-extra/zenity
@@ -50,7 +51,6 @@ RDEPEND="
 	) )
 	rar? ( app-arch/unrar )
 "
-#	virtual/wine
 
 # Test targets include syntax checks only, not the "heavy duty" tests
 # that would require a lot of disk space, as well as network access.
