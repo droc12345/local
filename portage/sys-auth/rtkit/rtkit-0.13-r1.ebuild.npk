@@ -18,6 +18,7 @@ BDEPEND="virtual/pkgconfig"
 DEPEND="acct-group/rtkit
 	acct-user/rtkit
 	sys-apps/dbus
+	sys-auth/polkit
 	sys-libs/libcap
 	systemd? ( sys-apps/systemd )"
 RDEPEND="${DEPEND}"
