@@ -18,7 +18,8 @@ fi
 
 LICENSE="GPL-3 CC-BY-SA-3.0"
 SLOT="0"
-IUSE="+bar +dmenu +grid layershell"
+
+IUSE="+bar +dmenu +grid +layershell"
 RESTRICT="mirror"
 
 RDEPEND="
