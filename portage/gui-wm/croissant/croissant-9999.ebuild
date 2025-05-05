@@ -18,7 +18,6 @@ IUSE=""
 RDEPEND="
 	dev-libs/glib:2
 	dev-libs/libinput
-	dev-libs/libliftoff
 	dev-libs/libxml2:2
 	x11-libs/cairo
 	x11-libs/libxkbcommon

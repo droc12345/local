@@ -27,6 +27,7 @@ DEPEND="
 	dev-libs/glib:2
 	dev-libs/libevdev
 	dev-libs/libinput
+	dev-libs/yyjson
 	gui-libs/gtk-layer-shell
 	media-libs/glm
 	media-libs/mesa
