@@ -14,8 +14,10 @@
 # in a matching slot.  To use the eclass:
 #
 # 1. Set LLVM_COMPAT to the list of supported LLVM slots.
+#
 # 2. Use llvm_gen_dep and/or LLVM_USEDEP to add appropriate
 #    dependencies.
+#
 # 3. Use llvm-r1_pkg_setup, get_llvm_prefix or LLVM_SLOT.
 #
 # The eclass sets IUSE and REQUIRED_USE.  The flag corresponding
@@ -31,8 +33,8 @@
 # DEPEND="
 #   dev-libs/libfoo[${LLVM_USEDEP}]
 #   $(llvm_gen_dep '
-#     llvm-core/clang:${LLVM_SLOT}
-#     llvm-core/llvm:${LLVM_SLOT}
+#     llvm-core/clang:${LLVM_SLOT}=
+#     llvm-core/llvm:${LLVM_SLOT}=
 #   ')
 # "
 # @CODE
@@ -42,7 +44,7 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ! ${_LLVM_R1_ECLASS} ]]; then
+if [[ -z ${_LLVM_R1_ECLASS} ]]; then
 _LLVM_R1_ECLASS=1
 
 inherit llvm-utils
@@ -61,7 +63,7 @@ _LLVM_OLDEST_SLOT=15
 # @DESCRIPTION:
 # The newest stable LLVM version.  Versions newer than that won't
 # be automatically enabled via USE defaults.
-_LLVM_NEWEST_STABLE=17
+_LLVM_NEWEST_STABLE=19
 
 # == control variables ==
 
@@ -101,7 +103,7 @@ _LLVM_NEWEST_STABLE=17
 # packages using the same eclass, to enforce a LLVM slot match.
 
 _llvm_set_globals() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	if [[ ${LLVM_COMPAT@a} != *a* ]]; then
 		die "LLVM_COMPAT must be set to an array before inheriting ${ECLASS}"
@@ -123,11 +125,16 @@ _llvm_set_globals() {
 	fi
 
 	if [[ ${stable[@]} ]]; then
+		# If there is at least one stable slot supported, then enable
+		# the newest stable slot by default.
 		IUSE="+llvm_slot_${stable[-1]}"
 		unset 'stable[-1]'
 	else
-		IUSE="+llvm_slot_${unstable[-1]}"
-		unset 'unstable[-1]'
+		# Otherwise, enable the "oldest" ~arch slot.  We really only
+		# expect a single ~arch version, so this primarily prevents
+		# defaulting to non-keyworded slots.
+		IUSE="+llvm_slot_${unstable[0]}"
+		unset 'unstable[0]'
 	fi
 	local nondefault=( "${stable[@]}" "${unstable[@]}" )
 	IUSE+=" ${nondefault[*]/#/llvm_slot_}"
@@ -158,13 +165,13 @@ unset -f _llvm_set_globals
 # @CODE
 # DEPEND="
 #   $(llvm_gen_dep '
-#     llvm-core/clang:${LLVM_SLOT}
-#     llvm-core/llvm:${LLVM_SLOT}
+#     llvm-core/clang:${LLVM_SLOT}=
+#     llvm-core/llvm:${LLVM_SLOT}=
 #   ')
 # "
 # @CODE
 llvm_gen_dep() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ ${#} -ne 1 ]] && die "Usage: ${FUNCNAME} <dependency>"
 
@@ -189,7 +196,7 @@ llvm_gen_dep() {
 # With "-b" option, the path is prefixed by BROOT. LLVM dependencies
 # should be in BDEPEND then.
 get_llvm_prefix() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ ${#} -gt 1 ]] && die "Usage: ${FUNCNAME} [-b|-d]"
 
@@ -223,7 +230,7 @@ get_llvm_prefix() {
 # Note that this function is not exported if LLVM_OPTIONAL is set.
 # In that case, it needs to be called manually.
 llvm-r1_pkg_setup() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	if [[ ${MERGE_TYPE} != binary ]]; then
 		[[ -z ${LLVM_SLOT} ]] && die "LLVM_SLOT unset (broken USE_EXPAND?)"
