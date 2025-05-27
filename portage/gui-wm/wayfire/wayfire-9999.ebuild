@@ -23,7 +23,6 @@ SLOT="0"
 IUSE="+gles +system-wfconfig +system-wlroots X"
 
 DEPEND="
-	dev-cpp/nlohmann_json
 	dev-libs/glib:2
 	dev-libs/libevdev
 	dev-libs/libinput
