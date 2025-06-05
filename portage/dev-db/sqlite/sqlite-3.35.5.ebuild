@@ -34,7 +34,7 @@ if [[ "${PV}" == "9999" ]]; then
 		dev-vcs/fossil"
 else
 	BDEPEND="app-arch/unzip
-		>=dev-lang/tcl-8.6:0"
+		tcl? ( >=dev-lang/tcl-8.6:0 ) "
 fi
 RDEPEND="sys-libs/zlib:0=[${MULTILIB_USEDEP}]
 	icu? ( dev-libs/icu:0=[${MULTILIB_USEDEP}] )
