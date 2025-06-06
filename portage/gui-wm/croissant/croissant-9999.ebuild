@@ -10,6 +10,7 @@ HOMEPAGE="https://codeberg.org/vyivel/croissant.git"
 
 #EGIT_REPO_URI="https://codeberg.org/vyivel/croissant"
 EGIT_REPO_URI="file:///n/don/git/croissant"
+EGIT_BRANCH="groups"
 
 LICENSE="GPL-3"
 SLOT="0"
