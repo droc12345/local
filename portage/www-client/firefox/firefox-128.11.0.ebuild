@@ -78,7 +78,7 @@ KEYWORDS="amd64 arm64 ~ppc64 ~riscv ~x86"
 
 IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
-IUSE+=" system-png +system-webp wayland wifi +X"
+IUSE+=" system-png +system-webp wayland wifi +X loong"
 
 # Firefox-only IUSE
 IUSE+=" +gmp-autoupdate gnome-shell +jumbo-build openh264 +telemetry wasm-sandbox"
