@@ -31,6 +31,7 @@ REQUIRED_USE="
 
 DEPEND="
 	>=dev-libs/libinput-1.19.0:0=
+	dev-libs/libliftoff
 	>=dev-libs/wayland-1.20.0
 	>=dev-libs/wayland-protocols-1.25
 	media-libs/mesa
@@ -60,6 +61,7 @@ src_configure() {
 	# xcb-util-errors is not on Gentoo Repository (and upstream seems inactive?)
 	# but I have the ebuild in local repo -- x11-libs/xcb-util-errors.
 	local emesonargs=(
+		--wrap-mode=default
 		-Ddefault_library=static
 		-Dxcb-errors=$(usex xcb-errors enabled disabled)
 		"-Dexamples=$(usex examples true false)"
