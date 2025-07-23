@@ -36,7 +36,6 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	x11-base/xorg-proto
 "
 
 distutils_enable_sphinx docs \

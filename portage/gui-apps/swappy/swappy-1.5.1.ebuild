@@ -29,9 +29,9 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}
 	media-fonts/fontawesome[otf]
 "
-DEPEND="${COMMON_DEPEND}
-	x11-base/xorg-proto
-"
+DEPEND="${COMMON_DEPEND}"
+#	x11-base/xorg-proto
+#"
 BDEPEND="
 	app-text/scdoc
 	sys-devel/gettext

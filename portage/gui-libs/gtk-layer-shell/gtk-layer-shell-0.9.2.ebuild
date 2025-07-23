@@ -34,7 +34,6 @@ RDEPEND="${DEPEND}"
 BDEPEND="
 	dev-util/wayland-scanner
 	virtual/pkgconfig
-	x11-base/xorg-proto
 	gtk-doc? ( dev-util/gtk-doc )
 	test? ( ${PYTHON_DEPS} )
 	vala? ( $(vala_depend) )
