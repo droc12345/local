@@ -15,7 +15,7 @@ S=${WORKDIR}/${P/_alpha[0-9][0-9]}
 
 LICENSE="GPL-2 LGPL-2.1 CDDL-Schily"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm arm64 hppa ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos"
+KEYWORDS="~alpha amd64 ~arm arm64 hppa ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos"
 IUSE="acl caps nls unicode selinux"
 
 BDEPEND="
@@ -44,10 +44,29 @@ cdrtools_os() {
 	echo "${os}"
 }
 
+symlink_build_rules() {
+	local cputype="$1"
+	pushd "${S}"/RULES > /dev/null || die
+	ln -sf i586-linux-cc.rul       "${cputype}"-linux-cc.rul      || die
+	ln -sf i586-linux-clang.rul    "${cputype}"-linux-clang.rul   || die
+	ln -sf i586-linux-clang32.rul  "${cputype}"-linux-clang32.rul || die
+	ln -sf i586-linux-clang64.rul  "${cputype}"-linux-clang64.rul || die
+	ln -sf i586-linux-gcc.rul      "${cputype}"-linux-gcc.rul     || die
+	ln -sf i586-linux-gcc32.rul    "${cputype}"-linux-gcc32.rul   || die
+	ln -sf i586-linux-gcc64.rul    "${cputype}"-linux-gcc64.rul   || die
+	popd > /dev/null || die
+}
+
 src_prepare() {
 	default
 
 	gnuconfig_update
+
+	# bug #898582, bug #903876
+	append-flags -std=gnu89
+	# bug #884771
+	append-flags -fno-strict-aliasing
+	filter-lto
 
 	# Remove profiled make files.
 	find -name '*_p.mk' -delete || die "delete *_p.mk"
@@ -71,6 +90,11 @@ src_prepare() {
 		$(find ./ -type f -exec grep -l '^include.\+rules\.lib' '{}' '+') \
 		|| die "sed rules"
 
+	# Don't quote $(MAKE)
+	sed -i -e 's|"$(MAKE)"|$(MAKE)|' \
+		$(find ./RULES -type f -exec grep -l '"$(MAKE)"' '{}' '+') \
+		|| die "sed RULES/"
+
 	# Enable verbose build.
 	sed -i -e '/@echo.*==>.*;/s:@echo[^;]*;:&set -x;:' \
 		RULES/*.rul RULES/rules.prg RULES/rules.inc \
@@ -80,9 +104,6 @@ src_prepare() {
 	cd "${S}"/RULES || die
 	local tcCC="$(tc-getCC)"
 	local tcCXX="$(tc-getCXX)"
-	# fix RISC-V build err, bug 811375
-	ln -s i586-linux-cc.rul riscv-linux-cc.rul || die
-	ln -s i586-linux-cc.rul riscv64-linux-cc.rul || die
 
 	sed -i -e "/cc-config.sh/s|\$(C_ARCH:%64=%) \$(CCOM_DEF)|${tcCC} ${tcCC}|" \
 		rules1.top || die "sed rules1.top"
@@ -93,6 +114,18 @@ src_prepare() {
 		cc-gcc.rul || die "sed cc-gcc.rul"
 	sed -i -e "s|^#\(CONFFLAGS +=\).*|\1\t-cc=${tcCC}|" \
 		rules.cnf || die "sed rules.cnf"
+
+	# Add support for arm64
+	symlink_build_rules aarch64_be
+
+	# fix RISC-V build err, bug 811375
+	symlink_build_rules riscv
+	symlink_build_rules riscv64
+	# big endian support, bug 907029
+	symlink_build_rules riscv64be
+
+	# Add support for loong
+	symlink_build_rules loongarch64
 
 	# Schily make setup.
 	cd "${S}"/DEFAULTS || die
