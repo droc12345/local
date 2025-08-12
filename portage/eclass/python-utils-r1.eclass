@@ -40,8 +40,8 @@ inherit multiprocessing toolchain-funcs
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
 	pypy3 pypy3_11
-	python3_{10..13}
-	python3_13t
+	python3_{10..14}
+	python3_{13,14}t
 	python2_{5..7}
 )
 readonly _PYTHON_ALL_IMPLS
@@ -138,7 +138,7 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				pypy3|pypy3_11|python3_9|python3_1[0-3]|python2_[5-7]|python3_13t)
+				pypy3|pypy3_11|python3_9|python3_1[0-4]|python2_[5-7]|python3_1[34]t)
 					;;
 				jython2_7|pypy|pypy1_[89]|pypy2_0|python3_[1-9])
 					obsolete+=( "${i}" )

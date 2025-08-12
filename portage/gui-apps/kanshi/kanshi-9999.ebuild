@@ -6,13 +6,14 @@ EAPI=7
 inherit meson
 
 DESCRIPTION="dynamic display configuration (autorandr for wayland)"
-HOMEPAGE="https://git.sr.ht/~emersion/kanshi"
+#HOMEPAGE="https://git.sr.ht/~emersion/kanshi"
+HOMEPAGE="https://gitlab.freedesktop.org/emersion/kanshi"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://git.sr.ht/~emersion/kanshi"
+	EGIT_REPO_URI="https://gitlab.freedesktop.org/emersion/kanshi"
 else
-	SRC_URI="https://github.com/emersion/kanshi/releases/download/v${PV}/${P}.tar.gz"
+	SRC_URI="https://gitlab.freedesktop.org/emersion/kanshi/-/archive/v${PV}/kanshi-v${PV}.tar.bz2"
 	KEYWORDS="~amd64 ~arm64 ~x86"
 fi
 
