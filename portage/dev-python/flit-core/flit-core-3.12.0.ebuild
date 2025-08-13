@@ -31,5 +31,6 @@ distutils_enable_tests pytest
 src_prepare() {
 	rm -r flit_core/vendor || die
 	sed -i -e 's:from \.vendor ::' flit_core/*.py || die
+	sed -i -e '/license-files/d' pyproject.toml || die
 	distutils-r1_src_prepare
 }
