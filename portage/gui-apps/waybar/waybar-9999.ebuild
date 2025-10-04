@@ -19,7 +19,7 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="evdev experimental jack +libinput -logind mpd mpris network niri pipewire pulseaudio sndio systemd test tray +udev upower wifi"
+IUSE="dwl evdev experimental hyprland jack +libinput -logind mpd mpris network niri pipewire pulseaudio river sndio sway systemd test tray +udev upower wifi"
 REQUIRED_USE="
 	mpris? ( logind )
 	upower? ( logind )
@@ -75,7 +75,7 @@ DEPEND="${RDEPEND}
 
 src_configure() {
 	local emesonargs=(
-		--wrap-mode=default
+#		--wrap-mode=default
 		-Dman-pages=enabled
 		-Dcava=disabled
 		$(meson_feature evdev libevdev)
@@ -95,7 +95,11 @@ src_configure() {
 		$(meson_feature upower upower_glib)
 		$(meson_feature wifi rfkill)
 		$(meson_use experimental)
+		$(meson_use dwl)
+		$(meson_use hyprland)
 		$(meson_use niri)
+		$(meson_use river)
+		$(meson_use sway)
 	)
 	meson_src_configure
 }
