@@ -23,7 +23,7 @@ RDEPEND="
 		openmp? (
 			|| (
 				>=sys-devel/gcc-4.2:*[openmp]
-				llvm-core/clang-runtime:*[openmp]
+				llvm-runtimes/clang-runtime:*[openmp]
 			)
 		)
 		static? (
@@ -43,7 +43,7 @@ RDEPEND="
 		openmp? (
 			|| (
 				>=sys-devel/gcc-4.2:*[openmp]
-				llvm-core/clang-runtime:*[openmp]
+				llvm-runtimes/clang-runtime:*[openmp]
 			)
 		)
 		static? (
