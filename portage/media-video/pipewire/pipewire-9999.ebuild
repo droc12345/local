@@ -202,7 +202,7 @@ multilib_src_configure() {
 		$(meson_native_use_feature gstreamer)
 		$(meson_native_use_feature gstreamer gstreamer-device-provider)
 		$(meson_native_use_feature gsettings)
-		$(meson_native_use_feature systemd)
+		$(meson_native_use_feature systemd libsystemd)
 
 		$(meson_native_use_feature system-service systemd-system-service)
 		-Dsystemd-system-unit-dir="$(systemd_get_systemunitdir)"
