@@ -1,11 +1,11 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-inherit flag-o-matic multilib toolchain-funcs multilib-minimal
+inherit dot-a flag-o-matic multilib toolchain-funcs multilib-minimal
 
-NSPR_VER="4.35"
+NSPR_VER="4.36"
 RTM_NAME="NSS_${PV//./_}_RTM"
 
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
@@ -15,17 +15,19 @@ SRC_URI="https://archive.mozilla.org/pub/security/nss/releases/${RTM_NAME}/src/$
 
 LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~x64-solaris"
+KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 ~sparc x86 ~x64-solaris"
 IUSE="cacert test test-full +utils cpu_flags_ppc_altivec cpu_flags_x86_avx2 cpu_flags_x86_sse3 cpu_flags_ppc_vsx"
-RESTRICT="!test? ( test )"
 
 REQUIRED_USE="test-full? ( test )"
+
+PROPERTIES="test_network"
+RESTRICT="test"
 
 # pkg-config called by nss-config -> virtual/pkgconfig in RDEPEND
 RDEPEND="
 	>=dev-libs/nspr-${NSPR_VER}[${MULTILIB_USEDEP}]
 	>=dev-db/sqlite-3.8.2[${MULTILIB_USEDEP}]
-	>=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
+	>=sys-libs/zlib-1.2.8-r1:=[${MULTILIB_USEDEP}]
 	virtual/pkgconfig
 "
 DEPEND="${RDEPEND}"
@@ -85,6 +87,7 @@ src_prepare() {
 		cmd/platlibs.mk || die
 
 	multilib_copy_sources
+	lto-guarantee-fat
 
 	strip-flags
 }
@@ -153,7 +156,7 @@ multilib_src_compile() {
 	)
 
 	# Take care of nspr settings #436216
-	local myCPPFLAGS="${CPPFLAGS} $($(tc-getPKG_CONFIG) nspr --cflags)"
+	local myCPPFLAGS="${CPPFLAGS} $($(tc-getPKG_CONFIG) nspr --cflags) -D_FILE_OFFSET_BITS=64"
 	unset NSPR_INCLUDE_DIR
 
 	export NSS_ALLOW_SSLKEYLOGFILE=1
@@ -211,19 +214,22 @@ multilib_src_compile() {
 
 	local d
 
+	# Disables calling shlibsign during the build #956431 and #436216
+	tc-is-cross-compiler && makeargs+=( CROSS_COMPILE=1 )
+
 	# Build the host tools first.
 	LDFLAGS="${BUILD_LDFLAGS}" \
-	XCFLAGS="${BUILD_CFLAGS}" \
+	XCFLAGS="${BUILD_CFLAGS} -D_FILE_OFFSET_BITS=64" \
 	NSPR_LIB_DIR="${T}/fakedir" \
 	emake -C coreconf \
 		CC="$(tc-getBUILD_CC)" \
-			${buildbits-${mybits}}
+		${buildbits-${mybits}}
 	makeargs+=( NSINSTALL="${PWD}/$(find -type f -name nsinstall)" )
 
 	# Then build the target tools.
 	for d in . lib/dbm ; do
 		CPPFLAGS="${myCPPFLAGS}" \
-		XCFLAGS="${CFLAGS} ${CPPFLAGS}" \
+		XCFLAGS="${CFLAGS} ${CPPFLAGS} -D_FILE_OFFSET_BITS=64" \
 		NSPR_LIB_DIR="${T}/fakedir" \
 		emake "${makeargs[@]}" -C ${d} OS_TEST="$(nssarch)"
 	done
@@ -401,9 +407,24 @@ multilib_src_install() {
 		done
 		popd >/dev/null || die
 	fi
+	strip-lto-bytecode
 }
 
 pkg_postinst() {
+	if [[ -n "${ROOT}" ]]; then
+		elog "You appear to to be installing in a seperate \$ROOT"
+		elog "to complete the setup and re-sign libraries please run:"
+		elog "emerge --config '=${CATEGORY}/${PF}'"
+	else
+		sign_libraries
+	fi
+}
+
+pkg_config() {
+	sign_libraries
+}
+
+sign_libraries() {
 	multilib_pkg_postinst() {
 		# We must re-sign the libraries AFTER they are stripped.
 		local shlibsign="${EROOT}/usr/bin/shlibsign"

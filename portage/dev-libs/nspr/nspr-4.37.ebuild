@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-inherit autotools toolchain-funcs multilib-minimal
+inherit autotools flag-o-matic toolchain-funcs multilib-minimal
 
 MIN_PV="$(ver_cut 2)"
 
@@ -13,7 +13,7 @@ SRC_URI="https://archive.mozilla.org/pub/nspr/releases/v${PV}/src/${P}.tar.gz"
 
 LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~x64-macos ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 ~sparc x86 ~x64-macos ~x64-solaris"
 IUSE="debug"
 
 MULTILIB_CHOST_TOOLS=(
@@ -21,9 +21,7 @@ MULTILIB_CHOST_TOOLS=(
 )
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-4.23-prtime.patch
 	"${FILESDIR}"/${PN}-4.7.1-solaris.patch
-	"${FILESDIR}"/${PN}-4.10.6-solaris.patch
 	"${FILESDIR}"/${PN}-4.8.4-darwin-install_name.patch
 	"${FILESDIR}"/${PN}-4.8.9-link-flags.patch
 	# We do not need to pass -L$libdir via nspr-config --libs
@@ -37,7 +35,10 @@ src_prepare() {
 
 	default
 
-	use elibc_musl && eapply "${FILESDIR}"/${PN}-4.21-ipv6-musl-support.patch
+	if use elibc_musl; then
+		eapply "${FILESDIR}"/${PN}-4.21-ipv6-musl-support.patch
+		eapply "${FILESDIR}"/nspr-4.35-bgo-905998-lfs64-musl.patch
+	fi
 
 	# rename configure.in to configure.ac for new autotools compatibility
 	if [[ -e "${S}"/nspr/configure.in ]] ; then
@@ -59,6 +60,20 @@ src_prepare() {
 }
 
 multilib_src_configure() {
+	# -Werror=strict-aliasing
+	# https://bugs.gentoo.org/867634
+	#
+	# Testsuite-only issue. Still, this makes it challenging to test the package with LTO
+	# enabled...
+	append-flags -fno-strict-aliasing
+	filter-lto
+
+	# The build system overrides user optimization level based on a configure flag. #886987
+	local my_optlvl=$(get-flag '-O*')
+
+	# bgo #923802
+	append-lfs-flags
+
 	# We use the standard BUILD_xxx but nspr uses HOST_xxx
 	tc-export_build_env BUILD_CC
 	export HOST_CC=${BUILD_CC} HOST_CFLAGS=${BUILD_CFLAGS} HOST_LDFLAGS=${BUILD_LDFLAGS}
@@ -67,11 +82,15 @@ multilib_src_configure() {
 		&& export CROSS_COMPILE=1 \
 		|| unset CROSS_COMPILE
 
-	local myconf=(
-		--libdir="${EPREFIX}/usr/$(get_libdir)"
-		$(use_enable debug)
-		$(use_enable !debug optimize)
-	)
+	local myconf=( --libdir="${EPREFIX}/usr/$(get_libdir)" )
+
+	# Optimization is disabled when debug is enabled.
+	if use debug; then
+		myconf+=( --enable-debug )
+	else
+		myconf+=( --disable-debug )
+		myconf+=( --enable-optimize="${my_optlvl}" )
+	fi
 
 	# The configure has some fancy --enable-{{n,x}32,64bit} switches
 	# that trigger some code conditional to platform & arch. This really
@@ -86,9 +105,10 @@ multilib_src_configure() {
 		s390x|*64) myconf+=( --enable-64bit );;
 		default) # no abi actually set, fall back to old check
 			einfo "Running a short build test to determine 64bit'ness"
+			# TODO: Port this to toolchain-funcs tc-get-ptr-size/tc-get-build-ptr-size
 			echo > "${T}"/test.c || die
-			${CC} ${CFLAGS} ${CPPFLAGS} -c "${T}"/test.c -o "${T}"/test.o || die
-			case $(file "${T}"/test.o) in
+			${CC} ${CFLAGS} ${CPPFLAGS} -fno-lto -c "${T}"/test.c -o "${T}"/test.o || die
+			case $(file -S "${T}"/test.o) in
 				*32-bit*x86-64*) myconf+=( --enable-x32 );;
 				*64-bit*|*ppc64*|*x86_64*) myconf+=( --enable-64bit );;
 				*32-bit*|*ppc*|*i386*) ;;

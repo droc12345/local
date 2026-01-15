@@ -1,51 +1,54 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-inherit flag-o-matic multilib toolchain-funcs multilib-minimal
+inherit dot-a flag-o-matic multilib toolchain-funcs multilib-minimal
 
-NSPR_VER="4.35"
+NSPR_VER="4.38.2"
 RTM_NAME="NSS_${PV//./_}_RTM"
 
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
 HOMEPAGE="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS"
-SRC_URI="https://archive.mozilla.org/pub/security/nss/releases/${RTM_NAME}/src/nss-3.101_3.tar.gz -> ${P}.tar.gz
-	cacert? ( https://dev.gentoo.org/~juippis/mozilla/patchsets/nss-3.101-cacert-class1-class3.patch )"
+SRC_URI="https://archive.mozilla.org/pub/security/nss/releases/${RTM_NAME}/src/${P}.tar.gz
+	cacert? ( https://dev.gentoo.org/~juippis/mozilla/patchsets/nss-3.104-cacert-class1-class3.patch )"
 
 LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~x64-solaris"
-IUSE="cacert test +utils cpu_flags_ppc_altivec cpu_flags_x86_avx2 cpu_flags_x86_sse3 cpu_flags_ppc_vsx"
-RESTRICT="!test? ( test )"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~x64-solaris"
+IUSE="cacert test test-full +utils cpu_flags_ppc_altivec cpu_flags_x86_avx2 cpu_flags_x86_sse3 cpu_flags_ppc_vsx"
+
+REQUIRED_USE="test-full? ( test )"
+
+PROPERTIES="test_network"
+RESTRICT="test"
+
 # pkg-config called by nss-config -> virtual/pkgconfig in RDEPEND
 RDEPEND="
 	>=dev-libs/nspr-${NSPR_VER}[${MULTILIB_USEDEP}]
 	>=dev-db/sqlite-3.8.2[${MULTILIB_USEDEP}]
-	>=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
+	>=virtual/zlib-1.2.8-r1:=[${MULTILIB_USEDEP}]
 	virtual/pkgconfig
 "
 DEPEND="${RDEPEND}"
 BDEPEND="dev-lang/perl"
 
-S="${WORKDIR}/nss-3.101_3/${PN}"
+S="${WORKDIR}/${P}/${PN}"
 
 MULTILIB_CHOST_TOOLS=(
 	/usr/bin/nss-config
 )
 
 PATCHES=(
-	"${FILESDIR}/${PN}-3.53-gentoo-fixups.patch"
-	"${FILESDIR}/${PN}-3.21-gentoo-fixup-warnings.patch"
-	"${FILESDIR}"/nss-3.87-use-clang-as-bgo892686.patch
-	"${FILESDIR}"/nss-3.101.3-update-expected-error-code-in-pkg12util-pbmac1-tests.patch
+	"${FILESDIR}"/nss-3.103-gentoo-fixes-add-pkgconfig-files.patch
+	"${FILESDIR}"/nss-3.21-gentoo-fixup-warnings.patch
 )
 
 src_prepare() {
 	default
 
 	if use cacert ; then
-		eapply -p2 "${DISTDIR}"/nss-3.101-cacert-class1-class3.patch
+		eapply -p2 "${DISTDIR}"/nss-3.104-cacert-class1-class3.patch
 	fi
 
 	pushd coreconf >/dev/null || die
@@ -83,6 +86,7 @@ src_prepare() {
 		cmd/platlibs.mk || die
 
 	multilib_copy_sources
+	lto-guarantee-fat
 
 	strip-flags
 }
@@ -151,7 +155,7 @@ multilib_src_compile() {
 	)
 
 	# Take care of nspr settings #436216
-	local myCPPFLAGS="${CPPFLAGS} $($(tc-getPKG_CONFIG) nspr --cflags)"
+	local myCPPFLAGS="${CPPFLAGS} $($(tc-getPKG_CONFIG) nspr --cflags) -D_FILE_OFFSET_BITS=64"
 	unset NSPR_INCLUDE_DIR
 
 	export NSS_ALLOW_SSLKEYLOGFILE=1
@@ -209,19 +213,22 @@ multilib_src_compile() {
 
 	local d
 
+	# Disables calling shlibsign during the build #956431 and #436216
+	tc-is-cross-compiler && makeargs+=( CROSS_COMPILE=1 )
+
 	# Build the host tools first.
 	LDFLAGS="${BUILD_LDFLAGS}" \
-	XCFLAGS="${BUILD_CFLAGS}" \
+	XCFLAGS="${BUILD_CFLAGS} -D_FILE_OFFSET_BITS=64" \
 	NSPR_LIB_DIR="${T}/fakedir" \
 	emake -C coreconf \
 		CC="$(tc-getBUILD_CC)" \
-			${buildbits-${mybits}}
+		${buildbits-${mybits}}
 	makeargs+=( NSINSTALL="${PWD}/$(find -type f -name nsinstall)" )
 
 	# Then build the target tools.
 	for d in . lib/dbm ; do
 		CPPFLAGS="${myCPPFLAGS}" \
-		XCFLAGS="${CFLAGS} ${CPPFLAGS}" \
+		XCFLAGS="${CFLAGS} ${CPPFLAGS} -D_FILE_OFFSET_BITS=64" \
 		NSPR_LIB_DIR="${T}/fakedir" \
 		emake "${makeargs[@]}" -C ${d} OS_TEST="$(nssarch)"
 	done
@@ -229,7 +236,8 @@ multilib_src_compile() {
 
 multilib_src_test() {
 	einfo "Tests can take a *long* time, especially on a multilib system."
-	einfo "30-45+ minutes per lib configuration. Bug #852755"
+	einfo "~10 minutes per lib configuration with only 'standard' tests,"
+	einfo "~40 minutes per lib configuration with 'full' tests. Bug #852755"
 
 	# https://www.linuxfromscratch.org/blfs/view/svn/postlfs/nss.html
 	# https://firefox-source-docs.mozilla.org/security/nss/legacy/nss_sources_building_testing/index.html#running_the_nss_test_suite
@@ -242,7 +250,12 @@ multilib_src_test() {
 
 	# Only run the standard cycle instead of full, reducing testing time from 45 minutes to 15
 	# per lib implementation.
-	export NSS_CYCLES=standard
+	if use test-full ; then
+		# export NSS_CYCLES="standard pkix sharedb"
+		:;
+	else
+		export NSS_CYCLES="standard"
+	fi
 
 	NSINSTALL="${PWD}/$(find -type f -name nsinstall)"
 
@@ -321,7 +334,7 @@ multilib_src_install() {
 
 	# create an nss-softokn.pc from nss.pc for libfreebl and some private headers
 	# bug 517266
-	sed 	-e 's#Libs:#Libs: -lfreebl#' \
+	sed -e 's#Libs:#Libs: -lfreebl#' \
 		-e 's#Cflags:#Cflags: -I${includedir}/private#' \
 		*/lib/pkgconfig/nss.pc >"${ED}"/usr/$(get_libdir)/pkgconfig/nss-softokn.pc \
 		|| die "could not create nss-softokn.pc"
@@ -393,9 +406,24 @@ multilib_src_install() {
 		done
 		popd >/dev/null || die
 	fi
+	strip-lto-bytecode
 }
 
 pkg_postinst() {
+	if [[ -n "${ROOT}" ]]; then
+		elog "You appear to to be installing in a seperate \$ROOT"
+		elog "to complete the setup and re-sign libraries please run:"
+		elog "emerge --config '=${CATEGORY}/${PF}'"
+	else
+		sign_libraries
+	fi
+}
+
+pkg_config() {
+	sign_libraries
+}
+
+sign_libraries() {
 	multilib_pkg_postinst() {
 		# We must re-sign the libraries AFTER they are stripped.
 		local shlibsign="${EROOT}/usr/bin/shlibsign"
