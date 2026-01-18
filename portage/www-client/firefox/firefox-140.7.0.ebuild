@@ -82,7 +82,7 @@ KEYWORDS="~amd64 ~arm64 ~loong ~ppc64 ~riscv ~x86"
 
 IUSE="+clang dbus debug eme-free hardened hwaccel jack libproxy pgo pulseaudio selinux sndio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
-IUSE+=" system-pipewire system-png +system-webp test wayland wifi +X"
+IUSE+=" system-pipewire system-png +system-webp test wayland wifi +X loong"
 
 # Firefox-only IUSE
 IUSE+=" +gmp-autoupdate gnome-shell +jumbo-build openh264 +telemetry wasm-sandbox"
@@ -138,7 +138,7 @@ COMMON_DEPEND="${FF_ONLY_DEPEND}
 	media-libs/freetype
 	media-libs/mesa
 	media-video/ffmpeg
-	virtual/zlib:=
+	sys-libs/zlib:=
 	virtual/freedesktop-icon-theme
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
