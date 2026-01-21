@@ -8,7 +8,7 @@ EAPI=8
 # on new automake (major) releases, as well as the dependency in RDEPEND below too.
 # * Update _WANT_AUTOMAKE and _automake_atom case statement in autotools.eclass.
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..13} )
 
 inherit python-any-r1 verify-sig
 
@@ -19,7 +19,7 @@ if [[ ${PV} == 9999 ]] ; then
 	EGIT_REPO_URI="https://git.savannah.gnu.org/r/${PN}.git"
 	inherit git-r3
 else
-	VERIFY_SIG_OPENPGP_KEY_PATH=/usr/share/openpgp-keys/karlberry.asc
+	VERIFY_SIG_OPENPGP_KEY_PATH=/usr/share/openpgp-keys/jimmeyering.asc
 	if [[ $(ver_cut 3) -ge 90 ]] ; then
 		MANGLED_SLOT=$(ver_cut 1).$(($(ver_cut 2) + 1))
 		SRC_URI="
@@ -35,7 +35,7 @@ else
 				mirror://gnu/${PN}/${P}.tar.xz.sig
 			)
 		"
-		KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~arm64-macos ~x64-macos ~x64-solaris"
+		KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 ~sparc x86 ~arm64-macos ~x64-macos ~x64-solaris"
 	fi
 fi
 
@@ -50,7 +50,7 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=dev-lang/perl-5.6
-	>=dev-build/automake-wrapper-20250528
+	>=dev-build/automake-wrapper-20240607
 	>=dev-build/autoconf-2.69:*
 	sys-devel/gnuconfig
 "
@@ -65,8 +65,13 @@ BDEPEND="
 		sys-devel/bison
 		sys-devel/flex
 	)
-	verify-sig? ( sec-keys/openpgp-keys-karlberry )
+	verify-sig? ( sec-keys/openpgp-keys-jimmeyering )
 "
+
+PATCHES=(
+	"${FILESDIR}"/${P}-perl-5.41.patch
+	"${FILESDIR}"/${P}-perl-no-werror.patch
+)
 
 pkg_setup() {
 	use test && python-any-r1_pkg_setup

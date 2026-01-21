@@ -47,7 +47,7 @@ https://bugzilla.redhat.com/show_bug.cgi?id=1140725
  	      if test -z "$dir_arg" || {
  		   # Check for POSIX incompatibilities with -m.
  		   # HP-UX 11.23 and IRIX 6.5 mkdir -m -p sets group- or
- 		   # other-writable bit of parent directory when it shouldn't.
+ 		   # other-writeable bit of parent directory when it shouldn't.
  		   # FreeBSD 6.1 mkdir -m -p sets mode of existing directory.
 -		   ls_ld_tmpdir=`ls -ld "$tmpdir"`
 +		   test_tmpdir="$tmpdir/a"
