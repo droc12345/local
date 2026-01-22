@@ -3,13 +3,13 @@
 
 EAPI=8
 
-QTMIN=6.7.2
+QTMIN=6.8.1
 inherit ecm frameworks.kde.org
 
 DESCRIPTION="Framework providing access to properties and features of the window manager"
 
 LICENSE="|| ( LGPL-2.1 LGPL-3 ) MIT"
-KEYWORDS="~amd64 ~arm64 ~loong ~ppc64 ~riscv ~x86"
+KEYWORDS="amd64 arm64 ~loong ppc64 ~riscv ~x86"
 IUSE="wayland X"
 
 RESTRICT="test"
@@ -19,9 +19,9 @@ RESTRICT="test"
 # x11-base/xorg-proto: X11/Xlib.h included in public header kkeyserver.h,
 #   req. by KF6WindowSystemConfig.cmake; see also bug #939177
 RDEPEND="
-	>=dev-qt/qtbase-${QTMIN}:6[gui,wayland?]
+	>=dev-qt/qtbase-${QTMIN}:6[gui]
 	>=dev-qt/qtdeclarative-${QTMIN}:6
-	wayland? ( >=dev-qt/qtwayland-${QTMIN}:6= )
+	wayland? ( >=dev-qt/qtbase-${QTMIN}:6=[wayland] )
 	X? (
 		>=dev-qt/qtbase-${QTMIN}:6=[gui,X]
 		x11-base/xorg-proto
@@ -38,7 +38,15 @@ DEPEND="${RDEPEND}
 		>=dev-libs/wayland-protocols-1.21
 	)
 "
-BDEPEND=">=dev-qt/qttools-${QTMIN}:6[linguist]"
+RDEPEND+=" wayland? ( || ( >=dev-qt/qtbase-6.10:6[wayland] <dev-qt/qtwayland-6.10:6 ) )"
+BDEPEND="
+	>=dev-qt/qttools-${QTMIN}:6[linguist]
+	wayland? (
+		>=dev-qt/qtbase-${QTMIN}:6[wayland]
+		dev-util/wayland-scanner
+	)
+"
+BDEPEND+=" wayland? ( || ( >=dev-qt/qtbase-6.10:6[wayland] <dev-qt/qtwayland-6.10:6 ) )"
 
 DOCS=( docs/README.kstartupinfo )
 

@@ -3,15 +3,16 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
-QTMIN=6.7.2
+CMAKE_QA_COMPAT_SKIP=1 # bug #964519 tests/ subdir is irrelevant
+PYTHON_COMPAT=( python3_{11..14} )
+QTMIN=6.8.1
 inherit cmake frameworks.kde.org python-any-r1
 
 DESCRIPTION="Extra modules and scripts for CMake"
 HOMEPAGE="https://invent.kde.org/frameworks/extra-cmake-modules"
 
 LICENSE="BSD"
-KEYWORDS="~amd64 arm ~arm64 ~hppa ~loong ppc ~ppc64 ~riscv x86"
+KEYWORDS="amd64 arm arm64 ~hppa ~loong ppc ppc64 ~riscv x86"
 IUSE="doc test"
 
 RESTRICT="!test? ( test )"

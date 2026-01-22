@@ -1,10 +1,11 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
-QTMIN=6.7.2
+CMAKE_QA_COMPAT_SKIP=1 # bug #964519 tests/ subdir is irrelevant
+PYTHON_COMPAT=( python3_{11..14} )
+QTMIN=6.10.1
 inherit cmake frameworks.kde.org python-any-r1
 
 DESCRIPTION="Extra modules and scripts for CMake"
@@ -37,7 +38,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-5.49.0-no-fatal-warnings.patch"
-	"${FILESDIR}/${PN}-5.93.0-skip-ecm_add_test-early.patch"
+	"${FILESDIR}/${PN}-6.22.0-skip-ecm_add_test-early.patch"
 	"${FILESDIR}/${PN}-5.245.0-disable-qmlplugindump.patch"
 	"${FILESDIR}/${PN}-6.5.0-disable-appstreamtest.patch"
 	"${FILESDIR}/${PN}-6.5.0-disable-git-commit-hooks.patch"

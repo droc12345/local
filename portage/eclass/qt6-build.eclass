@@ -68,9 +68,10 @@ readonly QT6_BUILD_TYPE
 HOMEPAGE="https://www.qt.io/"
 LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT=6/${PV%%_*}
+IUSE="custom-cflags"
 
 if [[ ${PN} != qttranslations ]]; then
-	IUSE="test"
+	IUSE+=" test"
 	RESTRICT="!test? ( test )"
 fi
 
@@ -215,10 +216,9 @@ _qt6-build_create_user_facing_links() {
 	while IFS= read -r link; do
 		if [[ -z ${link} ]]; then
 			continue
-		elif [[ ${link} =~ ^("${QT6_PREFIX}"/.+)\ ("${QT6_PREFIX}"/bin/.+) ]]
-		then
-			${dosym} -r "${BASH_REMATCH[1]#"${EPREFIX}"}" \
-				"${BASH_REMATCH[2]#"${EPREFIX}"}"
+		elif [[ ${link} =~ (../[^ ]+)\ (bin/.+) ]]; then
+			dosym "${BASH_REMATCH[1]}" \
+				"${QT6_PREFIX#"${EPREFIX}"}/${BASH_REMATCH[2]}"
 		else
 			die "unrecognized line '${link}' in '${links}'"
 		fi

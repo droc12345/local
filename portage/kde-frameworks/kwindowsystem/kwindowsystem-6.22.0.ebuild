@@ -1,9 +1,9 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-QTMIN=6.7.2
+QTMIN=6.10.1
 inherit ecm frameworks.kde.org
 
 DESCRIPTION="Framework providing access to properties and features of the window manager"
@@ -19,9 +19,9 @@ RESTRICT="test"
 # x11-base/xorg-proto: X11/Xlib.h included in public header kkeyserver.h,
 #   req. by KF6WindowSystemConfig.cmake; see also bug #939177
 RDEPEND="
-	>=dev-qt/qtbase-${QTMIN}:6[gui,wayland?]
+	>=dev-qt/qtbase-${QTMIN}:6[gui]
 	>=dev-qt/qtdeclarative-${QTMIN}:6
-	wayland? ( >=dev-qt/qtwayland-${QTMIN}:6= )
+	wayland? ( >=dev-qt/qtbase-${QTMIN}:6=[wayland] )
 	X? (
 		>=dev-qt/qtbase-${QTMIN}:6=[gui,X]
 		x11-base/xorg-proto
@@ -38,7 +38,13 @@ DEPEND="${RDEPEND}
 		>=dev-libs/wayland-protocols-1.21
 	)
 "
-BDEPEND=">=dev-qt/qttools-${QTMIN}:6[linguist]"
+BDEPEND="
+	>=dev-qt/qttools-${QTMIN}:6[linguist]
+	wayland? (
+		>=dev-qt/qtbase-${QTMIN}:6[wayland]
+		dev-util/wayland-scanner
+	)
+"
 
 DOCS=( docs/README.kstartupinfo )
 
