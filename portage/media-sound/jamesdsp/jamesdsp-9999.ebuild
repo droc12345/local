@@ -18,7 +18,7 @@ HOMEPAGE="https://github.com/Audio4Linux/JDSP4Linux"
 LICENSE="GPL-3"
 KEYWORDS=""
 SLOT="0"
-IUSE="pipewire pulseaudio"
+IUSE="qt5 pipewire pulseaudio"
 REQUIRED_USE="|| ( pipewire pulseaudio )"
 
 DEPEND="
@@ -31,12 +31,18 @@ DEPEND="
 	app-arch/libarchive
 	>=dev-cpp/glibmm-2.4:2
 	>=dev-libs/glib-2.0
-	dev-qt/qtcore:5
-	dev-qt/qtdbus:5
-	dev-qt/qtgui:5
-	dev-qt/qtnetwork:5
-	dev-qt/qtsvg:5
-	dev-qt/qtxml:5
+	qt5? (
+		dev-qt/qtcore:5
+		dev-qt/qtdbus:5
+		dev-qt/qtgui:5
+		dev-qt/qtnetwork:5
+		dev-qt/qtsvg:5
+		dev-qt/qtxml:5
+	)
+	!qt5? (
+		dev-qt/qtbase:6
+		dev-qt/qtsv6:6
+	)
 "
 
 RDEPEND="
