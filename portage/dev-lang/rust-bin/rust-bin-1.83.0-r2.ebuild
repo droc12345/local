@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,16 +6,16 @@ EAPI=8
 LLVM_COMPAT=( 19 )
 LLVM_OPTIONAL="yes"
 
-inherit llvm-r1 multilib prefix rust-toolchain toolchain-funcs verify-sig multilib-minimal optfeature
+inherit llvm-r1 multilib prefix rust-toolchain verify-sig multilib-minimal optfeature
 
-MY_P="rust-${PV}"
+MY_P="rust-${PV}-r2"
 # curl -L static.rust-lang.org/dist/channel-rust-${PV}.toml 2>/dev/null | grep "xz_url.*rust-src"
-MY_SRC_URI="${RUST_TOOLCHAIN_BASEURL%/}/2024-10-17/rust-src-${PV}.tar.xz"
-GENTOO_BIN_BASEURI="https://dev.gentoo.org/~arthurzam/distfiles/${CATEGORY}/${PN}" # omit leading slash
+MY_SRC_URI="${RUST_TOOLCHAIN_BASEURL%/}/2024-11-28/rust-src-${PV}.tar.xz"
+GENTOO_BIN_BASEURI="https://github.com/projg2/rust-bootstrap/releases/download/${PV}-r2" # omit leading slash
 
 DESCRIPTION="Systems programming language from Mozilla"
 HOMEPAGE="https://www.rust-lang.org/"
-SRC_URI="$(rust_all_arch_uris ${MY_P})
+SRC_URI="$(rust_all_arch_uris rust-${PV})
 	rust-src? ( ${MY_SRC_URI} )
 "
 # Keep this separate to allow easy commenting out if not yet built
@@ -40,7 +40,7 @@ SRC_URI+=" ppc64? ( elibc_musl? (
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD BSD-1 BSD-2 BSD-4"
 SLOT="${PV}"
-KEYWORDS="amd64 arm arm64 ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86"
+KEYWORDS="amd64 arm arm64 ~loong ~mips ppc ppc64 ~riscv ~s390 ~sparc x86"
 IUSE="big-endian clippy cpu_flags_x86_sse2 doc prefix rust-analyzer rust-src rustfmt"
 
 RDEPEND="
@@ -77,12 +77,6 @@ QA_EXECSTACK="opt/${P}/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
 VERIFY_SIG_OPENPGP_KEY_PATH="/usr/share/openpgp-keys/rust.asc"
 
-pkg_pretend() {
-	if [[ "$(tc-is-softfloat)" != "no" ]] && [[ ${CHOST} == armv7* ]]; then
-		die "${CHOST} is not supported by upstream Rust. You must use a hard float version."
-	fi
-}
-
 src_unpack() {
 	# sadly rust-src tarball does not have corresponding .asc file
 	# so do partial verification
@@ -96,7 +90,7 @@ src_unpack() {
 
 	default_src_unpack
 
-	mv "${WORKDIR}/${MY_P}-$(rust_abi)" "${S}" || die
+	mv "${WORKDIR}/rust-${PV}-$(rust_abi)" "${S}" || die
 }
 
 patchelf_for_bin() {
@@ -146,7 +140,7 @@ multilib_src_install() {
 			while IFS=  read -r -d '' filename; do
 				patchelf_for_bin ${filename} ${interpreter} \; || die
 			done
-		eend ${PIPESTATUS[0]}
+		eend $?
 	fi
 
 	local symlinks=(
@@ -183,8 +177,7 @@ multilib_src_install() {
 	CARGO_TRIPLET="${CARGO_TRIPLET//-/_}"
 	CARGO_TRIPLET="${CARGO_TRIPLET^^}"
 	cat <<-_EOF_ > "${T}/50${P}"
-	LDPATH="${EPREFIX}/usr/lib/rust/lib-bin-${PV}"
-	MANPATH="${EPREFIX}/usr/lib/rust/man-bin-${PV}"
+		MANPATH="${EPREFIX}/usr/lib/rust/man-bin-${PV}"
 	$(usev elibc_musl "CARGO_TARGET_${CARGO_TRIPLET}_RUSTFLAGS=\"-C target-feature=-crt-static\"")
 	_EOF_
 	doenvd "${T}/50${P}"

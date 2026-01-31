@@ -1,37 +1,56 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-inherit multilib prefix rust-toolchain toolchain-funcs verify-sig multilib-minimal
+LLVM_COMPAT=( 19 )
+LLVM_OPTIONAL="yes"
 
-MY_P="rust-${PV}"
+inherit llvm-r1 multilib prefix rust-toolchain verify-sig multilib-minimal optfeature
+
+MY_P="rust-${PV}-r1"
 # curl -L static.rust-lang.org/dist/channel-rust-${PV}.toml 2>/dev/null | grep "xz_url.*rust-src"
-MY_SRC_URI="${RUST_TOOLCHAIN_BASEURL%/}/2023-04-20/rust-src-${PV}.tar.xz"
-GENTOO_BIN_BASEURI="https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/${PN}" # omit leading slash
+MY_SRC_URI="${RUST_TOOLCHAIN_BASEURL%/}/2025-01-09/rust-src-${PV}.tar.xz"
+GENTOO_BIN_BASEURI="https://github.com/projg2/rust-bootstrap/releases/download/${PV}-r1" # omit leading slash
 
 DESCRIPTION="Systems programming language from Mozilla"
 HOMEPAGE="https://www.rust-lang.org/"
-SRC_URI="$(rust_all_arch_uris ${MY_P})
+SRC_URI="$(rust_all_arch_uris rust-${PV})
 	rust-src? ( ${MY_SRC_URI} )
 "
 # Keep this separate to allow easy commenting out if not yet built
-SRC_URI+=" sparc? ( ${GENTOO_BIN_BASEURI}/${MY_P}-sparc64-unknown-linux-gnu.tar.xz -> ${MY_P}-sparc64-unknown-linux-gnu.sam.tar.xz ) "
+SRC_URI+=" sparc? ( ${GENTOO_BIN_BASEURI}/${MY_P}-sparc64-unknown-linux-gnu.tar.xz ) "
+SRC_URI+=" mips? (
+	abi_mips_o32? (
+		big-endian?  ( ${GENTOO_BIN_BASEURI}/${MY_P}-mips-unknown-linux-gnu.tar.xz )
+		!big-endian? ( ${GENTOO_BIN_BASEURI}/${MY_P}-mipsel-unknown-linux-gnu.tar.xz )
+	)
+	abi_mips_n64? (
+		big-endian?  ( ${GENTOO_BIN_BASEURI}/${MY_P}-mips64-unknown-linux-gnuabi64.tar.xz )
+		!big-endian? ( ${GENTOO_BIN_BASEURI}/${MY_P}-mips64el-unknown-linux-gnuabi64.tar.xz )
+	)
+)"
+SRC_URI+=" riscv? (
+	elibc_musl? ( ${GENTOO_BIN_BASEURI}/${MY_P}-riscv64gc-unknown-linux-musl.tar.xz )
+)"
+SRC_URI+=" ppc64? ( elibc_musl? (
+	big-endian?  ( ${GENTOO_BIN_BASEURI}/${MY_P}-powerpc64-unknown-linux-musl.tar.xz )
+	!big-endian? ( ${GENTOO_BIN_BASEURI}/${MY_P}-powerpc64le-unknown-linux-musl.tar.xz )
+) )"
 
-LICENSE="|| ( MIT Apache-2.0 ) BSD BSD-1 BSD-2 BSD-4 UoI-NCSA"
-SLOT="stable"
-KEYWORDS="amd64 arm arm64 ~mips ~ppc ppc64 ~riscv ~s390 sparc x86"
+LICENSE="|| ( MIT Apache-2.0 ) BSD BSD-1 BSD-2 BSD-4"
+SLOT="${PV}"
+KEYWORDS="amd64 arm arm64 ~loong ~mips ppc ppc64 ~riscv ~s390 ~sparc x86"
 IUSE="big-endian clippy cpu_flags_x86_sse2 doc prefix rust-analyzer rust-src rustfmt"
-
-DEPEND=""
 
 RDEPEND="
 	>=app-eselect/eselect-rust-20190311
 	dev-libs/openssl
 	sys-apps/lsb-release
 	sys-devel/gcc:*
+	!dev-lang/rust:stable
+	!dev-lang/rust-bin:stable
 "
-
 BDEPEND="
 	prefix? ( dev-util/patchelf )
 	verify-sig? ( sec-keys/openpgp-keys-rust )
@@ -39,9 +58,13 @@ BDEPEND="
 
 REQUIRED_USE="x86? ( cpu_flags_x86_sse2 )"
 
+# stripping rust may break it (at least on x86_64)
+# https://github.com/rust-lang/rust/issues/112286
+RESTRICT="strip"
+
 QA_PREBUILT="
 	opt/${P}/bin/.*
-	opt/${P}/lib/.*.so
+	opt/${P}/lib/.*.so*
 	opt/${P}/libexec/.*
 	opt/${P}/lib/rustlib/.*/bin/.*
 	opt/${P}/lib/rustlib/.*/lib/.*
@@ -52,13 +75,7 @@ QA_PREBUILT="
 # so we can safely silence the warning for this QA check.
 QA_EXECSTACK="opt/${P}/lib/rustlib/*/lib*.rlib:lib.rmeta"
 
-VERIFY_SIG_OPENPGP_KEY_PATH="${BROOT}/usr/share/openpgp-keys/rust.asc"
-
-pkg_pretend() {
-	if [[ "$(tc-is-softfloat)" != "no" ]] && [[ ${CHOST} == armv7* ]]; then
-		die "${CHOST} is not supported by upstream Rust. You must use a hard float version."
-	fi
-}
+VERIFY_SIG_OPENPGP_KEY_PATH="/usr/share/openpgp-keys/rust.asc"
 
 src_unpack() {
 	# sadly rust-src tarball does not have corresponding .asc file
@@ -73,7 +90,7 @@ src_unpack() {
 
 	default_src_unpack
 
-	mv "${WORKDIR}/${MY_P}-$(rust_abi)" "${S}" || die
+	mv "${WORKDIR}/rust-${PV}-$(rust_abi)" "${S}" || die
 }
 
 patchelf_for_bin() {
@@ -114,8 +131,10 @@ multilib_src_install() {
 		--disable-ldconfig \
 		|| die
 
+	docompress /opt/${P}/man/
+
 	if use prefix; then
-		local interpreter=$(patchelf --print-interpreter ${EPREFIX}/bin/bash)
+		local interpreter=$(patchelf --print-interpreter "${EPREFIX}"/bin/bash)
 		ebegin "Changing interpreter to ${interpreter} for Gentoo prefix at ${ED}/opt/${P}/bin"
 		find "${ED}/opt/${P}/bin" -type f -print0 | \
 			while IFS=  read -r -d '' filename; do
@@ -158,8 +177,7 @@ multilib_src_install() {
 	CARGO_TRIPLET="${CARGO_TRIPLET//-/_}"
 	CARGO_TRIPLET="${CARGO_TRIPLET^^}"
 	cat <<-_EOF_ > "${T}/50${P}"
-	LDPATH="${EPREFIX}/usr/lib/rust/lib"
-	MANPATH="${EPREFIX}/usr/lib/rust/man"
+		MANPATH="${EPREFIX}/usr/lib/rust/man-bin-${PV}"
 	$(usev elibc_musl "CARGO_TARGET_${CARGO_TRIPLET}_RUSTFLAGS=\"-C target-feature=-crt-static\"")
 	_EOF_
 	doenvd "${T}/50${P}"
@@ -209,15 +227,17 @@ multilib_src_install() {
 pkg_postinst() {
 	eselect rust update
 
-	elog "Rust installs a helper script for calling GDB now,"
-	elog "for your convenience it is installed under /usr/bin/rust-gdb-bin-${PV}."
+	if has_version dev-debug/gdb || has_version llvm-core/lldb; then
+		elog "Rust installs helper scripts for calling GDB and LLDB,"
+		elog "for convenience they are installed under /usr/bin/rust-{gdb,lldb}-${PV}."
+	fi
 
 	if has_version app-editors/emacs; then
-		elog "install app-emacs/rust-mode to get emacs support for rust."
+		optfeature "emacs support for rust" app-emacs/rust-mode
 	fi
 
 	if has_version app-editors/gvim || has_version app-editors/vim; then
-		elog "install app-vim/rust-vim to get vim support for rust."
+		optfeature "vim support for rust" app-vim/rust-vim
 	fi
 }
 
