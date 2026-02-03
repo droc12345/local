@@ -1,17 +1,17 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 CONFIG_CHECK="~ADVISE_SYSCALLS"
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{11..14} )
 PYTHON_REQ_USE="threads(+)"
 
-inherit bash-completion-r1 check-reqs flag-o-matic linux-info pax-utils python-any-r1 toolchain-funcs xdg-utils
+inherit bash-completion-r1 check-reqs flag-o-matic linux-info ninja-utils pax-utils python-any-r1 toolchain-funcs xdg-utils
 
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
-LICENSE="Apache-1.1 Apache-2.0 BSD BSD-2 MIT"
+LICENSE="Apache-1.1 Apache-2.0 BSD BSD-2 MIT npm? ( Artistic-2 )"
 
 if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
@@ -20,13 +20,12 @@ if [[ ${PV} == *9999 ]]; then
 else
 	SRC_URI="https://nodejs.org/dist/v${PV}/node-v${PV}.tar.xz"
 	SLOT="0/$(ver_cut 1)"
-	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86 ~amd64-linux ~x64-macos"
+	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86 ~x64-macos"
 	S="${WORKDIR}/node-v${PV}"
 fi
 
-IUSE="corepack cpu_flags_x86_sse2 debug doc +icu inspector lto +npm pax-kernel +snapshot +ssl +system-icu +system-ssl test"
-REQUIRED_USE="corepack? ( !npm )
-	inspector? ( icu ssl )
+IUSE="corepack cpu_flags_x86_sse2 debug doc +icu +inspector lto npm pax-kernel +snapshot +ssl +system-icu +system-ssl test"
+REQUIRED_USE="inspector? ( icu ssl )
 	npm? ( ssl )
 	system-icu? ( icu )
 	system-ssl? ( ssl )
@@ -34,17 +33,29 @@ REQUIRED_USE="corepack? ( !npm )
 
 RESTRICT="!test? ( test )"
 
-RDEPEND=">=app-arch/brotli-1.0.9:=
-	>=dev-libs/libuv-1.44.0:=
-	>=net-dns/c-ares-1.18.1:=
-	>=net-libs/nghttp2-1.41.0:=
-	sys-libs/zlib
+RDEPEND=">=app-arch/brotli-1.1.0:=
+	>=dev-cpp/ada-3.3.0:=
+	>=dev-cpp/simdutf-7.3.4:=
+	dev-db/sqlite:3
+	>=dev-libs/libuv-1.51.0:=
+	>=dev-libs/simdjson-3.10.1:=
+	>=net-dns/c-ares-1.34.4:=
+	>=net-libs/nghttp2-1.64.0:=
+	>=net-libs/nghttp3-1.7.0:=
+	virtual/zlib:=
 	corepack? ( !sys-apps/yarn )
-	system-icu? ( >=dev-libs/icu-67:= )
-	system-ssl? ( >=dev-libs/openssl-1.1.1:0= )
-	sys-devel/gcc:*"
+	system-icu? ( >=dev-libs/icu-73:= )
+	system-ssl? (
+		>=net-libs/ngtcp2-1.9.1:=
+		>=dev-libs/openssl-1.1.1:0=
+	)
+	!system-ssl? ( >=net-libs/ngtcp2-1.9.1:=[-gnutls] )
+	|| (
+		sys-devel/gcc:*
+		llvm-runtimes/libatomic-stub
+	)"
 BDEPEND="${PYTHON_DEPS}
-	dev-build/ninja
+	app-alternatives/ninja
 	sys-apps/coreutils
 	virtual/pkgconfig
 	test? ( net-misc/curl )
@@ -84,9 +95,6 @@ src_prepare() {
 	# https://code.google.com/p/gyp/issues/detail?id=260
 	sed -i -e "/append('-arch/d" tools/gyp/pylib/gyp/xcode_emulation.py || die
 
-	# less verbose install output (stating the same as portage, basically)
-	sed -i -e "/print/d" tools/install.py || die
-
 	# proper libdir, hat tip @ryanpcmcquen https://github.com/iojs/io.js/issues/504
 	local LIBDIR=$(get_libdir)
 	sed -i -e "s|lib/|${LIBDIR}/|g" tools/install.py || die
@@ -104,7 +112,7 @@ src_prepare() {
 	fi
 
 	# We need to disable mprotect on two files when it builds Bug 694100.
-	use pax-kernel && PATCHES+=( "${FILESDIR}"/${PN}-18.16.0-paxmarking.patch )
+	use pax-kernel && PATCHES+=( "${FILESDIR}"/${PN}-24.1.0-paxmarking.patch )
 
 	default
 }
@@ -114,19 +122,23 @@ src_configure() {
 
 	# LTO compiler flags are handled by configure.py itself
 	filter-lto
-	# nodejs unconditionally links to libatomic #869992
-	# specifically it requires __atomic_is_lock_free which
-	# is not yet implemented by sys-libs/compiler-rt (see
-	# https://reviews.llvm.org/D85044?id=287068), therefore
-	# we depend on gcc and force using libgcc as the support lib
-	tc-is-clang && append-ldflags "--rtlib=libgcc --unwindlib=libgcc"
+	# The warnings are *so* noisy and make build.logs massive
+	append-cxxflags $(test-flags-CXX -Wno-template-id-cdtor)
+	# https://bugs.gentoo.org/931514
+	use arm64 && append-flags $(test-flags-CXX -mbranch-protection=none)
 
 	local myconf=(
 		--ninja
+		--shared-ada
 		--shared-brotli
 		--shared-cares
 		--shared-libuv
 		--shared-nghttp2
+		--shared-nghttp3
+		--shared-ngtcp2
+		--shared-simdjson
+		--shared-simdutf
+		--shared-sqlite
 		--shared-zlib
 	)
 	use debug && myconf+=( --debug )
@@ -171,7 +183,7 @@ src_configure() {
 }
 
 src_compile() {
-	emake
+	eninja -C out/Release
 }
 
 src_install() {
@@ -207,13 +219,12 @@ src_install() {
 
 		# Clean up
 		rm -f "${LIBDIR}"/node_modules/npm/{.mailmap,.npmignore,Makefile}
-		rm -rf "${LIBDIR}"/node_modules/npm/{doc,html,man}
 
 		local find_exp="-or -name"
 		local find_name=()
 		for match in "AUTHORS*" "CHANGELOG*" "CONTRIBUT*" "README*" \
 			".travis.yml" ".eslint*" ".wercker.yml" ".npmignore" \
-			"*.md" "*.markdown" "*.bat" "*.cmd"; do
+			"*.bat" "*.cmd"; do
 			find_name+=( ${find_exp} "${match}" )
 		done
 
@@ -234,15 +245,36 @@ src_install() {
 
 src_test() {
 	local drop_tests=(
+		test/parallel/test-dns.js
+		test/parallel/test-dns-resolveany-bad-ancount.js
 		test/parallel/test-dns-setserver-when-querying.js
+		test/parallel/test-dotenv.js
 		test/parallel/test-fs-mkdir.js
+		test/parallel/test-fs-read-stream.js
 		test/parallel/test-fs-utimes-y2K38.js
 		test/parallel/test-fs-watch-recursive-add-file.js
+		test/parallel/test-http2-client-set-priority.js
+		test/parallel/test-http2-priority-event.js
+		test/parallel/test-process-euid-egid.js
+		test/parallel/test-process-get-builtin.mjs
+		test/parallel/test-process-initgroups.js
+		test/parallel/test-process-setgroups.js
+		test/parallel/test-process-uid-gid.js
 		test/parallel/test-release-npm.js
 		test/parallel/test-socket-write-after-fin-error.js
 		test/parallel/test-strace-openat-openssl.js
+		test/sequential/test-tls-session-timeout.js
 		test/sequential/test-util-debug.js
 	)
+	use inspector ||
+		drop_tests+=(
+			test/parallel/test-inspector-emit-protocol-event.js
+			test/parallel/test-inspector-network-arbitrary-data.js
+			test/parallel/test-inspector-network-domain.js
+			test/parallel/test-inspector-network-fetch.js
+			test/parallel/test-inspector-network-http.js
+			test/sequential/test-watch-mode.mjs
+		)
 	rm -f "${drop_tests[@]}" || die "disabling tests failed"
 
 	out/${BUILDTYPE}/cctest || die
@@ -252,6 +284,6 @@ src_test() {
 pkg_postinst() {
 	if use npm; then
 		ewarn "remember to run: source /etc/profile if you plan to use nodejs"
-		ewarn "	in your current shell"
+		ewarn " in your current shell"
 	fi
 }
