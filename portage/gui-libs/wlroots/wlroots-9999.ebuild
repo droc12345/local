@@ -10,8 +10,8 @@ DESCRIPTION="Pluggable, composable, unopinionated modules for building a Wayland
 HOMEPAGE="https://gitlab.freedesktop.org/wlroots/wlroots"
 
 if [[ ${PV} == 9999 ]]; then
-#	EGIT_REPO_URI="https://github.com/swaywm/${PN}.git"
-	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
+	EGIT_REPO_URI="file:////n/don/git/wlroots"
+#	EGIT_REPO_URI="https://gitlab.freedesktop.org/${PN}/${PN}.git"
 #	EGIT_COMMIT="252b2348bd62170d97c4e81fb2050f757b56d67e"
 	inherit git-r3
 	SLOT="0/9999"
