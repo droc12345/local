@@ -24,7 +24,10 @@ BDEPEND="
 	sys-devel/gettext
 	virtual/pkgconfig"
 
-PATCHES=( "${FILESDIR}"/${P}-fno-common.patch )
+PATCHES=(
+	"${FILESDIR}"/${P}-fno-common.patch
+	"${FILESDIR}"/${P}-c23.patch
+	)
 
 src_prepare() {
 	default
