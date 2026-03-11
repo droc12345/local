@@ -1,28 +1,26 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit netsurf
+inherit git-r3 netsurf
 
 DESCRIPTION="decoding library for the GIF image file format, written in C"
 HOMEPAGE="https://www.netsurf-browser.org/projects/libnsgif/"
-SRC_URI="https://download.netsurf-browser.org/libs/releases/${P}-src.tar.gz"
 
+EGIT_REPO_URI="https://git.netsurf-browser.org/${PN}.git"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm arm64 ~hppa ~ia64 ~ppc ppc64 ~riscv x86"
-IUSE=""
 
 BDEPEND="
-	>=dev-build/netsurf-buildsystem-1.7-r1
+	dev-build/netsurf-buildsystem
 	virtual/pkgconfig
 "
 
+PATCHES=( "${FILESDIR}/${PN}-1.0.0-make-test-failures-fatal.patch" )
+
 src_prepare() {
 	default
-	sed -e '1i#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"' \
-		-i src/lzw.c || die
 }
 
 _emake() {
@@ -32,6 +30,10 @@ _emake() {
 
 src_compile() {
 	_emake
+}
+
+src_test() {
+	_emake test
 }
 
 src_install() {

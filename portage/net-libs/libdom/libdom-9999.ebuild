@@ -1,17 +1,16 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit netsurf
+inherit git-r3 netsurf
 
 DESCRIPTION="implementation of the W3C DOM, written in C"
-HOMEPAGE="http://www.netsurf-browser.org/projects/libdom/"
-SRC_URI="https://download.netsurf-browser.org/libs/releases/${P}-src.tar.gz"
+HOMEPAGE="https://www.netsurf-browser.org/projects/libdom/"
 
+EGIT_REPO_URI="https://git.netsurf-browser.org/${PN}.git"
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~riscv ~x86"
 IUSE="expat test xml"
 
 RESTRICT="!test? ( test )"
@@ -21,8 +20,8 @@ RDEPEND="
 	dev-libs/libwapcaplet
 	net-libs/libhubbub
 	xml? (
-		expat? ( >=dev-libs/expat-2.1.0-r3 )
-		!expat? ( >=dev-libs/libxml2-2.9.1-r4 )
+		expat? ( dev-libs/expat )
+		!expat? ( dev-libs/libxml2:= )
 	)"
 DEPEND="${RDEPEND}
 	test? (
