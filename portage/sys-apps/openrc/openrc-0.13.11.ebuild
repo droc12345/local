@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-apps/openrc/openrc-0.13.11.ebuild,v 1.8 2015/02/26 18:59:35 williamh Exp $
 
-EAPI=5
+EAPI=8
 
 inherit eutils flag-o-matic multilib pam toolchain-funcs
 
@@ -62,7 +62,7 @@ src_prepare() {
 	fi
 
 	# Allow user patches to be applied without modifying the ebuild
-	epatch_user
+	eapply_user
 }
 
 src_compile() {

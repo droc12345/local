@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI="5"
+EAPI=8
 
 KV_min=2.6.39
 
-inherit autotools eutils linux-info multilib multilib-minimal user
+inherit autotools linux-info multilib-minimal toolchain-funcs
 
 if [[ ${PV} = 9999* ]]; then
 	EGIT_REPO_URI="git://github.com/gentoo/eudev.git"
@@ -105,13 +105,8 @@ src_prepare() {
 	sed -e 's/GROUP="dialout"/GROUP="uucp"/' -i rules/*.rules \
 	|| die "failed to change group dialout to uucp"
 
-	# Bug #520684
-	epatch "${FILESDIR}"/${PN}-fix-selinux-headers.patch
-	epatch "${FILESDIR}"/${PN}-fix-selinux-linking.patch
-	epatch "${FILESDIR}"/fix-gperf-3.1.patch
-	epatch "${FILESDIR}"/eudev-1.10-include.patch
 
-	epatch_user
+	eapply_user
 
 	if use doc; then
 		gtkdocize --docdir docs || die "gtkdocize failed"

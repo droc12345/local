@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: multiprocessing.eclass
@@ -7,7 +7,6 @@
 # @AUTHOR:
 # Brian Harring <ferringb@gentoo.org>
 # Mike Frysinger <vapier@gentoo.org>
-# @SUPPORTED_EAPIS: 7 8
 # @BLURB: multiprocessing helper functions
 # @DESCRIPTION:
 # The multiprocessing eclass contains a suite of utility functions
@@ -26,11 +25,6 @@
 
 if [[ -z ${_MULTIPROCESSING_ECLASS} ]]; then
 _MULTIPROCESSING_ECLASS=1
-
-case ${EAPI} in
-	7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 # @FUNCTION: get_nproc
 # @USAGE: [${fallback:-1}]
@@ -64,57 +58,30 @@ get_nproc() {
 	fi
 }
 
-# @FUNCTION: _get_all_makeopts
-# @INTERNAL
-# @DESCRIPTION:
-# Returns ${MAKEOPTS} ${GNUMAKEFLAGS} ${MAKEFLAGS}.
-_get_all_makeopts() {
-	echo "${MAKEOPTS} ${GNUMAKEFLAGS} ${MAKEFLAGS}"
-}
-
-# @FUNCTION: get_makeopts_jobs
-# @USAGE: [default-jobs]
-# @DESCRIPTION:
-# Return the number of jobs extracted from the make options (MAKEOPTS,
-# GNUMAKEFLAGS, MAKEFLAGS). If the make options do not specify a number,
-# then either the provided default is returned, or 1.
-get_makeopts_jobs() {
-	makeopts_jobs "$(_get_all_makeopts)" "${1:-1}"
-}
-
 # @FUNCTION: makeopts_jobs
-# @USAGE: [${MAKEOPTS}] [${inf:-$(( $(get_nproc) + 1 ))}]
+# @USAGE: [${MAKEOPTS}] [${inf:-999}]
 # @DESCRIPTION:
-# Searches the arguments (or sensible defaults) and extracts the jobs number
+# Searches the arguments (defaults to ${MAKEOPTS}) and extracts the jobs number
 # specified therein.  Useful for running non-make tools in parallel too.
 # i.e. if the user has MAKEOPTS=-j9, this will echo "9" -- we can't return the
 # number as bash normalizes it to [0, 255].  If the flags haven't specified a
-# -j flag, then "1" is shown as that is the default `make` uses.  If the flags
-# specify -j without a number, ${inf} is returned (defaults to nproc).
+# -j flag, then "1" is shown as that is the default `make` uses.  Since there's
+# no way to represent infinity, we return ${inf} (defaults to 999) if the user
+# has -j without a number.
 makeopts_jobs() {
-	[[ $# -eq 0 ]] && set -- "$(_get_all_makeopts)"
+	[[ $# -eq 0 ]] && set -- "${MAKEOPTS}"
 	# This assumes the first .* will be more greedy than the second .*
 	# since POSIX doesn't specify a non-greedy match (i.e. ".*?").
 	local jobs=$(echo " $* " | sed -r -n \
 		-e 's:.*[[:space:]](-[a-z]*j|--jobs[=[:space:]])[[:space:]]*([0-9]+).*:\2:p' \
-		-e "s:.*[[:space:]](-[a-z]*j|--jobs)[[:space:]].*:${2:-$(( $(get_nproc) + 1 ))}:p")
+		-e "s:.*[[:space:]](-[a-z]*j|--jobs)[[:space:]].*:${2:-999}:p")
 	echo ${jobs:-1}
-}
-
-# @FUNCTION: get_makeopts_loadavg
-# @USAGE: [default-loadavg]
-# @DESCRIPTION:
-# Return the value for the load-average extracted from the make options (MAKEOPTS,
-# GNUMAKEFLAGS, MAKEFLAGS).  If the make options do not specify a value, then
-# either the optional provided default is returned, or 999.
-get_makeopts_loadavg() {
-	makeopts_loadavg "$(_get_all_makeopts)" "${1:-999}"
 }
 
 # @FUNCTION: makeopts_loadavg
 # @USAGE: [${MAKEOPTS}] [${inf:-999}]
 # @DESCRIPTION:
-# Searches the arguments (or sensible defaults) and extracts the value set
+# Searches the arguments (defaults to ${MAKEOPTS}) and extracts the value set
 # for load-average. For make and ninja based builds this will mean new jobs are
 # not only limited by the jobs-value, but also by the current load - which might
 # get excessive due to I/O and not just due to CPU load.
@@ -123,7 +90,7 @@ get_makeopts_loadavg() {
 # If no limit is specified or --load-average is used without a number, ${inf}
 # (defaults to 999) is returned.
 makeopts_loadavg() {
-	[[ $# -eq 0 ]] && set -- "$(_get_all_makeopts)"
+	[[ $# -eq 0 ]] && set -- "${MAKEOPTS}"
 	# This assumes the first .* will be more greedy than the second .*
 	# since POSIX doesn't specify a non-greedy match (i.e. ".*?").
 	local lavg=$(echo " $* " | sed -r -n \

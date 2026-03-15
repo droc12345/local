@@ -1,9 +1,9 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils multilib versionator prefix
+inherit multilib prefix
 
 DESCRIPTION="Filesystem baselayout and init scripts"
 HOMEPAGE="https://www.gentoo.org/"

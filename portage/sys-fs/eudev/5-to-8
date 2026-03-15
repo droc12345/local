@@ -1,0 +1,27 @@
+Gentoo EAPI 8 (introduced 2021) is a significant modernization over EAPI 5 (2012), focusing on stricter build environments, improved dependency handling (
+IDEPEND), and enhanced helper functions. Major changes include removing obsolete features (hasq, hasv), restricting unpack for security, and enforcing cleaner separation between build and target systems. 
+Major Differences: EAPI 5 vs. EAPI 8
+
+    Dependencies: EAPI 8 adds IDEPEND for tools executed during the install phase, crucial for cross-compiling, which EAPI 5 completely lacks.
+    Builtin Functions & Banned Items:
+        Banned: hasq, hasv, and useq are removed. They were deprecated or discouraged even in EAPI 5.
+        Improved: usev now accepts a second argument, and usex behavior is more flexible for custom build systems.
+        Restricted: unpack in EAPI 8 no longer supports 7-Zip, LHA, or RAR, enforcing security and reducing dependencies.
+    Environment & Sandboxing:
+        EAPI 8: pkg_* phases run in a dedicated empty directory to prevent accidental file leaks.
+        EAPI 8: insopts and exeopts only apply to doins and doexe, not all do* commands, providing better control.
+    Variable Changes:
+        PATCHES: Must be a variable (usually PATCHES=( "${FILESDIR}/..." )) and cannot be a function, simplifying usage.
+        PROPERTIES/RESTRICT: These are now accumulated across eclasses rather than being overwritten.
+    Build Tools: Bash 5.0 is standard in EAPI 8, allowing more modern script features.
+    Relative Symlinks: dosym -r is available in EAPI 8 to create relative symlinks automatically. 
+
+Why Move from 5 to 8?
+EAPI 5 is obsolete. EAPI 8 offers safer, faster (in terms of build-time analysis), and more reliable package management. 
+
+    Cleaner Builds: Less pollution between build steps.
+    Cross-compilation support: Necessary for ARM/embedded work.
+    Modern tooling: Better integration with recent Portage versions. 
+
+Updating requires removing deprecated functions and updating src_prepare to use PATCHES as an array. 
+

@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=8
 
-inherit eutils udev
+inherit systemd udev
 
 DESCRIPTION="Gentoo Network Interface Management Scripts"
 HOMEPAGE="https://www.gentoo.org/proj/en/base/openrc/"
@@ -38,7 +38,7 @@ src_prepare() {
 	fi
 
 	# Allow user patches to be applied without modifying the ebuild
-	epatch_user
+	default
 }
 
 src_compile() {

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/sys-boot/gummiboot/gummiboot-45.ebuild,v 1.3 2015/04/13 07:21:47 mgorny Exp $
 
-EAPI=5
+EAPI=8
 
 inherit eutils linux-info
 
@@ -29,5 +29,5 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	epatch_user
+	eapply_user
 }

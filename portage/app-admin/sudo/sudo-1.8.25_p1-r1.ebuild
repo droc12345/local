@@ -1,9 +1,9 @@
 # Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
-inherit eutils pam multilib libtool tmpfiles
+inherit pam tmpfiles toolchain-funcs
 if [[ ${PV} == "9999" ]] ; then
 	EHG_REPO_URI="https://www.sudo.ws/repos/sudo"
 	inherit mercurial
