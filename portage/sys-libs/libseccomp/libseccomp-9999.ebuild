@@ -1,14 +1,16 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
+DISTUTILS_EXT=1
 DISTUTILS_OPTIONAL=1
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{10..13} )
 
-inherit distutils-r1 multilib-minimal
+inherit distutils-r1 multilib-minimal multiprocessing
 
-DESCRIPTION="high level interface to Linux seccomp filter"
+DESCRIPTION="High level interface to Linux seccomp filter"
 HOMEPAGE="https://github.com/seccomp/libseccomp"
 
 if [[ ${PV} == *9999 ]] ; then
@@ -16,40 +18,71 @@ if [[ ${PV} == *9999 ]] ; then
 	PRERELEASE="2.6.0"
 	inherit autotools git-r3
 else
-	SRC_URI="https://github.com/seccomp/libseccomp/releases/download/v${PV}/${P}.tar.gz"
-	KEYWORDS="-* ~amd64 ~arm ~arm64 ~hppa ~mips ~ppc ~ppc64 ~riscv ~s390 ~x86 ~amd64-linux ~x86-linux"
+	VERIFY_SIG_OPENPGP_KEY_PATH=/usr/share/openpgp-keys/libseccomp.asc
+	inherit verify-sig
+
+	SRC_URI="
+		https://github.com/seccomp/libseccomp/releases/download/v${PV}/${P}.tar.gz
+		verify-sig? ( https://github.com/seccomp/libseccomp/releases/download/v${PV}/${P}.tar.gz.asc )
+	"
+	KEYWORDS="-* ~amd64 ~arm ~arm64 ~hppa ~loong ~mips ~ppc ~ppc64 ~riscv ~s390 ~x86"
+
+	BDEPEND="verify-sig? ( sec-keys/openpgp-keys-libseccomp )"
 fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 IUSE="python static-libs test"
 RESTRICT="!test? ( test )"
-
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-DEPEND="python? ( ${PYTHON_DEPS} )"
-RDEPEND="${DEPEND}"
-BDEPEND="${DEPEND}
-	dev-util/gperf
-	python? ( dev-python/cython[${PYTHON_USEDEP}] )
+RDEPEND="
+	python? ( ${PYTHON_DEPS} )
 "
 # We need newer kernel headers; we don't keep strict control of the exact
-# version here, just be safe and pull in the latest stable ones. #551248
-DEPEND="${DEPEND} >=sys-kernel/linux-headers-4.3"
-
-src_prepare() {
-	local PATCHES=(
-		"${FILESDIR}/libseccomp-python-shared.patch"
-		"${FILESDIR}/libseccomp-2.5.3-skip-valgrind.patch"
+# version here, just be safe and pull in the latest stable ones. bug #551248
+DEPEND="
+	${RDEPEND}
+	>=sys-kernel/linux-headers-5.15
+"
+BDEPEND+="
+	${DEPEND}
+	dev-util/gperf
+	python? (
+		${DISTUTILS_DEPS}
+		dev-python/cython[${PYTHON_USEDEP}]
 	)
+"
+
+PATCHES=(
+	"${FILESDIR}"/libseccomp-2.6.0-python-shared.patch
+	"${FILESDIR}"/libseccomp-2.5.3-skip-valgrind.patch
+)
+
+src_unpack() {
+	if [[ ${PV} == 9999 ]] ; then
+		git-r3_src_unpack
+		return
+	fi
+
+	if use verify-sig; then
+		verify-sig_verify_detached "${DISTDIR}"/${P}.tar.gz{,.asc}
+	fi
 
 	default
+}
 
-	if [[ "${PV}" == *9999 ]] ; then
+src_prepare() {
+	default
+
+	if [[ ${PV} == *9999 ]] ; then
 		sed -i -e "s/0.0.0/${PRERELEASE}/" configure.ac || die
 
 		eautoreconf
 	fi
+
+	# Silence noise when running Python tests
+	sed -i -e 's:$(pwd)/../src/python/build/lib\.\*:$(pwd):' tests/regression || die
 }
 
 multilib_src_configure() {
@@ -61,34 +94,45 @@ multilib_src_configure() {
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
-do_python() {
-	# setup.py reads VERSION_RELEASE from the environment
-	local -x VERSION_RELEASE=${PRERELEASE-${PV}}
-
-	pushd "${BUILD_DIR}/src/python" >/dev/null || die
-	"$@"
-	popd >/dev/null || die
-}
-
 multilib_src_compile() {
 	emake
 
 	if multilib_is_native_abi && use python ; then
 		# setup.py expects libseccomp.so to live in "../.libs"
 		# Copy the python files to the right place for this.
-		rm -r "${BUILD_DIR}/src/python" || die
-		cp -r "${S}/src/python" "${BUILD_DIR}/src/python" || die
+		rm -r "${BUILD_DIR}"/src/python || die
+		cp -r "${S}"/src/python "${BUILD_DIR}"/src/python || die
 		local -x CPPFLAGS="-I\"${BUILD_DIR}/include\" -I\"${S}/include\" ${CPPFLAGS}"
 
-		do_python distutils-r1_src_compile
+		# setup.py reads VERSION_RELEASE from the environment
+		local -x VERSION_RELEASE=${PRERELEASE-${PV}}
+
+		pushd "${BUILD_DIR}/src/python" >/dev/null || die
+		distutils-r1_src_compile
+		popd >/dev/null || die
 	fi
+}
+
+multilib_src_test() {
+	local -x LIBSECCOMP_TSTCFG_JOBS="$(makeopts_jobs)"
+	emake -Onone check
+
+	if multilib_is_native_abi && use python ; then
+		distutils-r1_src_test
+	fi
+}
+
+python_test() {
+	local -x LIBSECCOMP_TSTCFG_MODE_LIST="python"
+
+	emake -Onone check
 }
 
 multilib_src_install() {
 	emake DESTDIR="${D}" install
 
 	if multilib_is_native_abi && use python ; then
-		do_python distutils-r1_src_install
+		distutils-r1_src_install
 	fi
 }
 

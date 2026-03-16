@@ -1,33 +1,44 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: git-r3.eclass
 # @MAINTAINER:
 # Michał Górny <mgorny@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7 8
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: Eclass for fetching and unpacking git repositories.
 # @DESCRIPTION:
 # Third generation eclass for easing maintenance of live ebuilds using
 # git as remote repository.
 
-case ${EAPI:-0} in
-	5|6|7|8) ;;
+# @ECLASS_VARIABLE: EGIT_LFS
+# @PRE_INHERIT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set, git lfs support will be enabled.
+# Set before inheriting this eclass.
+
+# @ECLASS_VARIABLE: _NUM_LFS_FILTERS_FOUND
+# @INTERNAL
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# This is used to provide QA warnings if a repo has git lfs filters
+# defined but EGIT_LFS is not turned on and vice versa.
+# If non-empty, then the repo likely needs EGIT_LFS to clone properly.
+
+if [[ -z ${_GIT_R3_ECLASS} ]]; then
+_GIT_R3_ECLASS=1
+
+case ${EAPI} in
+	7|8|9) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-EXPORT_FUNCTIONS src_unpack
-
-if [[ ! ${_GIT_R3} ]]; then
-
 PROPERTIES+=" live"
 
-if [[ ${EAPI} != [56] ]]; then
-	BDEPEND=">=dev-vcs/git-1.8.2.1[curl]"
-else
-	DEPEND=">=dev-vcs/git-1.8.2.1[curl]"
-fi
+BDEPEND=">=dev-vcs/git-1.8.2.1[curl]"
+[[ ${EGIT_LFS} ]] && BDEPEND+=" dev-vcs/git-lfs"
 
-# @ECLASS-VARIABLE: EGIT_CLONE_TYPE
+# @ECLASS_VARIABLE: EGIT_CLONE_TYPE
 # @USER_VARIABLE
 # @DESCRIPTION:
 # Type of clone that should be used against the remote repository.
@@ -63,9 +74,9 @@ fi
 # unavailable calls like 'git describe' will not reference prior tags.
 # No purging of old references is done. This mode is intended mostly for
 # embedded systems with limited disk space.
-: ${EGIT_CLONE_TYPE:=single}
+: "${EGIT_CLONE_TYPE:=single}"
 
-# @ECLASS-VARIABLE: EGIT_MIN_CLONE_TYPE
+# @ECLASS_VARIABLE: EGIT_MIN_CLONE_TYPE
 # @DESCRIPTION:
 # 'Minimum' clone type supported by the ebuild. Takes same values
 # as EGIT_CLONE_TYPE. When user sets a type that's 'lower' (that is,
@@ -80,9 +91,39 @@ fi
 # or a similar remote is used that does not support shallow clones
 # and fetching tags along with commits. Please use sparingly, and to fix
 # fatal errors rather than 'non-pretty versions'.
-: ${EGIT_MIN_CLONE_TYPE:=shallow}
+: "${EGIT_MIN_CLONE_TYPE:=shallow}"
 
-# @ECLASS-VARIABLE: EGIT3_STORE_DIR
+# @ECLASS_VARIABLE: EGIT_LFS_CLONE_TYPE
+# @USER_VARIABLE
+# @DESCRIPTION:
+# Type of lfs clone that should be used against the remote repository.
+# This can be either of: 'mirror', 'single', 'shallow'.
+#
+# This works a bit differently than EGIT_CLONE_TYPE.
+#
+# The 'mirror' type clones all LFS files that is available from the
+# cloned repo. Is is mostly useful for backup or rehosting purposes as
+# the disk usage will be excessive.
+#
+# The 'single' type clones only the LFS files from the current commit.
+# However unlike 'shallow', it will not cleanup stale LFS files.
+#
+# The 'shallow' type clones only the LFS files from the current commit.
+# LFS files that are not referenced by the current commit and more than
+# a few days old will be automatically removed to save disk space.
+# This is the recommended mode for LFS repos to prevent excessive disk
+# usage.
+: "${EGIT_LFS_CLONE_TYPE:=shallow}"
+
+# @ECLASS_VARIABLE: EVCS_STORE_DIRS
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# Record of names of all the repositories directories being cloned in the git3_src.
+# This is useful in the case of ebuild that fetch multiple repos and
+# it would be used by eclean to clean them up.
+EVCS_STORE_DIRS=()
+
+# @ECLASS_VARIABLE: EGIT3_STORE_DIR
 # @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -93,7 +134,7 @@ fi
 #
 # EGIT3_STORE_DIR=${DISTDIR}/git3-src
 
-# @ECLASS-VARIABLE: EGIT_MIRROR_URI
+# @ECLASS_VARIABLE: EGIT_MIRROR_URI
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # 'Top' URI to a local git mirror. If specified, the eclass will try
@@ -107,7 +148,7 @@ fi
 # EGIT_MIRROR_URI="git://mirror.lan/"
 # @CODE
 
-# @ECLASS-VARIABLE: EGIT_REPO_URI
+# @ECLASS_VARIABLE: EGIT_REPO_URI
 # @REQUIRED
 # @DESCRIPTION:
 # URIs to the repository, e.g. https://foo. If multiple URIs are
@@ -116,7 +157,7 @@ fi
 # read the manpage for git-clone(1).
 #
 # URIs should be using https:// whenever possible. http:// and git://
-# URIs are completely unsecured and their use (even if only as
+# URIs are completely insecure and their use (even if only as
 # a fallback) renders the ebuild completely vulnerable to MITM attacks.
 #
 # Can be a whitespace-separated list or an array.
@@ -126,12 +167,12 @@ fi
 # EGIT_REPO_URI="https://a/b.git https://c/d.git"
 # @CODE
 
-# @ECLASS-VARIABLE: EVCS_OFFLINE
+# @ECLASS_VARIABLE: EVCS_OFFLINE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # If non-empty, this variable prevents any online operations.
 
-# @ECLASS-VARIABLE: EVCS_UMASK
+# @ECLASS_VARIABLE: EVCS_UMASK
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Set this variable to a custom umask. This is intended to be set by
@@ -142,13 +183,13 @@ fi
 # portage group write access already can screw the system over in more
 # creative ways.
 
-# @ECLASS-VARIABLE: EGIT_BRANCH
+# @ECLASS_VARIABLE: EGIT_BRANCH
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The branch name to check out. If unset, the upstream default (HEAD)
 # will be used.
 
-# @ECLASS-VARIABLE: EGIT_COMMIT
+# @ECLASS_VARIABLE: EGIT_COMMIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The tag name or commit identifier to check out. If unset, newest
@@ -156,7 +197,7 @@ fi
 # not on HEAD branch, EGIT_BRANCH needs to be set to a branch on which
 # the commit is available.
 
-# @ECLASS-VARIABLE: EGIT_COMMIT_DATE
+# @ECLASS_VARIABLE: EGIT_COMMIT_DATE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Attempt to check out the repository state for the specified timestamp.
@@ -170,14 +211,14 @@ fi
 # will be considered alike a single commit with date corresponding
 # to the merge commit date.
 
-# @ECLASS-VARIABLE: EGIT_CHECKOUT_DIR
+# @ECLASS_VARIABLE: EGIT_CHECKOUT_DIR
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The directory to check the git sources out to.
 #
 # EGIT_CHECKOUT_DIR=${WORKDIR}/${P}
 
-# @ECLASS-VARIABLE: EGIT_SUBMODULES
+# @ECLASS_VARIABLE: EGIT_SUBMODULES
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # An array of inclusive and exclusive wildcards on submodule names,
@@ -206,8 +247,8 @@ fi
 # @FUNCTION: _git-r3_env_setup
 # @INTERNAL
 # @DESCRIPTION:
-# Set the eclass variables as necessary for operation. This can involve
-# setting EGIT_* to defaults or ${PN}_LIVE_* variables.
+# Set the eclass variables as necessary for operation.  This can involve
+# setting EGIT_* to defaults.
 _git-r3_env_setup() {
 	debug-print-function ${FUNCNAME} "$@"
 
@@ -252,26 +293,29 @@ _git-r3_env_setup() {
 	esc_pn=${PN//[-+]/_}
 	[[ ${esc_pn} == [0-9]* ]] && esc_pn=_${esc_pn}
 
+	_git-r3_livevar_warn_or_die() {
+		case ${EAPI} in
+			7|8) ewarn "Using ${livevar}, no support will be provided" ;;
+			*) die "${livevar} is no longer supported in EAPI ${EAPI}" ;;
+		esac
+	}
+
 	# note: deprecated, use EGIT_OVERRIDE_* instead
 	livevar=${esc_pn}_LIVE_REPO
 	EGIT_REPO_URI=${!livevar-${EGIT_REPO_URI}}
-	[[ ${!livevar} ]] \
-		&& ewarn "Using ${livevar}, no support will be provided"
+	[[ ${!livevar} ]] && _git-r3_livevar_warn_or_die
 
 	livevar=${esc_pn}_LIVE_BRANCH
 	EGIT_BRANCH=${!livevar-${EGIT_BRANCH}}
-	[[ ${!livevar} ]] \
-		&& ewarn "Using ${livevar}, no support will be provided"
+	[[ ${!livevar} ]] && _git-r3_livevar_warn_or_die
 
 	livevar=${esc_pn}_LIVE_COMMIT
 	EGIT_COMMIT=${!livevar-${EGIT_COMMIT}}
-	[[ ${!livevar} ]] \
-		&& ewarn "Using ${livevar}, no support will be provided"
+	[[ ${!livevar} ]] && _git-r3_livevar_warn_or_die
 
 	livevar=${esc_pn}_LIVE_COMMIT_DATE
 	EGIT_COMMIT_DATE=${!livevar-${EGIT_COMMIT_DATE}}
-	[[ ${!livevar} ]] \
-		&& ewarn "Using ${livevar}, no support will be provided"
+	[[ ${!livevar} ]] && _git-r3_livevar_warn_or_die
 
 	if [[ ${EGIT_COMMIT} && ${EGIT_COMMIT_DATE} ]]; then
 		die "EGIT_COMMIT and EGIT_COMMIT_DATE can not be specified simultaneously"
@@ -318,9 +362,11 @@ _git-r3_set_gitdir() {
 	repo_name=${repo_name//\//_}
 
 	local distdir=${PORTAGE_ACTUAL_DISTDIR:-${DISTDIR}}
-	: ${EGIT3_STORE_DIR:=${distdir}/git3-src}
+	: "${EGIT3_STORE_DIR:=${distdir}/git3-src}"
 
 	GIT_DIR=${EGIT3_STORE_DIR}/${repo_name}
+
+	EVCS_STORE_DIRS+=( "${GIT_DIR}" )
 
 	if [[ ! -d ${EGIT3_STORE_DIR} && ! ${EVCS_OFFLINE} ]]; then
 		(
@@ -345,7 +391,7 @@ _git-r3_set_gitdir() {
 			umask "${EVCS_UMASK}" || die "Bad options to umask: ${EVCS_UMASK}"
 		fi
 		mkdir "${GIT_DIR}" || die
-		git init --bare || die
+		git init --bare -b __init__ || die
 		if [[ ${saved_umask} ]]; then
 			umask "${saved_umask}" || die
 		fi
@@ -381,6 +427,7 @@ _git-r3_set_submodules() {
 
 		l=${l#submodule.}
 		local subname=${l%%.url=*}
+		local is_manually_specified=
 
 		# filter out on EGIT_SUBMODULES
 		if declare -p EGIT_SUBMODULES &>/dev/null; then
@@ -401,13 +448,14 @@ _git-r3_set_submodules() {
 				continue
 			else
 				einfo "Using submodule ${parent_path}${subname}"
+				is_manually_specified=1
 			fi
 		fi
 
 		# skip modules that have 'update = none', bug #487262.
 		local upd=$(echo "${data}" | git config -f /dev/fd/0 \
 			submodule."${subname}".update)
-		[[ ${upd} == none ]] && continue
+		[[ ${upd} == none && ! ${is_manually_specified} ]] && continue
 
 		# https://github.com/git/git/blob/master/refs.c#L31
 		# we are more restrictive than git itself but that should not
@@ -534,7 +582,7 @@ git-r3_fetch() {
 	local r
 	for r in "${repos[@]}"; do
 		if [[ ${r} == git:* || ${r} == http:* ]]; then
-			ewarn "git-r3: ${r%%:*} protocol is completely unsecure and may render the ebuild"
+			ewarn "git-r3: ${r%%:*} protocol is completely insecure and may render the ebuild"
 			ewarn "easily susceptible to MITM attacks (even if used only as fallback). Please"
 			ewarn "use https instead."
 			ewarn "[URI: ${r}]"
@@ -559,49 +607,46 @@ git-r3_fetch() {
 	local commit_id=${2:-${EGIT_COMMIT}}
 	local commit_date=${4:-${EGIT_COMMIT_DATE}}
 
-	# support new override API for EAPI 6+
-	if [[ ${EAPI} != 5 ]]; then
-		# get the name and do some more processing:
-		# 1) kill .git suffix,
-		# 2) underscore (remaining) non-variable characters,
-		# 3) add preceding underscore if it starts with a digit,
-		# 4) uppercase.
-		local override_name=${GIT_DIR##*/}
-		override_name=${override_name%.git}
-		override_name=${override_name//[^a-zA-Z0-9_]/_}
-		override_name=${override_name^^}
+	# get the name and do some more processing:
+	# 1) kill .git suffix,
+	# 2) underscore (remaining) non-variable characters,
+	# 3) add preceding underscore if it starts with a digit,
+	# 4) uppercase.
+	local override_name=${GIT_DIR##*/}
+	override_name=${override_name%.git}
+	override_name=${override_name//[^a-zA-Z0-9_]/_}
+	override_name=${override_name^^}
 
-		local varmap=(
-			REPO:repos
-			BRANCH:branch_name
-			COMMIT:commit_id
-			COMMIT_DATE:commit_date
-		)
+	local varmap=(
+		REPO:repos
+		BRANCH:branch_name
+		COMMIT:commit_id
+		COMMIT_DATE:commit_date
+	)
 
-		local localvar livevar live_warn= override_vars=()
-		for localvar in "${varmap[@]}"; do
-			livevar=EGIT_OVERRIDE_${localvar%:*}_${override_name}
-			localvar=${localvar#*:}
-			override_vars+=( "${livevar}" )
+	local localvar livevar live_warn= override_vars=()
+	for localvar in "${varmap[@]}"; do
+		livevar=EGIT_OVERRIDE_${localvar%:*}_${override_name}
+		localvar=${localvar#*:}
+		override_vars+=( "${livevar}" )
 
-			if [[ -n ${!livevar} ]]; then
-				[[ ${localvar} == repos ]] && repos=()
-				live_warn=1
-				ewarn "Using ${livevar}=${!livevar}"
-				declare "${localvar}=${!livevar}"
-			fi
-		done
-
-		if [[ ${live_warn} ]]; then
-			ewarn "No support will be provided."
-		else
-			einfo "To override fetched repository properties, use:"
-			local x
-			for x in "${override_vars[@]}"; do
-				einfo "  ${x}"
-			done
-			einfo
+		if [[ -n ${!livevar} ]]; then
+			[[ ${localvar} == repos ]] && repos=()
+			live_warn=1
+			ewarn "Using ${livevar}=${!livevar}"
+			declare "${localvar}=${!livevar}"
 		fi
+	done
+
+	if [[ ${live_warn} ]]; then
+		ewarn "No support will be provided."
+	else
+		einfo "To override fetched repository properties, use:"
+		local x
+		for x in "${override_vars[@]}"; do
+			einfo "  ${x}"
+		done
+		einfo
 	fi
 
 	# set final variables after applying overrides
@@ -637,6 +682,8 @@ git-r3_fetch() {
 					# and HEAD in case we need the default branch
 					# (we keep it in refs/git-r3 since otherwise --prune interferes)
 					"+HEAD:refs/git-r3/HEAD"
+					# fetch the specifc commit_ref to deal with orphan commits
+					"${remote_ref}"
 				)
 			else # single or shallow
 				local fetch_l fetch_r
@@ -764,6 +811,39 @@ git-r3_fetch() {
 			fi
 		fi
 
+		if [[ ${EGIT_LFS} ]]; then
+			# Fetch the LFS files from the current ref (if any)
+			local lfs_fetch_command=( git lfs fetch "${r}" "${remote_ref}" )
+
+			case "${EGIT_LFS_CLONE_TYPE}" in
+				shallow)
+					if [[ -d ${GIT_DIR}/lfs/objects ]] && ! rmdir "${GIT_DIR}"/lfs/objects 2> /dev/null; then
+						# Only prune if the lfs directory is not empty.
+						# The prune command can take a very long time to resolve even if there are no lfs objects.
+						lfs_fetch_command+=(
+							--prune
+						)
+					fi
+					;;
+				single)
+					;;
+				mirror)
+					lfs_fetch_command+=(
+						--all
+					)
+					;;
+				*)
+					die "Invalid EGIT_LFS_CLONE_TYPE=${EGIT_LFS_CLONE_TYPE}"
+			esac
+
+			set -- "${lfs_fetch_command[@]}"
+			echo "${@}" >&2
+			"${@}" || die
+		elif [[ -d ${GIT_DIR}/lfs && ${EGIT_LFS_CLONE_TYPE} == shallow ]]; then
+			# Cleanup the LFS files from old checkouts if LFS support has been turned off.
+			rm -fr ${GIT_DIR}/lfs || die
+		fi
+
 		success=1
 		break
 	done
@@ -773,7 +853,7 @@ git-r3_fetch() {
 	[[ ${success} ]] || die "Unable to fetch from any of EGIT_REPO_URI"
 
 	# submodules can reference commits in any branch
-	# always use the 'mirror' mode to accomodate that, bug #503332
+	# always use the 'mirror' mode to accommodate that, bug #503332
 	local EGIT_CLONE_TYPE=mirror
 
 	# recursively fetch submodules
@@ -878,7 +958,12 @@ git-r3_checkout() {
 		# use git init+fetch instead of clone since the latter doesn't like
 		# non-empty directories.
 
-		git init --quiet || die
+		git init --quiet -b __init__ || die
+		if [[ ${EGIT_LFS} ]]; then
+			# The "skip-repo" flag will just skip the installation of the pre-push hooks.
+			# We don't use these hook as we don't do any pushes
+			git lfs install --local --skip-repo || die
+		fi
 		# setup 'alternates' to avoid copying objects
 		echo "${orig_repo}/objects" > "${GIT_DIR}"/objects/info/alternates || die
 		# now copy the refs
@@ -886,6 +971,11 @@ git-r3_checkout() {
 		if [[ -f ${orig_repo}/packed-refs ]]; then
 			cp "${orig_repo}"/packed-refs "${GIT_DIR}"/packed-refs || die
 		fi
+
+		# mark this directory as "safe" so that src_install() can access it
+		# https://bugs.gentoo.org/879353
+		git config --global --add safe.directory \
+			"$(cd "${out_dir}" && echo "${PWD}")" || die
 
 		# (no need to copy HEAD, we will set it via checkout)
 
@@ -904,6 +994,16 @@ git-r3_checkout() {
 		fi
 		echo "${@}" >&2
 		"${@}" || die "git checkout ${remote_ref:-${new_commit_id}} failed"
+
+		# If any filters in any of the ".gitattributes" files specifies lfs,
+		# then this repo is most likely storing files with git lfs.
+		local has_git_lfs_filters=$(
+			git grep "filter=lfs" -- ".gitattributes" "**/.gitattributes"
+		)
+		if [[ $has_git_lfs_filters ]]; then
+			# This is used for issuing QA warnings regarding LFS files in the repo (or lack thereof)
+			_EGIT_LFS_FILTERS_FOUND="yes"
+		fi
 	}
 	git-r3_sub_checkout
 	unset -f git-r3_sub_checkout
@@ -1053,6 +1153,13 @@ git-r3_src_unpack() {
 	_git-r3_env_setup
 	git-r3_src_fetch
 	git-r3_checkout
+
+	if [[ ! ${EGIT_LFS} && ${_EGIT_LFS_FILTERS_FOUND} ]]; then
+		eqawarn "QA Notice: There are Git LFS filters setup in the cloned repo, consider using EGIT_LFS!"
+	fi
+	if [[ ${EGIT_LFS} && ! ${_EGIT_LFS_FILTERS_FOUND} ]]; then
+		eqawarn "QA Notice: There are no Git LFS filters setup in the cloned repo. EGIT_LFS will do nothing!"
+	fi
 }
 
 # https://bugs.gentoo.org/show_bug.cgi?id=482666
@@ -1074,5 +1181,6 @@ git-r3_pkg_needrebuild() {
 # 'export' locally until this gets into EAPI
 pkg_needrebuild() { git-r3_pkg_needrebuild; }
 
-_GIT_R3=1
 fi
+
+EXPORT_FUNCTIONS src_unpack

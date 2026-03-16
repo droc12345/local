@@ -1,10 +1,10 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: libtool.eclass
 # @MAINTAINER:
 # base-system@gentoo.org
-# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: quickly update bundled libtool code
 # @DESCRIPTION:
 # This eclass patches ltmain.sh distributed with libtoolized packages with the
@@ -17,13 +17,27 @@
 if [[ -z ${_LIBTOOL_ECLASS} ]]; then
 _LIBTOOL_ECLASS=1
 
-case ${EAPI:-0} in
-	0|1|2|3|4|5|6) DEPEND=">=app-portage/elt-patches-20170815" ;;
-	7|8) BDEPEND=">=app-portage/elt-patches-20170815" ;;
-	*) die "${ECLASS}: EAPI ${EAPI} not supported" ;;
+case ${EAPI} in
+	7|8|9) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 inherit toolchain-funcs
+
+# @ECLASS_VARIABLE: LIBTOOL_DEPEND
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# Contains dependency on app-portage/elt-patches in *DEPEND format.
+LIBTOOL_DEPEND=">=app-portage/elt-patches-20250306"
+
+# @ECLASS_VARIABLE: LIBTOOL_AUTO_DEPEND
+# @PRE_INHERIT
+# @DESCRIPTION:
+# Set to 'no' to disable automatically adding to DEPEND.  This lets
+# ebuilds form conditional depends by using ${LIBTOOL_DEPEND} in
+# their own DEPEND string.
+: "${LIBTOOL_AUTO_DEPEND:=yes}"
+[[ ${LIBTOOL_AUTO_DEPEND} != "no" ]] && BDEPEND=${LIBTOOL_DEPEND}
 
 # @FUNCTION: elibtoolize
 # @USAGE: [dirs] [--portage] [--reverse-deps] [--patch-only] [--remove-internal-dep=xxx] [--shallow] [--no-uclibc]
@@ -42,8 +56,5 @@ elibtoolize() {
 	LD=$(tc-getLD) \
 	eltpatch "${@}" || die "eltpatch failed"
 }
-
-uclibctoolize() { die "Use elibtoolize"; }
-darwintoolize() { die "Use elibtoolize"; }
 
 fi

@@ -31,8 +31,6 @@ EXPORT_FUNCTIONS src_install pkg_postinst
 # - depend -- add it to DEPEND+RDEPEND with the binding slot operator (the
 # default)
 
-[[ ${EAPI} == [678] ]] && inherit eapi8-dosym
-
 # @ECLASS_VARIABLE: MPV_REQ_USE
 # @DEFAULT_UNSET
 # @PRE_INHERIT
@@ -118,12 +116,11 @@ mpv-plugin_src_install() {
 		doins -r "${f}"
 	done
 
-	[[ ${EAPI} == [678] ]] && dosym=dosym8
 	use autoload && if _mpv-plugin_has_main; then
-		"${dosym}" -r "${MPV_INSTALL_DIR}" "/etc/mpv/scripts/${PN}"
+		dosym -r "${MPV_INSTALL_DIR}" "/etc/mpv/scripts/${PN}"
 	else
 		for f in "${MPV_PLUGIN_FILES[@]}"; do
-			"${dosym}" -r "${MPV_INSTALL_DIR}/${f}" "/etc/mpv/scripts/${f}"
+			dosym -r "${MPV_INSTALL_DIR}/${f}" "/etc/mpv/scripts/${f}"
 		done
 	fi
 

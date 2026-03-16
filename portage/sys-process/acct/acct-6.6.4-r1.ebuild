@@ -1,8 +1,8 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-inherit autotools systemd
+EAPI=8
+inherit autotools flag-o-matic systemd tmpfiles
 
 DESCRIPTION="GNU system accounting utilities"
 HOMEPAGE="https://savannah.gnu.org/projects/acct/"
@@ -25,15 +25,21 @@ src_prepare() {
 }
 
 src_configure() {
+	append-flags -std=gnu17
+
 	econf --enable-linux-multiformat
 }
 
 src_install() {
 	default
+
 	keepdir /var/account
+
 	newinitd "${FILESDIR}"/acct.initd-r2 acct
 	newconfd "${FILESDIR}"/acct.confd-r1 acct
+
 	systemd_dounit "${FILESDIR}"/acct.service
+
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}"/acct.logrotate-r1 psacct
 
@@ -43,4 +49,8 @@ src_install() {
 	# accton in / is only a temp workaround for #239748
 	dodir /sbin
 	mv "${ED}"/usr/sbin/accton "${ED}"/sbin/ || die
+}
+
+pkg_postinst() {
+	tmpfiles_process acct.conf
 }

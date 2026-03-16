@@ -1,10 +1,10 @@
-# Copyright 2011-2021 Gentoo Authors
+# Copyright 2011-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: systemd.eclass
 # @MAINTAINER:
 # systemd@gentoo.org
-# @SUPPORTED_EAPIS: 0 1 2 3 4 5 6 7
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: helper functions to install systemd units
 # @DESCRIPTION:
 # This eclass provides a set of functions to install unit files for
@@ -24,18 +24,17 @@
 # }
 # @CODE
 
-inherit toolchain-funcs
+if [[ -z ${_SYSTEMD_ECLASS} ]]; then
+_SYSTEMD_ECLASS=1
 
-case ${EAPI:-0} in
-	0|1|2|3|4|5|6|7|8) ;;
-	*) die "${ECLASS}.eclass API in EAPI ${EAPI} not yet established."
+case ${EAPI} in
+	7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ${EAPI:-0} == [0123456] ]]; then
-	DEPEND="virtual/pkgconfig"
-else
-	BDEPEND="virtual/pkgconfig"
-fi
+inherit toolchain-funcs
+
+BDEPEND="virtual/pkgconfig"
 
 # @FUNCTION: _systemd_get_dir
 # @USAGE: <variable-name> <fallback-directory>
@@ -48,22 +47,26 @@ _systemd_get_dir() {
 	[[ ${#} -eq 2 ]] || die "Usage: ${FUNCNAME} <variable-name> <fallback-directory>"
 	local variable=${1} fallback=${2} d
 
+	# https://github.com/pkgconf/pkgconf/issues/205
+	local -x PKG_CONFIG_FDO_SYSROOT_RULES=1
+
 	if $(tc-getPKG_CONFIG) --exists systemd; then
 		d=$($(tc-getPKG_CONFIG) --variable="${variable}" systemd) || die
-		d=${d#${EPREFIX}}
 	else
-		d=${fallback}
+		d="${EPREFIX}${fallback}"
 	fi
 
 	echo "${d}"
 }
 
-# @FUNCTION: _systemd_get_systemunitdir
+# @FUNCTION: _systemd_unprefix
+# @USAGE: <function-name>
 # @INTERNAL
 # @DESCRIPTION:
-# Get unprefixed unitdir.
-_systemd_get_systemunitdir() {
-	_systemd_get_dir systemdsystemunitdir /lib/systemd/system
+# Calls the specified function and removes ${EPREFIX} from the result.
+_systemd_unprefix() {
+	local d=$("${@}")
+	echo "${d#"${EPREFIX}"}"
 }
 
 # @FUNCTION: systemd_get_systemunitdir
@@ -72,27 +75,9 @@ _systemd_get_systemunitdir() {
 # ${D}).  This function always succeeds, even if systemd is not
 # installed.
 systemd_get_systemunitdir() {
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
-	echo "${EPREFIX}$(_systemd_get_systemunitdir)"
-}
-
-# @FUNCTION: systemd_get_unitdir
-# @DESCRIPTION:
-# Deprecated alias for systemd_get_systemunitdir.
-systemd_get_unitdir() {
-	[[ ${EAPI} == [012345] ]] || die "${FUNCNAME} is banned in EAPI 6, use systemd_get_systemunitdir instead"
-
-	systemd_get_systemunitdir
-}
-
-# @FUNCTION: _systemd_get_userunitdir
-# @INTERNAL
-# @DESCRIPTION:
-# Get unprefixed userunitdir.
-_systemd_get_userunitdir() {
-	_systemd_get_dir systemduserunitdir /usr/lib/systemd/user
+	_systemd_get_dir systemdsystemunitdir /usr/lib/systemd/system
 }
 
 # @FUNCTION: systemd_get_userunitdir
@@ -101,18 +86,9 @@ _systemd_get_userunitdir() {
 # ${D}). This function always succeeds, even if systemd is not
 # installed.
 systemd_get_userunitdir() {
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
-	echo "${EPREFIX}$(_systemd_get_userunitdir)"
-}
-
-# @FUNCTION: _systemd_get_utildir
-# @INTERNAL
-# @DESCRIPTION:
-# Get unprefixed utildir.
-_systemd_get_utildir() {
-	_systemd_get_dir systemdutildir /lib/systemd
+	_systemd_get_dir systemduserunitdir /usr/lib/systemd/user
 }
 
 # @FUNCTION: systemd_get_utildir
@@ -121,43 +97,49 @@ _systemd_get_utildir() {
 # ${D}). This function always succeeds, even if systemd is not
 # installed.
 systemd_get_utildir() {
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
-	echo "${EPREFIX}$(_systemd_get_utildir)"
-}
-
-# @FUNCTION: _systemd_get_systemgeneratordir
-# @INTERNAL
-# @DESCRIPTION:
-# Get unprefixed systemgeneratordir.
-_systemd_get_systemgeneratordir() {
-	_systemd_get_dir systemdsystemgeneratordir /lib/systemd/system-generators
+	_systemd_get_dir systemdutildir /usr/lib/systemd
 }
 
 # @FUNCTION: systemd_get_systemgeneratordir
 # @DESCRIPTION:
 # Output the path for the systemd system generator directory (not including
-# ${D}). This function always succeeds, even if systemd is not
-# installed.
+# ${D}). This function always succeeds, even if systemd is not installed.
 systemd_get_systemgeneratordir() {
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
-	echo "${EPREFIX}$(_systemd_get_systemgeneratordir)"
+	_systemd_get_dir systemdsystemgeneratordir /usr/lib/systemd/system-generators
+}
+
+# @FUNCTION: systemd_get_systempresetdir
+# @DESCRIPTION:
+# Output the path for the systemd system preset directory (not including
+# ${D}). This function always succeeds, even if systemd is not installed.
+systemd_get_systempresetdir() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	_systemd_get_dir systemdsystempresetdir /usr/lib/systemd/system-preset
+}
+
+# @FUNCTION: systemd_get_sleepdir
+# @DESCRIPTION:
+# Output the path for the system sleep directory.
+systemd_get_sleepdir() {
+	debug-print-function ${FUNCNAME} "$@"
+	_systemd_get_dir systemdsleepdir /usr/lib/systemd/system-sleep
 }
 
 # @FUNCTION: systemd_dounit
 # @USAGE: <unit>...
 # @DESCRIPTION:
-# Install systemd unit(s). Uses doins, thus it is fatal in EAPI 4
-# and non-fatal in earlier EAPIs.
+# Install systemd unit(s). Uses doins, thus it is fatal.
 systemd_dounit() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	(
 		insopts -m 0644
-		insinto "$(_systemd_get_systemunitdir)"
+		insinto "$(_systemd_unprefix systemd_get_systemunitdir)"
 		doins "${@}"
 	)
 }
@@ -165,14 +147,13 @@ systemd_dounit() {
 # @FUNCTION: systemd_newunit
 # @USAGE: <old-name> <new-name>
 # @DESCRIPTION:
-# Install systemd unit with a new name. Uses newins, thus it is fatal
-# in EAPI 4 and non-fatal in earlier EAPIs.
+# Install systemd unit with a new name. Uses newins, thus it is fatal.
 systemd_newunit() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	(
 		insopts -m 0644
-		insinto "$(_systemd_get_systemunitdir)"
+		insinto "$(_systemd_unprefix systemd_get_systemunitdir)"
 		newins "${@}"
 	)
 }
@@ -180,14 +161,13 @@ systemd_newunit() {
 # @FUNCTION: systemd_douserunit
 # @USAGE: <unit>...
 # @DESCRIPTION:
-# Install systemd user unit(s). Uses doins, thus it is fatal in EAPI 4
-# and non-fatal in earlier EAPIs.
+# Install systemd user unit(s). Uses doins, thus it is fatal.
 systemd_douserunit() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	(
 		insopts -m 0644
-		insinto "$(_systemd_get_userunitdir)"
+		insinto "$(_systemd_unprefix systemd_get_userunitdir)"
 		doins "${@}"
 	)
 }
@@ -196,13 +176,13 @@ systemd_douserunit() {
 # @USAGE: <old-name> <new-name>
 # @DESCRIPTION:
 # Install systemd user unit with a new name. Uses newins, thus it
-# is fatal in EAPI 4 and non-fatal in earlier EAPIs.
+# is fatal.
 systemd_newuserunit() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	(
 		insopts -m 0644
-		insinto "$(_systemd_get_userunitdir)"
+		insinto "$(_systemd_unprefix systemd_get_userunitdir)"
 		newins "${@}"
 	)
 }
@@ -215,7 +195,7 @@ systemd_newuserunit() {
 # <conf-file> with the .conf suffix stripped is used
 # (e.g. foo.service.conf -> foo.service.d/00gentoo.conf).
 systemd_install_serviced() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	local src=${1}
 	local service=${2}
@@ -237,45 +217,45 @@ systemd_install_serviced() {
 	)
 }
 
-# @FUNCTION: systemd_dotmpfilesd
-# @USAGE: <tmpfilesd>...
+# @FUNCTION: systemd_install_dropin
+# @USAGE: [--user] <unit> <conf-file>
 # @DESCRIPTION:
-# Deprecated in favor of tmpfiles.eclass.
-#
-# Install systemd tmpfiles.d files. Uses doins, thus it is fatal
-# in EAPI 4 and non-fatal in earlier EAPIs.
-systemd_dotmpfilesd() {
-	debug-print-function ${FUNCNAME} "${@}"
+# Install <conf-file> as the dropin file <unit>.d/00gentoo.conf,
+# overriding the settings of <unit>.
+# Defaults to system unit dropins, unless --user is provided,
+# which causes the dropin to be installed for user units.
+# The required argument <conf-file> may be '-', in which case the
+# file is read from stdin and <unit> must also be specified.
+# @EXAMPLE:
+# systemd_install_dropin foo.service "${FILESDIR}/foo.service.conf"
+# systemd_install_dropin foo.service - <<-EOF
+# 	[Service]
+# 	RestartSec=120
+# EOF
+systemd_install_dropin() {
+	debug-print-function ${FUNCNAME} "$@"
 
-	for f; do
-		[[ ${f} == *.conf ]] \
-			|| die 'tmpfiles.d files need to have .conf suffix.'
-	done
+	local basedir
+	if [[ $# -ge 1 ]] && [[ $1 == "--user" ]]; then
+		basedir=$(_systemd_unprefix systemd_get_userunitdir)
+		shift 1
+	else
+		basedir=$(_systemd_unprefix systemd_get_systemunitdir)
+	fi
+
+	local unit=${1}
+	local src=${2}
+
+	[[ ${unit} ]] || die "No unit specified"
+	[[ ${src} ]] || die "No conf file specified"
+
+	# avoid potentially common mistake
+	[[ ${unit} == *.d ]] && die "Unit ${unit} must not have .d suffix"
 
 	(
 		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d/
-		doins "${@}"
-	)
-}
-
-# @FUNCTION: systemd_newtmpfilesd
-# @USAGE: <old-name> <new-name>.conf
-# @DESCRIPTION:
-# Deprecated in favor of tmpfiles.eclass.
-#
-# Install systemd tmpfiles.d file under a new name. Uses newins, thus it
-# is fatal in EAPI 4 and non-fatal in earlier EAPIs.
-systemd_newtmpfilesd() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	[[ ${2} == *.conf ]] \
-		|| die 'tmpfiles.d files need to have .conf suffix.'
-
-	(
-		insopts -m 0644
-		insinto /usr/lib/tmpfiles.d/
-		newins "${@}"
+		insinto "${basedir}/${unit}".d
+		newins "${src}" 00gentoo.conf
 	)
 }
 
@@ -283,16 +263,15 @@ systemd_newtmpfilesd() {
 # @USAGE: <target> <service>
 # @DESCRIPTION:
 # Enable service in desired target, e.g. install a symlink for it.
-# Uses dosym, thus it is fatal in EAPI 4 and non-fatal in earlier
-# EAPIs.
+# Uses dosym, thus it is fatal.
 systemd_enable_service() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ ${#} -eq 2 ]] || die "Synopsis: systemd_enable_service target service"
 
 	local target=${1}
 	local service=${2}
-	local ud=$(_systemd_get_systemunitdir)
+	local ud=$(_systemd_unprefix systemd_get_systemunitdir)
 	local destname=${service##*/}
 
 	dodir "${ud}"/"${target}".wants && \
@@ -307,12 +286,11 @@ systemd_enable_service() {
 # and name, while the remaining arguments list service units that will
 # be added to that file.
 #
-# Uses doins, thus it is fatal in EAPI 4 and non-fatal in earlier
-# EAPIs.
+# Uses doins, thus it is fatal.
 #
 # Doc: https://www.freedesktop.org/wiki/Software/systemd/timedated/
 systemd_enable_ntpunit() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 	if [[ ${#} -lt 2 ]]; then
 		die "Usage: systemd_enable_ntpunit <NN-name> <service>..."
 	fi
@@ -337,7 +315,7 @@ systemd_enable_ntpunit() {
 
 	(
 		insopts -m 0644
-		insinto "$(_systemd_get_utildir)"/ntp-units.d
+		insinto "$(_systemd_unprefix systemd_get_utildir)"/ntp-units.d
 		doins "${T}"/${ntpunit_name}.list
 	)
 	local ret=${?}
@@ -345,46 +323,6 @@ systemd_enable_ntpunit() {
 	rm "${T}"/${ntpunit_name}.list || die
 
 	return ${ret}
-}
-
-# @FUNCTION: systemd_with_unitdir
-# @USAGE: [<configure-option-name>]
-# @DESCRIPTION:
-# Note: deprecated and banned in EAPI 6. Please use full --with-...=
-# parameter for improved ebuild readability.
-#
-# Output '--with-systemdsystemunitdir' as expected by systemd-aware configure
-# scripts. This function always succeeds. Its output may be quoted in order
-# to preserve whitespace in paths. systemd_to_myeconfargs() is preferred over
-# this function.
-#
-# If upstream does use invalid configure option to handle installing systemd
-# units (e.g. `--with-systemdunitdir'), you can pass the 'suffix' as an optional
-# argument to this function (`$(systemd_with_unitdir systemdunitdir)'). Please
-# remember to report a bug upstream as well.
-systemd_with_unitdir() {
-	[[ ${EAPI:-0} != [012345] ]] && die "${FUNCNAME} is banned in EAPI ${EAPI}, use --with-${1:-systemdsystemunitdir}=\"\$(systemd_get_systemunitdir)\" instead"
-
-	debug-print-function ${FUNCNAME} "${@}"
-	local optname=${1:-systemdsystemunitdir}
-
-	echo --with-${optname}="$(systemd_get_systemunitdir)"
-}
-
-# @FUNCTION: systemd_with_utildir
-# @DESCRIPTION:
-# Note: deprecated and banned in EAPI 6. Please use full --with-...=
-# parameter for improved ebuild readability.
-#
-# Output '--with-systemdsystemutildir' as used by some packages to install
-# systemd helpers. This function always succeeds. Its output may be quoted
-# in order to preserve whitespace in paths.
-systemd_with_utildir() {
-	[[ ${EAPI:-0} != [012345] ]] && die "${FUNCNAME} is banned in EAPI ${EAPI}, use --with-systemdutildir=\"\$(systemd_get_utildir)\" instead"
-
-	debug-print-function ${FUNCNAME} "${@}"
-
-	echo --with-systemdutildir="$(systemd_get_utildir)"
 }
 
 # @FUNCTION: systemd_update_catalog
@@ -397,7 +335,7 @@ systemd_with_utildir() {
 #
 # See: https://www.freedesktop.org/wiki/Software/systemd/catalog
 systemd_update_catalog() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ ${EBUILD_PHASE} == post* ]] \
 		|| die "${FUNCNAME} disallowed during ${EBUILD_PHASE_FUNC:-${EBUILD_PHASE}}"
@@ -427,36 +365,13 @@ systemd_update_catalog() {
 #
 # See: man sd_booted
 systemd_is_booted() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ -d /run/systemd/system ]]
 	local ret=${?}
 
 	debug-print "${FUNCNAME}: [[ -d /run/systemd/system ]] -> ${ret}"
 	return ${ret}
-}
-
-# @FUNCTION: systemd_tmpfiles_create
-# @USAGE: <tmpfilesd> ...
-# @DESCRIPTION:
-# Deprecated in favor of tmpfiles.eclass.
-#
-# Invokes systemd-tmpfiles --create with given arguments.
-# Does nothing if ROOT != / or systemd-tmpfiles is not in PATH.
-# This function should be called from pkg_postinst.
-#
-# Generally, this function should be called with the names of any tmpfiles
-# fragments which have been installed, either by the build system or by a
-# previous call to systemd_dotmpfilesd. This ensures that any tmpfiles are
-# created without the need to reboot the system.
-systemd_tmpfiles_create() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	[[ ${EBUILD_PHASE} == postinst ]] || die "${FUNCNAME}: Only valid in pkg_postinst"
-	[[ ${#} -gt 0 ]] || die "${FUNCNAME}: Must specify at least one filename"
-	[[ ${ROOT:-/} == / ]] || return 0
-	type systemd-tmpfiles &> /dev/null || return 0
-	systemd-tmpfiles --create "${@}"
 }
 
 # @FUNCTION: systemd_reenable
@@ -479,3 +394,5 @@ systemd_reenable() {
 		fi
 	done
 }
+
+fi

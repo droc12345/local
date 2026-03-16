@@ -38,7 +38,7 @@
 # https://projects.gentoo.org/python/guide/
 
 case ${EAPI} in
-	5|6|7|8) ;;
+	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 

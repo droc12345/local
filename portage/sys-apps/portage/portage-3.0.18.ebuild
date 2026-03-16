@@ -1,14 +1,15 @@
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-DISTUTILS_USE_SETUPTOOLS=no
-PYTHON_COMPAT=( pypy3 python3_{7..11} )
+#DISTUTILS_USE_SETUPTOOLS=no
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( pypy3 python3_{11..14} )
 PYTHON_REQ_USE='bzip2(+),threads(+)'
 TMPFILES_OPTIONAL=1
 
-inherit distutils-r1 linux-info tmpfiles prefix
+inherit distutils-r1 linux-info tmpfiles python-r1 python-utils-r1
 
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage"
@@ -226,14 +227,22 @@ python_install_all() {
 
 	dotmpfiles "${FILESDIR}"/portage-ccache.conf
 
+	local bin_relocations='ebuild egencache emerge emerge-webrsync emirrordist glsa-check portageq quickpkg'
+	einfo "Moving admin scripts to the correct directory"
+	dodir /usr/bin
+	for target in ${bin_relocations}; do
+		einfo "Moving ${S}/usr/bin/${target} to ${ED}/usr/bin/${target}"
+		mv "${S}/bin/${target}" "${ED}/usr/bin/${target}" || die "bin scripts move failed!"
+	done
+
 	# Due to distutils/python-exec limitations
 	# these must be installed to /usr/bin.
 	local sbin_relocations='archive-conf dispatch-conf emaint env-update etc-update fixpackages regenworld'
 	einfo "Moving admin scripts to the correct directory"
 	dodir /usr/sbin
 	for target in ${sbin_relocations}; do
-		einfo "Moving /usr/bin/${target} to /usr/sbin/${target}"
-		mv "${ED}/usr/bin/${target}" "${ED}/usr/sbin/${target}" || die "sbin scripts move failed!"
+		einfo "Moving ${S} /usr/bin/${target} to /usr/sbin/${target}"
+		mv "${S}/bin/${target}" "${ED}/usr/sbin/${target}" || die "sbin scripts move failed!"
 	done
 }
 

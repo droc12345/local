@@ -1,10 +1,10 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: fcaps.eclass
 # @MAINTAINER:
 # base-system@gentoo.org
-# @SUPPORTED_EAPIS: 6 7 8
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: function to set POSIX file-based capabilities
 # @DESCRIPTION:
 # This eclass provides a function to set file-based capabilities on binaries.
@@ -30,8 +30,8 @@
 # @CODE
 
 case ${EAPI} in
-	6|7|8) ;;
-	*) die "EAPI ${EAPI:-0} is unsupported" ;;
+	7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 if [[ -z ${_FCAPS_ECLASS} ]]; then
@@ -41,12 +41,12 @@ IUSE="+filecaps"
 
 # Since it is needed in pkg_postinst() it must be in IDEPEND
 case ${EAPI} in
-	7) BDEPEND="filecaps? ( sys-libs/libcap )" ;& # fallthrough
-	6) RDEPEND="filecaps? ( sys-libs/libcap )" ;;
+	7) BDEPEND="filecaps? ( sys-libs/libcap )"
+	   RDEPEND="filecaps? ( sys-libs/libcap )" ;;
 	*) IDEPEND="filecaps? ( sys-libs/libcap )" ;;
 esac
 
-# @ECLASS-VARIABLE: FILECAPS
+# @ECLASS_VARIABLE: FILECAPS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # An array of fcap arguments to use to automatically execute fcaps.  See that
@@ -66,6 +66,12 @@ esac
 #
 # Note: If you override pkg_postinst, you must call fcaps_pkg_postinst yourself.
 
+# @ECLASS_VARIABLE: FCAPS_DENY_WORLD_READ
+# @USER_VARIABLE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# When set, deny read access on files updated by the fcaps function.
+
 # @FUNCTION: fcaps
 # @USAGE: [-o <owner>] [-g <group>] [-m <mode>] [-M <caps mode>] <capabilities> <file[s]>
 # @DESCRIPTION:
@@ -78,26 +84,28 @@ esac
 # appropriate path var ($D/$ROOT/etc...) will be prefixed based on the current
 # ebuild phase.
 #
-# The caps mode (default 711) is used to set the permission on the file if
-# capabilities were properly set on the file.
+# The caps mode is used to set the permission on the file if capabilities
+# were properly set on the file.  No change is applied by default.
 #
-# If the system is unable to set capabilities, it will use the specified user,
-# group, and mode (presumably to make the binary set*id).  The defaults there
-# are root:0 and 4711.  Otherwise, the ownership and permissions will be
-# unchanged.
+# If capabilities are not sucessfully applied, the permissions on the file are
+# updated according to the owner, group, and mode options, if provided.
+#
+# For example, "-m u+s" may be used to enable suid as a fallback when file caps
+# are unavailable.  This should be used with care, typically when the
+# application is written to handle dropping privileges itself.
 fcaps() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	if [[ ${EUID} != 0 ]] ; then
+	if [[ ${EUID} -ne 0 ]] ; then
 		einfo "Insufficient privileges to execute ${FUNCNAME}, skipping."
 		return 0
 	fi
 
 	# Process the user options first.
-	local owner='root'
-	local group='0'
-	local mode='4711'
-	local caps_mode='711'
+	local owner=
+	local group=
+	local mode=
+	local caps_mode=
 
 	while [[ $# -gt 0 ]] ; do
 		case $1 in
@@ -132,14 +140,19 @@ fcaps() {
 	for file ; do
 		[[ ${file} != /* ]] && file="${root}/${file}"
 
+		# Remove the read bits if requested.
+		if [[ -n ${FCAPS_DENY_WORLD_READ} ]]; then
+			chmod go-r "${file}" || die
+		fi
+
 		if use filecaps ; then
 			# Try to set capabilities.  Ignore errors when the
 			# fs doesn't support it, but abort on all others.
 			debug-print "${FUNCNAME}: setting caps '${caps}' on '${file}'"
 
-			# If everything goes well, we don't want the file to be readable
-			# by people.
-			chmod ${caps_mode} "${file}" || die
+			if [[ -n ${caps_mode} ]]; then
+				chmod ${caps_mode} "${file}" || die
+			fi
 
 			if ! out=$(LC_ALL=C setcap "${caps}" "${file}" 2>&1) ; then
 				case ${out} in
@@ -169,10 +182,15 @@ fcaps() {
 			fi
 		fi
 
-		# If we're still here, setcaps failed.
-		debug-print "${FUNCNAME}: setting owner/mode on '${file}'"
-		chown "${owner}:${group}" "${file}" || die
-		chmod ${mode} "${file}" || die
+		# If we're still here, setcaps failed or filecaps are disabled.
+		if [[ -n ${owner} || -n ${group} ]]; then
+			debug-print "${FUNCNAME}: setting owner on '${file}'"
+			chown "${owner}${group:+:}${group}" "${file}" || die
+		fi
+		if [[ -n ${mode} ]]; then
+			debug-print "${FUNCNAME}: setting mode on '${file}'"
+			chmod ${mode} "${file}" || die
+		fi
 	done
 }
 
@@ -191,6 +209,6 @@ fcaps_pkg_postinst() {
 	done
 }
 
-EXPORT_FUNCTIONS pkg_postinst
-
 fi
+
+EXPORT_FUNCTIONS pkg_postinst

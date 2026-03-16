@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: multilib.eclass
@@ -13,7 +13,7 @@ if [[ -z ${_MULTILIB_ECLASS} ]]; then
 _MULTILIB_ECLASS=1
 
 case ${EAPI} in
-	0|1|2|3|4|5|6|7|8) ;;
+	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
@@ -487,6 +487,17 @@ multilib_toolchain_setup() {
 	local save_restore_variables=(
 		CBUILD
 		CHOST
+		BUILD_AR
+		BUILD_CC
+		BUILD_CXX
+		BUILD_LD
+		BUILD_NM
+		BUILD_OBJCOPY
+		BUILD_PKG_CONFIG
+		BUILD_RANLIB
+		BUILD_READELF
+		BUILD_STRINGS
+		BUILD_STRIP
 		AR
 		CC
 		CXX
@@ -525,16 +536,30 @@ multilib_toolchain_setup() {
 		done
 		export _DEFAULT_ABI_SAVED="true"
 
-		# Set CBUILD only if not cross-compiling.
-		if [[ ${CBUILD} == "${CHOST}" ]]; then
-			export CBUILD=$(get_abi_CHOST $1)
-		fi
-
 		# Set the CHOST native first so that we pick up the native
 		# toolchain and not a cross-compiler by accident #202811.
 		#
 		# Make sure ${save_restore_variables[@]} list matches below.
 		export CHOST=$(get_abi_CHOST ${DEFAULT_ABI})
+
+		# Set CBUILD only if not cross-compiling.
+		if [[ "${_abi_saved_CBUILD:-${_abi_saved_CHOST}}" == "${_abi_saved_CHOST}" ]]; then
+			export CBUILD=${CHOST}
+		fi
+
+		# Derive the build-machine toolchain variables before we
+		# override the host-machine toolchain variables.
+		export BUILD_AR="$(tc-getBUILD_AR)" # Avoid 'ar', use "${CBUILD}-ar"
+		export BUILD_CC="$(tc-getBUILD_CC)" # Default ABI
+		export BUILD_CXX="$(tc-getBUILD_CXX)" # Default ABI
+		export BUILD_LD="$(tc-getBUILD_LD)" # Default ABI
+		export BUILD_NM="$(tc-getBUILD_NM)" # Avoid 'nm', use "${CBUILD}-nm"
+		export BUILD_OBJCOPY="$(tc-getBUILD_OBJCOPY)" # Avoid 'objcopy', use "${CBUILD}-objcopy"
+		export BUILD_PKG_CONFIG="$(tc-getBUILD_PKG_CONFIG)"
+		export BUILD_RANLIB="$(tc-getBUILD_RANLIB)" # Avoid 'ranlib', use "${CBUILD}-ranlib"
+		export BUILD_READELF="$(tc-getBUILD_READELF)" # Avoid 'readelf', use "${CBUILD}-readelf"
+		export BUILD_STRINGS="$(tc-getBUILD_STRINGS)" # Avoid 'strings', use "${CBUILD}-strings"
+		export BUILD_STRIP="$(tc-getBUILD_STRIP)" # Avoid 'strip', use "${CBUILD}-strip"
 
 		export AR="$(tc-getAR)" # Avoid 'ar', use '${CHOST}-ar'
 		export CC="$(tc-getCC) $(get_abi_CFLAGS)"
@@ -552,10 +577,16 @@ multilib_toolchain_setup() {
 		export STRIP="$(tc-getSTRIP)" # Avoid 'strip', use '${CHOST}-strip'
 
 		export CHOST=$(get_abi_CHOST $1)
-		export PKG_CONFIG_LIBDIR=${EPREFIX}/usr/$(get_libdir)/pkgconfig
-		export PKG_CONFIG_PATH=${EPREFIX}/usr/share/pkgconfig
-		export PKG_CONFIG_SYSTEM_INCLUDE_PATH=${EPREFIX}/usr/include
-		export PKG_CONFIG_SYSTEM_LIBRARY_PATH=${EPREFIX}/$(get_libdir):${EPREFIX}/usr/$(get_libdir)
+		export PKG_CONFIG_LIBDIR=${ESYSROOT}/usr/$(get_libdir)/pkgconfig
+		export PKG_CONFIG_PATH=${ESYSROOT}/usr/share/pkgconfig
+		export PKG_CONFIG_SYSTEM_INCLUDE_PATH=${ESYSROOT}/usr/include
+		export PKG_CONFIG_SYSTEM_LIBRARY_PATH=${ESYSROOT}/$(get_libdir):${ESYSROOT}/usr/$(get_libdir)
+
+		# Also set CBUILD so as not to trigger cross-compilation
+		# mode falsely in build systems.
+		if [[ "${_abi_saved_CBUILD:-${_abi_saved_CHOST}}" == "${_abi_saved_CHOST}" ]]; then
+			export CBUILD=${CHOST}
+		fi
 	fi
 }
 

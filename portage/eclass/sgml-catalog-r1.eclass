@@ -1,4 +1,4 @@
-# Copyright 2019 Gentoo Authors
+# Copyright 2019-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: sgml-catalog-r1.eclass
@@ -6,21 +6,19 @@
 # Michał Górny <mgorny@gentoo.org>
 # @AUTHOR:
 # Michał Górny <mgorny@gentoo.org>
-# @SUPPORTED_EAPIS: 7
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: Functions for installing SGML catalogs
 # @DESCRIPTION:
-# This eclass regenerates /etc/sgml/catalog, /etc/sgml.{,c}env
-# and /etc/env.d/93sgmltools-lite as necessary for the DocBook tooling.
-# This is done via exported pkg_postinst and pkg_postrm phases.
+# This eclass regenerates /etc/sgml/catalog as necessary for the DocBook
+# tooling. This is done via exported pkg_postinst and pkg_postrm phases.
 
-case ${EAPI:-0} in
-	7) ;;
-	*) die "Unsupported EAPI=${EAPI} for ${ECLASS}";;
+if [[ -z ${_SGML_CATALOG_R1_ECLASS} ]]; then
+_SGML_CATALOG_R1_ECLASS=1
+
+case ${EAPI} in
+	7|8|9) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
-
-EXPORT_FUNCTIONS pkg_postinst pkg_postrm
-
-if [[ ! ${_SGML_CATALOG_R1} ]]; then
 
 if [[ ${CATEGORY}/${PN} != app-text/sgml-common ]]; then
 	RDEPEND=">=app-text/sgml-common-0.6.3-r7"
@@ -37,7 +35,7 @@ sgml-catalog-r1_update_catalog() {
 
 	if [[ ${#cats[@]} -gt 0 ]]; then
 		ebegin "Updating ${EROOT}/etc/sgml/catalog"
-		printf 'CATALOG "%s"\n' "${cats[@]}" > "${T}"/catalog &&
+		printf 'CATALOG "%s"\n' "${cats[@]#${ROOT}}" > "${T}"/catalog &&
 		mv "${T}"/catalog "${EROOT}"/etc/sgml/catalog
 		eend "${?}"
 	else
@@ -50,16 +48,9 @@ sgml-catalog-r1_update_catalog() {
 
 # @FUNCTION: sgml-catalog-r1_update_env
 # @DESCRIPTION:
-# Regenerate environment variables and copy them to env.d.
+# Remove obsolete environment files. They can break tools such as asciidoc.
 sgml-catalog-r1_update_env() {
-	# gensgmlenv doesn't support overriding root
-	if [[ -z ${ROOT} && -x "${EPREFIX}/usr/bin/gensgmlenv" ]]; then
-		ebegin "Regenerating SGML environment variables"
-		gensgmlenv &&
-		grep -v export "${EPREFIX}/etc/sgml/sgml.env" > "${T}"/93sgmltools-lite &&
-		mv "${T}"/93sgmltools-lite "${EPREFIX}/etc/env.d/93sgmltools-lite"
-		eend "${?}"
-	fi
+	rm -f "${EROOT}"/etc/env.d/93sgmltools-lite "${EROOT}"/etc/sgml/sgml.{,c}env
 }
 
 sgml-catalog-r1_pkg_postinst() {
@@ -72,5 +63,6 @@ sgml-catalog-r1_pkg_postrm() {
 	sgml-catalog-r1_update_env
 }
 
-_SGML_CATALOG_R1=1
 fi
+
+EXPORT_FUNCTIONS pkg_postinst pkg_postrm

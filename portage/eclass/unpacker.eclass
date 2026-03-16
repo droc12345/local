@@ -1,10 +1,10 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: unpacker.eclass
 # @MAINTAINER:
 # base-system@gentoo.org
-# @SUPPORTED_EAPIS: 6 7 8
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: helpers for extraneous file formats and consistent behavior across EAPIs
 # @DESCRIPTION:
 # Some extraneous file formats are not part of PMS, or are only in certain
@@ -16,7 +16,7 @@
 #  - support partial unpacks?
 
 case ${EAPI} in
-	5|6|7|8) ;;
+	7|8) inherit eapi9-pipestatus ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
@@ -142,28 +142,23 @@ unpack_pdv() {
 	#	| dd ibs=${tailskip} skip=1 \
 	#	| gzip -dc \
 	#	> ${datafile}
+	local decompress=(cat)
 	if [ ${iscompressed} -eq 1 ] ; then
 		if [ ${istar} -eq 1 ] ; then
-			tail -c +$((${tailskip}+1)) "${src}" 2>/dev/null \
-				| head -c $((${metaskip}-${tailskip})) \
-				| tar -xzf -
+			decompress=(tar -xzf -)
 		else
-			tail -c +$((${tailskip}+1)) "${src}" 2>/dev/null \
-				| head -c $((${metaskip}-${tailskip})) \
-				| gzip -dc \
-				> ${datafile}
+			decompress=(gzip -dc)
 		fi
 	else
 		if [ ${istar} -eq 1 ] ; then
-			tail -c +$((${tailskip}+1)) "${src}" 2>/dev/null \
-				| head -c $((${metaskip}-${tailskip})) \
-				| tar --no-same-owner -xf -
-		else
-			tail -c +$((${tailskip}+1)) "${src}" 2>/dev/null \
-				| head -c $((${metaskip}-${tailskip})) \
-				> ${datafile}
+			decompress=(tar --no-same-owner -xf -)
 		fi
+
 	fi
+
+	tail -c +$((${tailskip}+1)) "${src}" 2>/dev/null \
+		| head -c $((${metaskip}-${tailskip})) \
+		"${decompress[@]}" > "${datafile}"
 	true
 	#[ -s "${datafile}" ] || die "failure unpacking pdv ('${metaskip}' '${tailskip}' '${datafile}')"
 	#assert "failure unpacking pdv ('${metaskip}' '${tailskip}' '${datafile}')"
@@ -218,7 +213,8 @@ unpack_makeself() {
 				skip=$(head -n ${skip} "${src}" | wc -c)
 				exe="dd"
 				;;
-			2.4.5)
+			# 2.6.0's header also contains "2.5.0"; unpack_makeself works in both cases
+			2.4.5|2.5.0|2.7.0|2.7.1)
 				# e.g.: skip="713"
 				skip=$(
 					sed -n -e '/^skip=/{s:skip="\(.*\)":\1:p;q}' "${src}"
@@ -280,7 +276,7 @@ unpack_makeself() {
 
 	[[ -z ${decomp} ]] && decomp=$(_unpacker_get_decompressor ".${suffix}")
 	"${exe[@]}" | ${decomp} | tar --no-same-owner -xf -
-	assert "failure unpacking (${filetype}) makeself ${src##*/} ('${ver}' +${skip})"
+	pipestatus || die "failure unpacking (${filetype}) makeself ${src##*/} ('${ver}' +${skip})"
 }
 
 # @FUNCTION: unpack_deb
@@ -309,7 +305,7 @@ unpack_deb() {
 					if [[ ${f} = "data.tar"* ]] ; then
 						local decomp=$(_unpacker_get_decompressor "${f}")
 						head -c "${size}" | ${decomp:-cat}
-						assert "unpacking ${f} from ${deb} failed"
+						pipestatus || die "unpacking ${f} from ${deb} failed"
 						break
 					else
 						head -c "${size}" > /dev/null # trash it
@@ -319,14 +315,14 @@ unpack_deb() {
 		else
 			local f=$(
 				$(tc-getBUILD_AR) t "${deb}" | grep ^data.tar
-				assert "data not found in ${deb}"
+				pipestatus || die "data not found in ${deb}"
 			)
 			local decomp=$(_unpacker_get_decompressor "${f}")
 			$(tc-getBUILD_AR) p "${deb}" "${f}" | ${decomp:-cat}
-			assert "unpacking ${f} from ${deb} failed"
+			pipestatus || die "unpacking ${f} from ${deb} failed"
 		fi
 	} | tar --no-same-owner -xf -
-	assert "unpacking ${deb} failed"
+	pipestatus || die "unpacking ${deb} failed"
 }
 
 # @FUNCTION: unpack_cpio
@@ -375,10 +371,15 @@ unpack_7z() {
 	local p7z=$(find_unpackable_file "$1")
 	unpack_banner "${p7z}"
 
+	local cmd7z="7z"
+	if command -v 7zz 1>/dev/null 2>&1; then
+		cmd7z="7zz"
+	fi
+
 	# warning: putting local and command substitution in a single call
 	# discards the exit status!
 	local output
-	output="$(7z x -y "${p7z}")"
+	output="$($cmd7z x -y "${p7z}")"
 	if [ $? -ne 0 ]; then
 		echo "${output}" >&2
 		die "unpacking ${p7z} failed (arch=unpack_7z)"
@@ -430,10 +431,7 @@ _unpacker_get_decompressor() {
 		echo "xz -T$(makeopts_jobs) -dc" ;;
 	*.lz)
 		find_lz_unpacker() {
-			local has_version_arg="-b"
-
-			[[ ${EAPI} == 6 ]] && has_version_arg="--host-root"
-			if has_version "${has_version_arg}" ">=app-arch/xz-utils-5.4.0" ; then
+			if has_version -b ">=app-arch/xz-utils-5.4.0" ; then
 				echo xz
 				return
 			fi
@@ -488,7 +486,7 @@ unpack_gpkg() {
 	mkdir -p "${dirname}" || die
 	tar -xOf "${gpkg}" "${images[0]}" | ${decomp:-cat} |
 		tar --no-same-owner -C "${dirname}" -xf -
-	assert "Unpacking ${gpkg} failed"
+	pipestatus || die "Unpacking ${gpkg} failed"
 }
 
 # @FUNCTION: _unpacker
@@ -537,7 +535,7 @@ _unpacker() {
 	esac
 
 	# 7z, rar and lha/lzh are handled by package manager in EAPI < 8
-	if [[ ${EAPI} != [67] ]]; then
+	if [[ ${EAPI} != 7 ]]; then
 		case ${m} in
 		*.7z)
 			arch="unpack_7z" ;;
@@ -566,7 +564,7 @@ _unpacker() {
 		${comp} < "${a}" | ${arch} -
 	fi
 
-	assert "unpacking ${a} failed (comp=${comp} arch=${arch})"
+	pipestatus || die "unpacking ${a} failed (comp=${comp} arch=${arch})"
 }
 
 # @FUNCTION: unpacker
@@ -609,11 +607,17 @@ unpacker_src_uri_depends() {
 	for uri in "$@" ; do
 		case ${uri,,} in
 		*.cpio.*|*.cpio)
-			deps[cpio]="app-arch/cpio" ;;
+			deps[cpio]="app-alternatives/cpio" ;;
 		*.rar)
 			deps[rar]="app-arch/unrar" ;;
 		*.7z)
-			deps[7z]="app-arch/p7zip" ;;
+			deps[7z]="
+				|| (
+					app-arch/7zip
+					app-arch/p7zip
+				)
+			"
+			;;
 		*.xz)
 			deps[xz]="app-arch/xz-utils" ;;
 		*.zip)

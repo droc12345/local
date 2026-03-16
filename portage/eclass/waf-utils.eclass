@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: waf-utils.eclass
@@ -16,14 +16,14 @@
 # Its main features are support of common portage default settings.
 
 case ${EAPI} in
-	5|6|7|8) ;;
+	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 if [[ -z ${_WAF_UTILS_ECLASS} ]]; then
 _WAF_UTILS_ECLASS=1
 
-inherit multilib toolchain-funcs multiprocessing
+inherit multilib sysroot toolchain-funcs multiprocessing
 
 # @ECLASS_VARIABLE: WAF_VERBOSE
 # @USER_VARIABLE
@@ -93,6 +93,11 @@ waf-utils_src_configure() {
 	fi
 	if [[ ${waf_help} == *--mandir* ]]; then
 		conf_args+=( --mandir="${EPREFIX}"/usr/share/man )
+	fi
+
+	local sysroot_run_prefixed
+	if sysroot_run_prefixed=$(sysroot_make_run_prefixed); then
+		conf_args+=( --cross-compile --cross-execute="${sysroot_run_prefixed}" )
 	fi
 
 	tc-export AR CC CPP CXX RANLIB

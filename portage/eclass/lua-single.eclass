@@ -1,10 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: lua-single.eclass
 # @MAINTAINER:
 # William Hubbs <williamh@gentoo.org>
-# Marek Szuba <marecki@gentoo.org>
 # @AUTHOR:
 # Marek Szuba <marecki@gentoo.org>
 # Based on python-single-r1.eclass by Michał Górny <mgorny@gentoo.org> et al.
@@ -52,7 +51,7 @@
 # "
 # BDEPEND="virtual/pkgconfig"
 #
-# # Only neeed if the setup phase has to do more than just call lua-single_pkg_setup
+# # Only need if the setup phase has to do more than just call lua-single_pkg_setup
 # pkg_setup() {
 #     lua-single_pkg_setup
 #     [...]
@@ -64,24 +63,20 @@
 # @CODE
 
 case ${EAPI} in
-	7|8)
-		;;
+	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ! ${_LUA_SINGLE_R0} ]]; then
+if [[ -z ${_LUA_SINGLE_ECLASS} ]]; then
+_LUA_SINGLE_ECLASS=1
 
-if [[ ${_LUA_R0} ]]; then
+if [[ ${_LUA_ECLASS} ]]; then
 	die 'lua-single.eclass cannot be used with lua.eclass.'
 fi
 
 inherit lua-utils
 
-fi
-
-EXPORT_FUNCTIONS pkg_setup
-
-# @ECLASS-VARIABLE: LUA_COMPAT
+# @ECLASS_VARIABLE: LUA_COMPAT
 # @REQUIRED
 # @PRE_INHERIT
 # @DESCRIPTION:
@@ -99,7 +94,7 @@ EXPORT_FUNCTIONS pkg_setup
 # LUA_COMPAT=( lua5-{1..3} )
 # @CODE
 
-# @ECLASS-VARIABLE: LUA_COMPAT_OVERRIDE
+# @ECLASS_VARIABLE: LUA_COMPAT_OVERRIDE
 # @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -119,7 +114,7 @@ EXPORT_FUNCTIONS pkg_setup
 # LUA_COMPAT_OVERRIDE='luajit' emerge -1v dev-lua/foo
 # @CODE
 
-# @ECLASS-VARIABLE: LUA_REQ_USE
+# @ECLASS_VARIABLE: LUA_REQ_USE
 # @DEFAULT_UNSET
 # @PRE_INHERIT
 # @DESCRIPTION:
@@ -139,7 +134,7 @@ EXPORT_FUNCTIONS pkg_setup
 # lua_targets_luaX-Y? ( dev-lang/lua:X.Y[deprecated] )
 # @CODE
 
-# @ECLASS-VARIABLE: LUA_DEPS
+# @ECLASS_VARIABLE: LUA_DEPS
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # This is an eclass-generated Lua dependency string for all
@@ -158,7 +153,7 @@ EXPORT_FUNCTIONS pkg_setup
 # lua_targets_lua5-3? ( dev-lang/lua:5.3 )
 # @CODE
 
-# @ECLASS-VARIABLE: LUA_REQUIRED_USE
+# @ECLASS_VARIABLE: LUA_REQUIRED_USE
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # This is an eclass-generated required-use expression which ensures at
@@ -177,7 +172,7 @@ EXPORT_FUNCTIONS pkg_setup
 # || ( lua_targets_lua5-1 lua_targets_lua5-3 )
 # @CODE
 
-# @ECLASS-VARIABLE: LUA_SINGLE_USEDEP
+# @ECLASS_VARIABLE: LUA_SINGLE_USEDEP
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # This is an eclass-generated USE-dependency string which can be used
@@ -197,7 +192,7 @@ EXPORT_FUNCTIONS pkg_setup
 # lua_single_target_lua5-1(-)?
 # @CODE
 
-# @ECLASS-VARIABLE: LUA_USEDEP
+# @ECLASS_VARIABLE: LUA_USEDEP
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # This is an eclass-generated USE-dependency string which can be used to
@@ -276,8 +271,6 @@ _lua_single_set_globals() {
 _lua_single_set_globals
 unset -f _lua_single_set_globals
 
-if [[ ! ${_LUA_SINGLE_R0} ]]; then
-
 # @FUNCTION: _lua_gen_usedep
 # @USAGE: [<pattern>...]
 # @INTERNAL
@@ -292,7 +285,7 @@ if [[ ! ${_LUA_SINGLE_R0} ]]; then
 #
 # This is an internal function used to implement lua_gen_cond_dep.
 _lua_gen_usedep() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	local impl matches=()
 
@@ -345,7 +338,7 @@ _lua_impl_matches() {
 # Verify whether the patterns passed to the eclass function are correct
 # (i.e. can match any valid implementation).  Dies on wrong pattern.
 _lua_verify_patterns() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	local impl pattern
 	for pattern; do
@@ -388,7 +381,7 @@ _lua_verify_patterns() {
 #     dev-lua/backported_core_module[lua_targets_lua5-3(-)?,...] )"
 # @CODE
 lua_gen_cond_dep() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	local impl matches=()
 
@@ -447,7 +440,7 @@ lua_gen_cond_dep() {
 # )"
 # @CODE
 lua_gen_impl_dep() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	local impl
 	local matches=()
@@ -472,7 +465,7 @@ lua_gen_impl_dep() {
 # Determine what the selected Lua implementation is and set
 # the Lua build environment up for it.
 lua_setup() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	unset ELUA
 
@@ -527,10 +520,11 @@ lua_setup() {
 # @DESCRIPTION:
 # Runs lua_setup.
 lua-single_pkg_setup() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ ${MERGE_TYPE} != binary ]] && lua_setup
 }
 
-_LUA_SINGLE_R0=1
 fi
+
+EXPORT_FUNCTIONS pkg_setup

@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: chromium-2.eclass
@@ -11,7 +11,7 @@
 
 case ${EAPI} in
 	7|8) ;;
-	*) die "${ECLASS}: EAPI=${EAPI:-0} is not supported" ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 inherit linux-info
@@ -39,10 +39,9 @@ chromium_suid_sandbox_check_kernel_config() {
 		# Warn if the kernel does not support features needed for the browser to work
 		# (bug #552576, bug #556286).
 		ERROR_ADVISE_SYSCALLS="CONFIG_ADVISE_SYSCALLS is required for the renderer (bug #552576)"
-		# ERROR_COMPAT_VDSO="CONFIG_COMPAT_VDSO causes segfaults (bug #556286)"
+		ERROR_COMPAT_VDSO="CONFIG_COMPAT_VDSO causes segfaults (bug #556286)"
 		ERROR_GRKERNSEC="CONFIG_GRKERNSEC breaks sandbox (bug #613668)"
-		# CONFIG_CHECK="~PID_NS ~NET_NS ~SECCOMP_FILTER ~USER_NS ~ADVISE_SYSCALLS ~!COMPAT_VDSO ~!GRKERNSEC"
-		CONFIG_CHECK="~PID_NS ~NET_NS ~SECCOMP_FILTER ~USER_NS ~ADVISE_SYSCALLS ~!GRKERNSEC"
+		CONFIG_CHECK="~PID_NS ~NET_NS ~SECCOMP_FILTER ~USER_NS ~ADVISE_SYSCALLS ~!COMPAT_VDSO ~!GRKERNSEC"
 		check_extra_config
 	fi
 }
@@ -79,12 +78,12 @@ fi
 # not selected via the L10N variable.
 # Also performs QA checks to ensure CHROMIUM_LANGS has been set correctly.
 chromium_remove_language_paks() {
-	local lang pak
+	local lang pak suffixed
 
 	# Look for missing pak files.
 	for lang in ${CHROMIUM_LANGS}; do
 		if [[ ! -e ${lang}.pak ]]; then
-			eqawarn "L10N warning: no .pak file for ${lang} (${lang}.pak not found)"
+			eqawarn "QA Notice: L10N warning: no .pak file for ${lang} (${lang}.pak not found)"
 		fi
 	done
 
@@ -94,15 +93,19 @@ chromium_remove_language_paks() {
 
 	# Look for extra pak files.
 	# Remove pak files that the user does not want.
+	# Chromium includes pak files with non-standard _ suffixes. _ is not a valid
+	# language tag character, so we strip this suffix when checking the USE
+	# flag, thereby grouping such files with their non-suffixed counterparts.
 	for pak in *.pak; do
-		lang=${pak%.pak}
+		suffixed=${pak%.pak}
+		lang=${suffixed%%_*}
 
 		if [[ ${lang} == en-US ]]; then
 			continue
 		fi
 
 		if ! has ${lang} ${CHROMIUM_LANGS}; then
-			eqawarn "L10N warning: no ${lang} in LANGS"
+			eqawarn "QA Notice: L10N warning: no ${lang} in LANGS"
 			continue
 		fi
 

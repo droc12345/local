@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: readme.gentoo-r1.eclass
@@ -6,11 +6,11 @@
 # Pacho Ramos <pacho@gentoo.org>
 # @AUTHOR:
 # Author: Pacho Ramos <pacho@gentoo.org>
-# @SUPPORTED_EAPIS: 6 7 8
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: install a doc file shown via elog messages
 # @DESCRIPTION:
 # An eclass for installing a README.gentoo doc file recording tips
-# shown via elog messages. With this eclass, those elog messages will only be
+# shown via elog messages.  With this eclass, those elog messages will only be
 # shown at first package installation and a file for later reviewing will be
 # installed under /usr/share/doc/${PF}
 #
@@ -21,40 +21,40 @@ if [[ -z ${_README_GENTOO_ECLASS} ]]; then
 _README_GENTOO_ECLASS=1
 
 case ${EAPI} in
-	6|7|8) ;;
+	7|8) inherit eapi9-pipestatus ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-# @ECLASS-VARIABLE: DOC_CONTENTS
+# @ECLASS_VARIABLE: DOC_CONTENTS
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The information that is used to create the README.gentoo file.
 
-# @ECLASS-VARIABLE: DISABLE_AUTOFORMATTING
+# @ECLASS_VARIABLE: DISABLE_AUTOFORMATTING
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # If non-empty, DOC_CONTENTS information will be strictly respected,
-# not getting it automatically formatted by fmt. If empty, it will
-# rely on fmt for formatting and 'echo -e' options to tweak lines a bit.
+# not getting it automatically formatted by fold.  If empty, it will
+# rely on fold for formatting and 'echo -e' options to tweak lines a bit.
 
-# @ECLASS-VARIABLE: FORCE_PRINT_ELOG
+# @ECLASS_VARIABLE: FORCE_PRINT_ELOG
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # If non-empty this variable forces elog messages to be printed.
 
-# @ECLASS-VARIABLE: README_GENTOO_SUFFIX
+# @ECLASS_VARIABLE: README_GENTOO_SUFFIX
 # @DESCRIPTION:
 # If you want to specify a suffix for README.gentoo file please export it.
-: ${README_GENTOO_SUFFIX:=""}
+: "${README_GENTOO_SUFFIX:=""}"
 
 # @FUNCTION: readme.gentoo_create_doc
 # @DESCRIPTION:
 # Create doc file with ${DOC_CONTENTS} variable (preferred) and, if not set,
-# look for "${FILESDIR}/README.gentoo" contents. You can use
+# look for "${FILESDIR}/README.gentoo" contents.  You can use
 # ${FILESDIR}/README.gentoo-${SLOT} also.
 # Usually called at src_install phase.
 readme.gentoo_create_doc() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	if [[ -n "${DOC_CONTENTS}" ]]; then
 		if [[ -n "${DISABLE_AUTOFORMATTING}" ]]; then
@@ -64,7 +64,7 @@ readme.gentoo_create_doc() {
 			set -f				# disable filename expansion in echo arguments
 			echo -e ${DOC_CONTENTS} | fold -s -w 70 \
 				| sed 's/[[:space:]]*$//' > "${T}"/README.gentoo
-			assert
+			pipestatus || die
 			set +f -${saved_flags}
 		fi
 	elif [[ -f "${FILESDIR}/README.gentoo-${SLOT%/*}" ]]; then
@@ -78,13 +78,13 @@ readme.gentoo_create_doc() {
 	( # subshell to avoid pollution of calling environment
 		docinto .
 		dodoc "${T}"/README.gentoo
-	) || die
+	)
 	README_GENTOO_DOC_VALUE=$(< "${T}/README.gentoo")
 }
 
 # @FUNCTION: readme.gentoo_print_elog
 # @DESCRIPTION:
-# Print elog messages with "${T}"/README.gentoo contents. They will be
+# Print elog messages with "${T}"/README.gentoo contents.  They will be
 # shown only when package is installed at first time.
 # Usually called at pkg_postinst phase.
 #
@@ -94,7 +94,7 @@ readme.gentoo_create_doc() {
 # rely on specific REPLACING_VERSIONS handling in your ebuild to print messages
 # when people update from versions still providing old message.
 readme.gentoo_print_elog() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	if [[ -z "${README_GENTOO_DOC_VALUE}" ]]; then
 		die "readme.gentoo_print_elog invoked without matching readme.gentoo_create_doc call!"

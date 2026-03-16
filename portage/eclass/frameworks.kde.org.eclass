@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: frameworks.kde.org.eclass
@@ -19,11 +19,18 @@
 
 case ${EAPI} in
 	8) ;;
-	*) die "EAPI=${EAPI:-0} is not supported" ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 if [[ -z ${_FRAMEWORKS_KDE_ORG_ECLASS} ]]; then
 _FRAMEWORKS_KDE_ORG_ECLASS=1
+
+# @ECLASS_VARIABLE: KDE_CATV
+# @DESCRIPTION:
+# Holds main Frameworks release number (major.minor) for use on same-category
+# dependencies.
+KDE_CATV=$(ver_cut 1-2)
+readonly KDE_CATV
 
 # @ECLASS_VARIABLE: KDE_PV_UNRELEASED
 # @INTERNAL
@@ -35,8 +42,18 @@ inherit kde.org
 
 HOMEPAGE="https://develop.kde.org/products/frameworks/"
 
-SLOT=5/${PV}
-[[ ${KDE_BUILD_TYPE} == release ]] && SLOT=$(ver_cut 1)/$(ver_cut 1-2)
+SLOT=6
+if ver_test ${PV} -lt 5.240; then
+	SLOT=5
+fi
+case ${PN} in
+	extra-cmake-modules|kapidox)
+		SLOT=0
+		;;
+	*)
+		SLOT=${SLOT}/${KDE_CATV}
+		;;
+esac
 
 # @ECLASS_VARIABLE: KDE_ORG_SCHEDULE_URI
 # @INTERNAL
@@ -48,25 +65,10 @@ KDE_ORG_SCHEDULE_URI+="/Frameworks"
 # @INTERNAL
 # @DESCRIPTION:
 # Helper variable to construct release group specific SRC_URI.
-_KDE_SRC_URI="mirror://kde/"
+_KDE_SRC_URI="mirror://kde/stable/frameworks/${KDE_CATV}/"
 
 if [[ ${KDE_BUILD_TYPE} != live && -z ${KDE_ORG_COMMIT} ]]; then
-	_KDE_SRC_URI+="stable/frameworks/$(ver_cut 1-2)/"
-	case ${KDE_ORG_NAME} in
-		kdelibs4support | \
-		kdesignerplugin | \
-		kdewebkit | \
-		khtml | \
-		kjs | \
-		kjsembed | \
-		kmediaplayer | \
-		kross | \
-		kxmlrpcclient)
-			_KDE_SRC_URI+="portingAids/"
-			;;
-	esac
-
-	SRC_URI="${_KDE_SRC_URI}${KDE_ORG_NAME}-${PV}.tar.xz"
+	SRC_URI="${_KDE_SRC_URI}${KDE_ORG_TAR_PN}-${PV}.tar.xz"
 fi
 
 fi

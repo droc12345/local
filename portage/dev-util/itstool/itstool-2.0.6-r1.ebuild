@@ -3,8 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..11} )
-PYTHON_REQ_USE="xml"
+PYTHON_COMPAT=( python3_{11..14} )
+#PYTHON_REQ_USE="xml"
 
 inherit python-single-r1
 

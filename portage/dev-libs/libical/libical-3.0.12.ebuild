@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{11..14} )
 VALA_USE_DEPEND="vapigen"
 inherit cmake python-any-r1 vala
 

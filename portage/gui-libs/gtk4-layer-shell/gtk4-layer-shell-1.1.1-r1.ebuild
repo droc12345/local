@@ -16,7 +16,7 @@ REQUIRED_USE="vala? ( introspection )"
 
 RESTRICT="!test? ( test )"
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 inherit meson python-any-r1 vala
 
 DEPEND="

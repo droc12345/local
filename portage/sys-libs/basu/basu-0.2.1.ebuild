@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..11} )
+PYTHON_COMPAT=( python3_{11..14} )
 inherit meson python-any-r1
 
 DESCRIPTION="The sd-bus library, extracted from systemd"

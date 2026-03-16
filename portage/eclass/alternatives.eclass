@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: alternatives.eclass
@@ -6,7 +6,7 @@
 # maintainer-needed@gentoo.org
 # @AUTHOR:
 # Alastair Tse <liquidx@gentoo.org> (03 Oct 2003)
-# @SUPPORTED_EAPIS: 5 6 7
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: Creates symlink to the latest version of multiple slotted packages.
 # @DESCRIPTION:
 # When a package is SLOT'ed, very often we need to have a symlink to the
@@ -42,21 +42,19 @@
 # consider using this unless you are want to do something special.
 
 case ${EAPI} in
-	[5-8]) ;;
-	*)     die "EAPI=${EAPI:-0} is not supported" ;;
+	7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
-
-EXPORT_FUNCTIONS pkg_postinst pkg_postrm
 
 if [[ -z ${_ALTERNATIVES_ECLASS} ]]; then
 _ALTERNATIVES_ECLASS=1
 
-# @ECLASS-VARIABLE: SOURCE
+# @ECLASS_VARIABLE: SOURCE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The symlink to be created
 
-# @ECLASS-VARIABLE: ALTERNATIVES
+# @ECLASS_VARIABLE: ALTERNATIVES
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # The list of alternatives
@@ -94,9 +92,8 @@ alternatives_makesym() {
 
 	# usage: alternatives_makesym <resulting symlink> [alternative targets..]
 	# make sure it is in the prefix, allow it already to be in the prefix
-	SYMLINK=${EPREFIX}/${1#${EPREFIX}}
-	# this trick removes the trailing / from ${ROOT}
-	pref=${ROOT%/}
+	SYMLINK=${EPREFIX}/${1#"${EPREFIX}"}
+	pref=${ROOT}
 	shift
 	ALTERNATIVES=$@
 
@@ -104,7 +101,7 @@ alternatives_makesym() {
 	# and if one exists, link it and finish.
 
 	for alt in ${ALTERNATIVES}; do
-		alt=${EPREFIX}/${alt#${EPREFIX}}
+		alt=${EPREFIX}/${alt#"${EPREFIX}"}
 		if [ -f "${pref}${alt}" ]; then
 			#are files in same directory?
 			if [ "${alt%/*}" = "${SYMLINK%/*}" ]
@@ -154,3 +151,5 @@ alternatives_pkg_postrm() {
 }
 
 fi
+
+EXPORT_FUNCTIONS pkg_postinst pkg_postrm

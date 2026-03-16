@@ -1,17 +1,28 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: rpm.eclass
 # @MAINTAINER:
 # base-system@gentoo.org
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: convenience class for extracting RPMs
 
-inherit estack eutils
-
-case "${EAPI:-0}" in
-	[0-6]) DEPEND=">=app-arch/rpm2targz-9.0.0.3g" ;;
-	*) BDEPEND=">=app-arch/rpm2targz-9.0.0.3g" ;;
+case ${EAPI} in
+	7|8) inherit eapi9-pipestatus ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
+
+if [[ -z ${_RPM_ECLASS} ]] ; then
+_RPM_ECLASS=1
+
+inherit estack
+
+BDEPEND="
+	|| (
+		app-arch/rpm2targz
+		>=app-arch/rpm-4.19.0
+	)
+"
 
 # @FUNCTION: rpm_unpack
 # @USAGE: <rpms>
@@ -23,15 +34,24 @@ rpm_unpack() {
 	for a in "$@" ; do
 		echo ">>> Unpacking ${a} to ${PWD}"
 		if [[ ${a} == ./* ]] ; then
-			: nothing to do -- path is local
-		elif [[ ${a} == ${DISTDIR}/* ]] ; then
-			ewarn 'QA: do not use ${DISTDIR} with rpm_unpack -- it is added for you'
+			: # nothing to do -- path is local
+		elif [[ ${a} == "${DISTDIR}"/* ]] ; then
+			eqawarn 'QA Notice: do not use ${DISTDIR} with rpm_unpack -- it is added for you'
 		elif [[ ${a} == /* ]] ; then
-			ewarn 'QA: do not use full paths with rpm_unpack -- use ./ paths instead'
+			eqawarn 'QA Notice: do not use full paths with rpm_unpack -- use ./ paths instead'
 		else
 			a="${DISTDIR}/${a}"
 		fi
-		rpm2tar -O "${a}" | tar xf - || die "failure unpacking ${a}"
+
+		if command -v rpm2tar >/dev/null; then
+			local extracttool=(rpm2tar -O)
+		else
+			# app-arch/rpm fallback
+			local extracttool=(rpm2archive -n)
+		fi
+
+		"${extracttool[@]}" "${a}" | tar xf -
+		pipestatus || die "failure unpacking ${a}"
 	done
 }
 
@@ -53,9 +73,9 @@ srcrpm_unpack() {
 
 	# unpack everything
 	local a
-	for a in *.tar.{gz,bz2,xz} *.t{gz,bz2,xz,pxz} *.zip *.ZIP ; do
+	for a in *.tar.{gz,bz2,xz} *.t{gz,bz2,xz} *.zip *.ZIP ; do
 		unpack "./${a}"
-		rm -f "${a}"
+		rm -f "${a}" || die
 	done
 
 	eshopts_pop
@@ -77,53 +97,6 @@ rpm_src_unpack() {
 	done
 }
 
-# @FUNCTION: rpm_spec_epatch
-# @USAGE: [spec]
-# @DESCRIPTION:
-# Read the specified spec (defaults to ${PN}.spec) and attempt to apply
-# all the patches listed in it.  If the spec does funky things like moving
-# files around, well this won't handle that.
-rpm_spec_epatch() {
-	local p spec=$1
-	local dir
-
-	if [[ -z ${spec} ]] ; then
-		# search likely places for the spec file
-		for spec in "${PWD}" "${S}" "${WORKDIR}" ; do
-			spec+="/${PN}.spec"
-			[[ -e ${spec} ]] && break
-		done
-	fi
-	[[ ${spec} == */* ]] \
-		&& dir=${spec%/*} \
-		|| dir=
-
-	ebegin "Applying patches from ${spec}"
-
-	grep '^%patch' "${spec}" | \
-	while read line ; do
-		# expand the %patch line
-		set -- ${line}
-		p=$1
-		shift
-
-		# process the %patch arguments
-		local arg
-		EPATCH_OPTS=
-		for arg in "$@" ; do
-			case ${arg} in
-			-b) EPATCH_OPTS+=" --suffix" ;;
-			*)  EPATCH_OPTS+=" ${arg}" ;;
-			esac
-		done
-
-		# extract the patch name from the Patch# line
-		set -- $(grep "^P${p#%p}: " "${spec}")
-		shift
-		epatch "${dir:+${dir}/}$*"
-	done
-
-	eend
-}
+fi
 
 EXPORT_FUNCTIONS src_unpack

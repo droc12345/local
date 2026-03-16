@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: python-r1.eclass
@@ -34,7 +34,7 @@ if [[ -z ${_PYTHON_R1_ECLASS} ]]; then
 _PYTHON_R1_ECLASS=1
 
 case ${EAPI} in
-	5|6|7|8) ;;
+	7|8) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
@@ -518,7 +518,7 @@ python_gen_any_dep() {
 			local i_depstr=${depstr//\$\{PYTHON_USEDEP\}/${PYTHON_USEDEP}}
 			i_depstr=${i_depstr//\$\{PYTHON_SINGLE_USEDEP\}/${PYTHON_SINGLE_USEDEP}}
 			# note: need to strip '=' slot operator for || deps
-			out="( ${PYTHON_PKG_DEP/:=} ${i_depstr} ) ${out}"
+			out="( ${PYTHON_PKG_DEP/=} ${i_depstr} ) ${out}"
 		fi
 	done
 	echo "|| ( ${out})"
@@ -620,7 +620,7 @@ python_foreach_impl() {
 			[[ ! ${_DISTUTILS_CALLING_FOREACH_IMPL} &&
 				! ${_DISTUTILS_FOREACH_IMPL_WARNED} ]]
 		then
-			eqawarn "python_foreach_impl has been called directly while using distutils-r1."
+			eqawarn "QA Notice: python_foreach_impl has been called directly while using distutils-r1."
 			eqawarn "Please redefine python_*() phase functions to meet your expectations"
 			eqawarn "instead."
 			_DISTUTILS_FOREACH_IMPL_WARNED=1
@@ -780,7 +780,7 @@ python_replicate_script() {
 
 		(
 			exeopts -m 0755
-			exeinto "${PYTHON_SCRIPTDIR#${EPREFIX}}"
+			exeinto "${PYTHON_SCRIPTDIR#"${EPREFIX}"}"
 			doexe "${files[@]}"
 		)
 

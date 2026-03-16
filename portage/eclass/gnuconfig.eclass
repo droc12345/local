@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: gnuconfig.eclass
@@ -6,7 +6,7 @@
 # Sam James <sam@gentoo.org>
 # @AUTHOR:
 # Will Woods <wwoods@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7 8
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: Refresh bundled gnuconfig files (config.guess, config.sub)
 # @DESCRIPTION:
 # This eclass is used to automatically update files that typically come with
@@ -16,17 +16,28 @@
 # other files that come with automake, e.g. depcomp, mkinstalldirs, etc.
 #
 
-case ${EAPI:-0} in
-	5|6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
-
 if [[ -z ${_GNUCONFIG_ECLASS} ]] ; then
  _GNUCONFIG_CLASS=1
 
-BDEPEND="sys-devel/gnuconfig"
+case ${EAPI} in
+	7|8|9) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+esac
 
-[[ ${EAPI} == [56] ]] && DEPEND="${BDEPEND}"
+# @ECLASS_VARIABLE: GNUCONFIG_DEPEND
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# Contains dependency on gnuconfig in *DEPEND format.
+GNUCONFIG_DEPEND="sys-devel/gnuconfig"
+
+# @ECLASS_VARIABLE: GNUCONFIG_AUTO_DEPEND
+# @PRE_INHERIT
+# @DESCRIPTION:
+# Set to 'no' to disable automatically adding to DEPEND.  This lets
+# ebuilds form conditional depends by using ${GNUCONFIG_DEPEND} in
+# their own DEPEND string.
+: "${GNUCONFIG_AUTO_DEPEND:=yes}"
+[[ ${GNUCONFIG_AUTO_DEPEND} != "no" ]] && BDEPEND=${GNUCONFIG_DEPEND}
 
 # @FUNCTION: gnuconfig_update
 # @USAGE: [file1 file2 ...]
@@ -84,9 +95,9 @@ gnuconfig_do_update() {
 		if [[ -n ${targetlist} ]] ; then
 			for target in ${targetlist} ; do
 				[[ -L ${target} ]] && rm -f "${target}"
-				einfo "  Updating ${target/$startdir\//}"
+				ebegin "  Updating ${target/$startdir\//}"
 				cp -f "${configsubs_dir}/${file}" "${target}"
-				eend $?
+				eend $? || die
 			done
 		else
 			ewarn "  No ${file} found in ${startdir}, skipping ..."
@@ -102,23 +113,11 @@ gnuconfig_do_update() {
 # This searches the standard locations for the newest config.{sub|guess}, and
 # returns the directory where they can be found.
 gnuconfig_findnewest() {
-	local locations=()
-	local prefix
-
-	case ${EAPI} in
-		5|6)
-			prefix="${EPREFIX}"
-			;;
-		*)
-			prefix="${BROOT}"
-			;;
-	esac
-
-	locations+=(
-		"${prefix}"/usr/share/misc/config.sub
-		"${prefix}"/usr/share/gnuconfig/config.sub
-		"${prefix}"/usr/share/automake*/config.sub
-		"${prefix}"/usr/share/libtool/config.sub
+	local locations=(
+		"${BROOT}"/usr/share/misc/config.sub
+		"${BROOT}"/usr/share/gnuconfig/config.sub
+		"${BROOT}"/usr/share/automake*/config.sub
+		"${BROOT}"/usr/share/libtool/config.sub
 	)
 
 	grep -s '^timestamp' "${locations[@]}" | \

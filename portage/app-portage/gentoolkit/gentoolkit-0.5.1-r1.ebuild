@@ -3,9 +3,9 @@
 
 EAPI=7
 
-DISTUTILS_USE_SETUPTOOLS=no
-PYTHON_COMPAT=( python3_{7..11} pypy3 )
-PYTHON_REQ_USE="xml(+),threads(+)"
+DISTUTILS_USE_PEP517=no
+PYTHON_COMPAT=( python3_{11..14} pypy3 )
+#PYTHON_REQ_USE="xml(+),threads(+)"
 
 inherit distutils-r1 tmpfiles
 
@@ -29,7 +29,7 @@ RDEPEND="${DEPEND}
 	sys-apps/gawk
 	sys-apps/gentoo-functions"
 
-distutils_enable_tests setup.py
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	python_setup

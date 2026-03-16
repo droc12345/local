@@ -1,12 +1,13 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: mercurial.eclass
 # @MAINTAINER:
-# Christoph Junghans <junghans@gentoo.org>
+# No maintainer <maintainer-needed@gentoo.org>
 # @AUTHOR:
 # Next gen author: Krzysztof Pawlik <nelchael@gentoo.org>
 # Original author: Aron Griffis <agriffis@gentoo.org>
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: This eclass provides generic mercurial fetching functions
 # @DESCRIPTION:
 # This eclass provides generic mercurial fetching functions. To fetch sources
@@ -14,33 +15,37 @@
 # you need to share single repository between several ebuilds set EHG_PROJECT to
 # project name in all of them.
 
-inherit eutils
+case ${EAPI:-0} in
+	[78]) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+esac
 
-EXPORT_FUNCTIONS src_unpack
+if [[ -z ${_MERCURIAL_ECLASS} ]] ; then
+_MERCURIAL_ECLASS=1
 
 PROPERTIES+=" live"
 
-DEPEND="dev-vcs/mercurial"
+BDEPEND="dev-vcs/mercurial"
 
-# @ECLASS-VARIABLE: EHG_REPO_URI
+# @ECLASS_VARIABLE: EHG_REPO_URI
 # @DESCRIPTION:
 # Mercurial repository URI.
 
-# @ECLASS-VARIABLE: EHG_REVISION
+# @ECLASS_VARIABLE: EHG_REVISION
 # @DESCRIPTION:
 # Create working directory for specified revision, defaults to default.
 #
 # EHG_REVISION is passed as a value for --updaterev parameter, so it can be more
 # than just a revision, please consult `hg help revisions' for more details.
-: ${EHG_REVISION:="default"}
+: "${EHG_REVISION:="default"}"
 
-# @ECLASS-VARIABLE: EHG_STORE_DIR
+# @ECLASS_VARIABLE: EHG_STORE_DIR
 # @USER_VARIABLE
 # @DESCRIPTION:
 # Mercurial sources store directory. Users may override this in /etc/portage/make.conf
 [[ -z "${EHG_STORE_DIR}" ]] && EHG_STORE_DIR="${PORTAGE_ACTUAL_DISTDIR:-${DISTDIR}}/hg-src"
 
-# @ECLASS-VARIABLE: EHG_PROJECT
+# @ECLASS_VARIABLE: EHG_PROJECT
 # @DESCRIPTION:
 # Project name.
 #
@@ -48,38 +53,42 @@ DEPEND="dev-vcs/mercurial"
 # between several ebuilds.
 [[ -z "${EHG_PROJECT}" ]] && EHG_PROJECT="${PN}"
 
-# @ECLASS-VARIABLE: EGIT_CHECKOUT_DIR
+# @ECLASS_VARIABLE: EHG_CHECKOUT_DIR
 # @DESCRIPTION:
 # The directory to check the hg sources out to.
 #
 # EHG_CHECKOUT_DIR=${S}
 
-# @ECLASS-VARIABLE: EHG_QUIET
+# @ECLASS_VARIABLE: EHG_QUIET
 # @DESCRIPTION:
 # Suppress some extra noise from mercurial, set it to 'ON' to be quiet.
-: ${EHG_QUIET:="OFF"}
+: "${EHG_QUIET:="OFF"}"
 [[ "${EHG_QUIET}" == "ON" ]] && EHG_QUIET_CMD_OPT="--quiet"
 
-# @ECLASS-VARIABLE: EHG_CONFIG
+# @ECLASS_VARIABLE: EHG_CONFIG
 # @DESCRIPTION:
 # Extra config option to hand to hg clone/pull
 
-# @ECLASS-VARIABLE: EHG_CLONE_CMD
+# @ECLASS_VARIABLE: EHG_CLONE_CMD
 # @DESCRIPTION:
 # Command used to perform initial repository clone.
 [[ -z "${EHG_CLONE_CMD}" ]] && EHG_CLONE_CMD="hg clone ${EHG_CONFIG:+--config ${EHG_CONFIG}} ${EHG_QUIET_CMD_OPT} --pull --noupdate"
 
-# @ECLASS-VARIABLE: EHG_PULL_CMD
+# @ECLASS_VARIABLE: EHG_PULL_CMD
 # @DESCRIPTION:
 # Command used to update repository.
 [[ -z "${EHG_PULL_CMD}" ]] && EHG_PULL_CMD="hg pull ${EHG_CONFIG:+--config ${EHG_CONFIG}} ${EHG_QUIET_CMD_OPT}"
 
-# @ECLASS-VARIABLE: EHG_OFFLINE
+# @ECLASS_VARIABLE: EHG_OFFLINE
 # @DESCRIPTION:
 # Set this variable to a non-empty value to disable the automatic updating of
 # a mercurial source tree. This is intended to be set outside the ebuild by
 # users.
 EHG_OFFLINE="${EHG_OFFLINE:-${EVCS_OFFLINE}}"
+
+# @ECLASS_VARIABLE: EHG_BOOTSTRAP
+# @DESCRIPTION:
+# Command to be executed after checkout and clone of the specified repository.
 
 # @FUNCTION: mercurial_fetch
 # @USAGE: [repository_uri] [module] [sourcedir]
@@ -91,9 +100,7 @@ EHG_OFFLINE="${EHG_OFFLINE:-${EVCS_OFFLINE}}"
 # EHG_CHECKOUT_DIR, which defaults to S.
 
 mercurial_fetch() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
+	debug-print-function ${FUNCNAME} "$@"
 
 	EHG_REPO_URI=${1-${EHG_REPO_URI}}
 	[[ -z "${EHG_REPO_URI}" ]] && die "EHG_REPO_URI is empty"
@@ -160,10 +167,6 @@ mercurial_fetch() {
 mercurial_bootstrap() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	# @ECLASS-VARIABLE: EHG_BOOTSTRAP
-	# @DESCRIPTION:
-	# Command to be executed after checkout and clone of the specified
-	# repository.
 	if [[ ${EHG_BOOTSTRAP} ]]; then
 		pushd "${S}" > /dev/null
 		einfo "Starting bootstrap"
@@ -202,3 +205,7 @@ function mercurial_src_unpack {
 	mercurial_fetch
 	mercurial_bootstrap
 }
+
+fi
+
+EXPORT_FUNCTIONS src_unpack

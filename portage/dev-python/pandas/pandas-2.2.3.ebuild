@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -21,7 +21,7 @@ HOMEPAGE="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 arm64 ~loong ~riscv x86"
+KEYWORDS="amd64 arm64 ~riscv x86"
 IUSE="big-endian full-support minimal test X"
 RESTRICT="!test? ( test )"
 
@@ -226,5 +226,5 @@ pkg_postinst() {
 	optfeature "Needed for parts of pandas.stats" dev-python/statsmodels
 	optfeature "SQL database support" ">=dev-python/sqlalchemy-1.4.36"
 	optfeature "miscellaneous statistical functions" dev-python/scipy
-	optfeature "necessary to use pandas.io.clipboard.read_clipboard support" dev-python/pyqt5 dev-python/qtpy dev-python/pygtk x11-misc/xclip x11-misc/xsel
+	optfeature "necessary to use pandas.io.clipboard.read_clipboard support" dev-python/pyqt5 dev-python/qtpy x11-misc/xclip x11-misc/xsel
 }

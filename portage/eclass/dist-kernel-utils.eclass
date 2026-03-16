@@ -1,4 +1,4 @@
-# Copyright 2020-2025 Gentoo Authors
+# Copyright 2020-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: dist-kernel-utils.eclass
@@ -66,18 +66,37 @@ dist-kernel_get_image_path() {
 }
 
 # @FUNCTION: dist-kernel_install_kernel
-# @USAGE: <version> <image> <system.map>
+# @USAGE: [<version>] [<image>] [<system.map>] [<dir>] [<installkernel-args>...]
 # @DESCRIPTION:
-# Install kernel using installkernel tool.  <version> specifies
-# the kernel version, <image> full path to the image, <system.map>
-# full path to System.map.
+# Install kernel using installkernel. Takes the following arguments:
+#
+# <version> -- the target kernel version (default: ${KV_FULL})
+#
+# <image> -- the full path to the kernel image (default: the image
+# 	 	as reported by dist-kernel_get_image_path() in the ${KV_DIR})
+#
+# <system.map> -- the full path to the System.map
+# 		(default: ${KV_DIR}/System.map})
+#
+# <dir> -- the target directory to install to (default: ${EROOT}/boot)
+#
+# <installkernel-args> -- extra optional arguments for installkernel
+# 		see man kernel-install and man installkernel. Requires at
+# 		least version 56 of sys-kernel/installkernel.
 dist-kernel_install_kernel() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${#} -eq 3 ]] || die "${FUNCNAME}: invalid arguments"
-	local version=${1}
-	local image=${2}
-	local map=${3}
+	local version=${1:-${KV_FULL}}
+	local image=${2:-${KV_DIR}/$(dist-kernel_get_image_path)}
+	local map=${3:-${KV_DIR}/System.map}
+	local dir=${4:-${EROOT}/boot}
+
+	local installkernel_args=(
+		"${version}" "${image}" "${map}" "${dir}"
+	)
+	if has_version ">=sys-kernel/installkernel-56"; then
+		installkernel_args+=( "${@:5}" --verbose )
+	fi
 
 	local success=
 	# not an actual loop but allows error handling with 'break'
@@ -107,8 +126,7 @@ dist-kernel_install_kernel() {
 		ebegin "Installing the kernel via installkernel"
 		# note: .config is taken relatively to System.map;
 		# initrd relatively to bzImage
-		ARCH=$(tc-arch-kernel) installkernel "${version}" "${image}" "${map}" \
-			"${EROOT}/boot" || break
+		ARCH=$(tc-arch-kernel) installkernel "${installkernel_args[@]}" || break
 		eend ${?} || die -n "Installing the kernel failed"
 
 		success=1
@@ -129,39 +147,56 @@ dist-kernel_install_kernel() {
 		eerror "in the logs above and once you resolve the problems please"
 		eerror "run the equivalent of the following command to try again:"
 		eerror
-		eerror "    emerge --config ${kernel}"
+		if has --all "${installkernel_args[@]}"; then
+			eerror "    installkernel ${installkernel_args[*]}"
+		else
+			eerror "    emerge --config ${kernel}"
+		fi
 		die "Kernel install failed, please fix the problems and run emerge --config"
 	fi
 }
 
 # @FUNCTION: dist-kernel_reinstall_initramfs
-# @USAGE: <kv-dir> <kv-full>
+# @USAGE: [<kv-dir>] [<kv-full>] [<installkernel-args>...]
 # @DESCRIPTION:
 # Rebuild and install initramfs for the specified dist-kernel.
-# <kv-dir> is the kernel source directory (${KV_DIR} from linux-info),
-# while <kv-full> is the full kernel version (${KV_FULL}).
-# The function will determine whether <kernel-dir> is actually
-# a dist-kernel, and whether initramfs was used.
+# Takes the following arguments:
+#
+# <kv-dir> -- the full path to the target kernel (default: ${KV_DIR})
+#
+# <kv-full> -- the target kernel version (default: ${KV_FULL})
+#
+# <installkernel-args> -- extra optional arguments for installkernel
+# 		see man kernel-install and man installkernel. Requires at
+# 		least version 56 of sys-kernel/installkernel.
 #
 # This function is to be used in pkg_postinst() of ebuilds installing
-# kernel modules that are included in the initramfs.
+# kernel modules that are included in the initramfs. In order to
+# reinstall *all* distribution kernels currently installed on the
+# system add the --all argument (requires installkernel-56 or newer).
 dist-kernel_reinstall_initramfs() {
 	debug-print-function ${FUNCNAME} "$@"
 
-	[[ ${#} -eq 2 ]] || die "${FUNCNAME}: invalid arguments"
-	local kernel_dir=${1}
-	local ver=${2}
+	local kernel_dir=${1:-${KV_DIR}}
+	local ver=${2:-${KV_FULL}}
+
+	# If this is set it will have an effect on the name of the output
+	# image. Set this variable to track this setting.
+	if grep -q "CONFIG_EFI_ZBOOT=y" "${kernel_dir}/.config"; then
+		KERNEL_EFI_ZBOOT=1
+	fi
 
 	local image_path=${kernel_dir}/$(dist-kernel_get_image_path)
+
 	if [[ ! -f ${image_path} ]]; then
 		eerror "Kernel install missing, image not found:"
 		eerror "  ${image_path}"
-		eerror "Initramfs will not be updated.  Please reinstall your kernel."
+		eerror "Initramfs will not be updated.  Please reinstall kernel ${ver}."
 		return
 	fi
 
 	dist-kernel_install_kernel "${ver}" "${image_path}" \
-		"${kernel_dir}/System.map"
+		"${kernel_dir}/System.map" "${EROOT}/boot" "${@:3}"
 }
 
 # @FUNCTION: dist-kernel_PV_to_KV
@@ -178,6 +213,43 @@ dist-kernel_PV_to_KV() {
 	[[ -z $(ver_cut 3- "${kv}") ]] && kv+=".0"
 	[[ ${pv} == *_* ]] && kv+=-${pv#*_}
 	echo "${kv}"
+}
+
+# @FUNCTION: dist-kernel_get_compressor
+# @USAGE: <kernel_config>
+# @DESCRIPTION:
+# Returns the compressor with arguments for compressing kernel modules
+# based on the CONFIG_MODULES_COMPESS_* setting in the kernel config.
+dist-kernel_get_compressor() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	[[ ${#} -eq 1 ]] || die "${FUNCNAME}: invalid arguments"
+
+	local suffix=$(dist-kernel_get_module_suffix "${1}")
+	local compress=()
+	# Options taken from linux-mod-r1.eclass.
+	# We don't instruct the compressor to parallelize because it applies
+	# multithreading per file, so it works only for big files, and we have
+	# lots of small files instead.
+	case ${suffix} in
+		.ko)
+			return
+			;;
+		.ko.gz)
+			compress+=( gzip )
+			;;
+		.ko.xz)
+			compress+=( xz --check=crc32 --lzma2=dict=1MiB )
+			;;
+		.ko.zst)
+			compress+=( zstd -q --rm )
+			;;
+		*)
+			die "Unknown compressor: ${suffix}"
+			;;
+	esac
+
+	echo "${compress[@]}"
 }
 
 # @FUNCTION: dist-kernel_get_module_suffix

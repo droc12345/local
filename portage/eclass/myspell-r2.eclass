@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: myspell-r2.eclass
@@ -6,49 +6,45 @@
 # Conrad Kostecki <conikost@gentoo.org>
 # @AUTHOR:
 # Tomáš Chvátal <scarabeus@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7 8
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: An eclass to streamline the construction of ebuilds for new Myspell dictionaries.
 # @DESCRIPTION:
 # The myspell-r2 eclass is designed to streamline the construction of ebuilds for
 # the new Myspell dictionaries which support hunspell.
 
-# @ECLASS-VARIABLE: MYSPELL_DICT
+# @ECLASS_VARIABLE: MYSPELL_DICT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Array variable containing list of all dictionary files.
+# @CODE
 # MYSPELL_DICT=( "file.dic" "dir/file2.aff" )
+# @CODE
 
-# @ECLASS-VARIABLE: MYSPELL_HYPH
+# @ECLASS_VARIABLE: MYSPELL_HYPH
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Array variable containing list of all hyphenation files.
+# @CODE
 # MYSPELL_HYPH=( "file.dic" "dir/file2.dic" )
+# @CODE
 
-# @ECLASS-VARIABLE: MYSPELL_THES
+# @ECLASS_VARIABLE: MYSPELL_THES
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Array variable containing list of all thesarus files.
+# @CODE
 # MYSPELL_THES=( "file.dat" "dir/file2.idx" )
+# @CODE
 
-case ${EAPI:-0} in
-	[5-8])
-		;;
-	*)
-		die "${ECLASS}: EAPI ${EAPI:-0} not supported"
-		;;
+case ${EAPI} in
+	7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
-
-EXPORT_FUNCTIONS src_unpack src_install
 
 # Basically no extra deps needed.
 # Unzip is required for .oxt libreoffice extensions
 # which are just fancy zip files.
-if [[ ${EAPI:-0} != [56] ]]; then
-	BDEPEND="app-arch/unzip"
-else
-	DEPEND="app-arch/unzip"
-	RDEPEND=""
-fi
+BDEPEND="app-arch/unzip"
 
 # by default this stuff does not have any folder in the pack
 S="${WORKDIR}"
@@ -65,8 +61,7 @@ myspell-r2_src_unpack() {
 		case ${f} in
 			*.oxt)
 				echo ">>> Unpacking "${DISTDIR}/${f}" to ${PWD}"
-				unzip -qoj ${DISTDIR}/${f}
-				assert "failed unpacking ${DISTDIR}/${f}"
+				unzip -qoj "${DISTDIR}"/${f} || die "failed unpacking ${DISTDIR}/${f}"
 				;;
 			*) unpack ${f} ;;
 		esac
@@ -132,3 +127,5 @@ myspell-r2_src_install() {
 		fi
 	done
 }
+
+EXPORT_FUNCTIONS src_unpack src_install

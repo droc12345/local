@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{11..14} )
 inherit meson optfeature python-any-r1 udev
 
 DESCRIPTION="Library to handle input devices in Wayland"

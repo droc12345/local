@@ -1,32 +1,30 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: flag-o-matic.eclass
 # @MAINTAINER:
 # toolchain@gentoo.org
-# @SUPPORTED_EAPIS: 6 7 8
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: common functions to manipulate and query toolchain flags
 # @DESCRIPTION:
 # This eclass contains a suite of functions to help developers sanely
 # and safely manage toolchain flags in their builds.
 
-case ${EAPI} in
-	4|5|6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
-
 if [[ -z ${_FLAG_O_MATIC_ECLASS} ]]; then
 _FLAG_O_MATIC_ECLASS=1
 
-inherit toolchain-funcs
+case ${EAPI} in
+	7|8|9) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+esac
 
-[[ ${EAPI} == 6 ]] && inherit eutils
+inherit toolchain-funcs
 
 # @FUNCTION: all-flag-vars
 # @DESCRIPTION:
 # Return all the flag variables that our high level functions operate on.
 all-flag-vars() {
-	echo {ADA,C,CPP,CXX,CCAS,F,FC,LD}FLAGS
+	echo {ADA,C,CPP,CXX,CCAS,F,FC,GDC,LD}FLAGS
 }
 
 # @FUNCTION: setup-allowed-flags
@@ -35,7 +33,7 @@ all-flag-vars() {
 # {C,CPP,CXX,CCAS,F,FC,LD}FLAGS that we allow in strip-flags
 # Note: shell globs and character lists are allowed
 setup-allowed-flags() {
-	[[ ${EAPI} == [67] ]] ||
+	[[ ${EAPI} == 7 ]] ||
 		die "Internal function ${FUNCNAME} is not available in EAPI ${EAPI}."
 	_setup-allowed-flags "$@"
 }
@@ -47,8 +45,8 @@ setup-allowed-flags() {
 # Note: shell globs and character lists are allowed
 _setup-allowed-flags() {
 	ALLOWED_FLAGS=(
-		-pipe -O '-O[123szg]' '-mcpu=*' '-march=*' '-mtune=*'
-		-flto '-flto=*' -fno-lto
+		-pipe -O '-O[123szg]' '-mcpu=*' '-march=*' '-mtune=*' '-mfpmath=*'
+		-flto '-flto=*' -fno-lto -ffat-lto-objects
 
 		# Hardening flags
 		'-fstack-protector*'
@@ -56,11 +54,17 @@ _setup-allowed-flags() {
 		'-fcf-protection=*'
 		-fbounds-check -fbounds-checking
 		-fno-PIE -fno-pie -nopie -no-pie
+		-fharden-compares -fharden-conditional-branches
+		-fharden-control-flow-redundancy -fno-harden-control-flow-redundancy
+		-fhardcfr-skip-leaf -fhardcfr-check-exceptions -fhardcfr-check-returning-calls
+		'-fhardcfr-check-noreturn-calls=*'
 		# Spectre mitigations, bug #646076
 		'-mindirect-branch=*'
 		-mindirect-branch-register
 		'-mfunction-return=*'
 		-mretpoline
+		'-mharden-sls=*'
+		'-mbranch-protection=*'
 
 		# Misc
 		-fno-unit-at-a-time -fno-strict-overflow
@@ -73,13 +77,14 @@ _setup-allowed-flags() {
 		-ggdb '-ggdb[0-9]'
 		-gdwarf '-gdwarf-*'
 		-gstabs -gstabs+
-		-gz
+		-gz '-gz=*'
 		-glldb
+		'-fdebug-default-version=*'
 
 		# Cosmetic/output related, see e.g. bug #830534
 		-fno-diagnostics-color '-fmessage-length=*'
 		-fno-ident -fpermissive -frecord-gcc-switches
-		-frecord-command-line
+		-frecord-command-line -freport-bug
 		'-fdiagnostics*' '-fplugin*'
 		'-W*' -w
 
@@ -95,6 +100,7 @@ _setup-allowed-flags() {
 		'-fno-stack-protector*' '-fabi-version=*'
 		-fno-strict-aliasing -fno-bounds-check -fno-bounds-checking -fstrict-overflow
 		-fno-omit-frame-pointer '-fno-builtin*'
+		-mno-omit-leaf-frame-pointer
 	)
 	ALLOWED_FLAGS+=(
 		'-mregparm=*' -mno-app-regs -mapp-regs -mno-mmx -mno-sse
@@ -107,12 +113,23 @@ _setup-allowed-flags() {
 		-mno-faster-structs -mfaster-structs -m32 -m64 -mx32 '-mabi=*'
 		-mlittle-endian -mbig-endian -EL -EB -fPIC -mlive-g0 '-mcmodel=*'
 		-mstack-bias -mno-stack-bias -msecure-plt '-m*-toc' '-mfloat-abi=*'
+
+		# This is default on for a bunch of arches except amd64 in GCC
+		# already, and amd64 itself is planned too.
+		'-mtls-dialect=*'
+
+		# MIPS errata
 		-mfix-r4000 -mno-fix-r4000 -mfix-r4400 -mno-fix-r4400
-		-mfix-rm7000 -mno-fix-rm7000 -mfix-r10000 -mno-fix-r10000
+		-mfix-r10000 -mno-fix-r10000
+
 		'-mr10k-cache-barrier=*' -mthumb -marm
 
 		# needed for arm64 (and in particular SCS)
 		-ffixed-x18
+
+		# needed for riscv (to prevent unaligned vector access)
+		# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=115789
+		-mstrict-align -mvector-strict-align
 
 		# gcc 4.5
 		-mno-fma4 -mno-movbe -mno-xop -mno-lwp
@@ -124,6 +141,8 @@ _setup-allowed-flags() {
 		-mno-fxsr -mno-hle -mno-rtm -mno-xsave -mno-xsaveopt
 		# gcc 4.9
 		-mno-avx512cd -mno-avx512er -mno-avx512f -mno-avx512pf -mno-sha
+
+		-mevex512 -mno-evex512
 	)
 
 	# Allow some safe individual flags. Should come along with the bug reference.
@@ -131,6 +150,14 @@ _setup-allowed-flags() {
 		# Allow explicit stack realignment to run non-conformant
 		# binaries: bug #677852
 		-mstackrealign
+		'-mpreferred-stack-boundary=*'
+		'-mincoming-stack-boundary=*'
+	)
+	ALLOWED_FLAGS+=(
+		# Clang-only
+		'--unwindlib=*'
+		'--rtlib=*'
+		'--stdlib=*'
 	)
 }
 
@@ -174,7 +201,7 @@ _filter-hardened() {
 					continue
 				fi
 
-				is-flagq -fno-stack-protector-all || append-flags $(test-flags -fno-stack-protector-all)
+				is-flagq -fno-stack-protector || append-flags $(test-flags -fno-stack-protector)
 				;;
 			-fno-strict-overflow)
 				gcc-specs-nostrict || continue
@@ -537,7 +564,7 @@ strip-flags() {
 # Returns shell true if <flag> is supported by given <compiler>,
 # else returns shell false.
 test-flag-PROG() {
-	[[ ${EAPI} == [67] ]] ||
+	[[ ${EAPI} == 7 ]] ||
 		die "Internal function ${FUNCNAME} is not available in EAPI ${EAPI}."
 	_test-flag-PROG "$@"
 }
@@ -608,6 +635,11 @@ _test-flag-PROG() {
 			fi
 
 			cmdline_extra+=(-xc)
+			;;
+		hip)
+			in_ext='hip'
+			in_src='int main(void) { return 0; }'
+			cmdline_extra+=(-xhip -c)
 			;;
 	esac
 	local test_in=${T}/test-flag.${in_ext}
@@ -680,6 +712,12 @@ test-flag-FC() { _test-flag-PROG FC f95 "$@"; }
 # Returns shell true if <flag> is supported by the C compiler and linker, else returns shell false.
 test-flag-CCLD() { _test-flag-PROG CC c+ld "$@"; }
 
+# @FUNCTION: test-flag-HIPCXX
+# @USAGE: <flag>
+# @DESCRIPTION:
+# Returns shell true if <flag> is supported by the HIP compiler, else returns shell false.
+test-flag-HIPCXX() { _test-flag-PROG HIPCXX hip "$@"; }
+
 # @FUNCTION: test-flags-PROG
 # @USAGE: <compiler> <flag> [more flags...]
 # @INTERNAL
@@ -687,7 +725,7 @@ test-flag-CCLD() { _test-flag-PROG CC c+ld "$@"; }
 # Returns shell true if <flags> are supported by given <compiler>,
 # else returns shell false.
 test-flags-PROG() {
-	[[ ${EAPI} == [67] ]] ||
+	[[ ${EAPI} == 7 ]] ||
 		die "Internal function ${FUNCNAME} is not available in EAPI ${EAPI}."
 	_test-flags-PROG "$@"
 }
@@ -761,6 +799,12 @@ test-flags-FC() { _test-flags-PROG FC "$@"; }
 # Returns shell true if <flags> are supported by the C compiler and default linker, else returns shell false.
 test-flags-CCLD() { _test-flags-PROG CCLD "$@"; }
 
+# @FUNCTION: test-flags-HIPCXX
+# @USAGE: <flags>
+# @DESCRIPTION:
+# Returns shell true if <flags> are supported by the HIP compiler and default linker, else returns shell false.
+test-flags-HIPCXX() { _test-flags-PROG HIPCXX "$@"; }
+
 # @FUNCTION: test-flags
 # @USAGE: <flags>
 # @DESCRIPTION:
@@ -783,7 +827,7 @@ test_version_info() {
 
 # @FUNCTION: strip-unsupported-flags
 # @DESCRIPTION:
-# Strip {C,CXX,F,FC}FLAGS of any flags not supported by the active toolchain.
+# Strip {C,CXX,F,FC,HIP}FLAGS of any flags not supported by the active toolchain.
 strip-unsupported-flags() {
 	[[ $# -ne 0 ]] && die "strip-unsupported-flags takes no arguments"
 	export CFLAGS=$(test-flags-CC ${CFLAGS})
@@ -791,6 +835,7 @@ strip-unsupported-flags() {
 	export FFLAGS=$(test-flags-F77 ${FFLAGS})
 	export FCFLAGS=$(test-flags-FC ${FCFLAGS})
 	export LDFLAGS=$(test-flags-CCLD ${LDFLAGS})
+	export HIPFLAGS=$(test-flags-HIPCXX ${HIPFLAGS})
 }
 
 # @FUNCTION: get-flag
@@ -808,9 +853,24 @@ get-flag() {
 	# `get-flag march` == "i686"
 	for var in $(all-flag-vars) ; do
 		for f in ${!var} ; do
-			if [ "${f/${findflag}}" != "${f}" ] ; then
-				printf "%s\n" "${f/-${findflag}=}"
-				return 0
+			if [[ ${EAPI} = [78] && -z "${_FLAG_O_MATIC_TESTS_FAKE_EAPI_NINE}" ]]; then
+				if [[ "${f/${findflag}}" != "${f}" ]] ; then
+					printf "%s\n" "${f/-${findflag}=}"
+					return 0
+				fi
+			else
+				# Print RHS for "flag" (no leading "-")
+				if [[ "${f#-${findflag}=}" != "${f}" ]] ; then
+					printf "%s\n" "${f#-${findflag}=}"
+					return 0
+				fi
+				# Print full match for any of:
+				#   "-flag" with leading "-"
+				#   "flag" without leading "-" that has no unmatched succeeding =value
+				if [[ ${f} = -${findflag#-} || ${f%=*} = ${findflag} ]] ; then
+					printf "%s\n" "${f}"
+					return 0
+				fi
 			fi
 		done
 	done
@@ -981,6 +1041,12 @@ test-compile() {
 			args+=(${FCFLAGS[@]} ${LDFLAGS[@]} -xf95)
 			libs+=(${LIBS[@]})
 			;;
+		hip)
+			compiler="$(tc-getHIPCXX)"
+			filename_in="${T}/test.hip"
+			filename_out="${T}/test.o"
+			args+=(${CFLAGS[@]} -xhip -c)
+			;;
 		*)
 			die "Unknown compiled language ${lang}"
 			;;
@@ -992,69 +1058,27 @@ test-compile() {
 }
 
 # @FUNCTION: append-atomic-flags
-# @USAGE: [bytes]
 # @DESCRIPTION:
-# Attempts to detect if appending -latomic is required to use
-# a specific-sized atomic intrinsic, and if so, appends it.  If the bytesize
-# is not specified, then check the four most common byte sizes (1, 2, 4, 8).
-# >=16-byte atomics are not included in this default set and must be explicitly
-# passed if required.  This may require you to add a macro definition like
-# -Duint128_t=__uint128_t to your CFLAGS.
+# Attempts to detect if appending -latomic works, and does so.
 append-atomic-flags() {
-	# this implementation is as described in bug #820101
-	local code
+	# Make sure that the flag is actually valid. If it isn't, then maybe the
+	# library both doesn't exist and is redundant, or maybe the toolchain is
+	# broken, but let the build succeed or fail on its own.
+	test-flags-CCLD "-latomic" &>/dev/null || return
 
-	# first, ensure we can compile a trivial program
-	# this is because we can't distinguish if test-compile
-	# fails because -latomic is actually needed or if we have a
-	# broken toolchain (like due to bad FLAGS)
-	read -r -d '' code <<- EOF
-		int main(void)
-		{
-			return 0;
-		}
-	EOF
-
-	# if toolchain is broken, just return silently.  it's better to
-	# let other pieces of the build fail later down the line than to
-	# make people think that something to do with atomic support is the
-	# cause of their problems.
-	test-compile "c+ld" "${code}" || return
-
-	local bytesizes
-	[[ "${#}" == "0" ]] && bytesizes=( "1" "2" "4" "8" ) || bytesizes="${@}"
-
-	for bytesize in ${bytesizes[@]}
-	do
-		# this sample program is informed by the great testing from the buildroot project:
-		# https://github.com/buildroot/buildroot/commit/6856e417da4f3aa77e2a814db2a89429af072f7d
-		read -r -d '' code <<- EOF
-			#include <stdint.h>
-			int main(void)
-			{
-				uint$((${bytesize} * 8))_t a = 0;
-				__atomic_add_fetch(&a, 3, __ATOMIC_RELAXED);
-				__atomic_compare_exchange_n(&a, &a, 2, 1, __ATOMIC_RELAXED, __ATOMIC_RELAXED);
-				return 0;
-			}
-		EOF
-
-		# do nothing if test program links fine
-		test-compile "c+ld" "${code}" && continue
-
-		# ensure that the toolchain supports -latomic
-		test-flags-CCLD "-latomic" &>/dev/null || die "-latomic is required but not supported by $(tc-getCC)"
-
-		append-libs "-latomic"
-
-		# verify that this did indeed fix the problem
-		test-compile "c+ld" "${code}" || \
-			die "libatomic does not include an implementation of ${bytesize}-byte atomics for this toolchain"
-
-		# if any of the required bytesizes require -latomic, no need to continue
-		# checking the others
-		return
-	done
+	# We unconditionally append this flag. In the case that it's needed, the
+	# flag is, well, needed. In the case that it's not needed, it causes no
+	# harm, because we ensure that this specific library is definitely
+	# certainly linked with as-needed.
+	#
+	# Really, this should be implemented directly in the compiler, including
+	# the use of push/pop for as-needed. It's exactly what the gcc spec file
+	# does for e.g. -lgcc_s, but gcc is concerned about doing so due to build
+	# system internals and as a result all users have to deal with this mess
+	# instead.
+	#
+	# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81358
+	append-libs "-Wl,--push-state,--as-needed,-latomic,--pop-state"
 }
 
 fi

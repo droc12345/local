@@ -1,27 +1,30 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{7..10} )
+PYTHON_COMPAT=( python3_{11..14} )
 
-inherit pam python-any-r1 readme.gentoo-r1
+inherit edo pam python-any-r1 readme.gentoo-r1
 
 DESCRIPTION="PAM base configuration files"
 HOMEPAGE="https://github.com/gentoo/pambase"
 
 if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/gentoo/pambase.git"
+	EGIT_REPO_URI="
+		https://anongit.gentoo.org/git/proj/pambase.git
+		https://github.com/gentoo/pambase.git
+	"
 else
-	SRC_URI="https://github.com/gentoo/pambase/archive/${P}.tar.gz"
-	KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86"
-	S="${WORKDIR}/${PN}-${P}"
+	SRC_URI="https://gitweb.gentoo.org/proj/pambase.git/snapshot/${P}.tar.bz2"
+
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="caps debug elogind gnome-keyring homed minimal mktemp +nullok pam_krb5 pam_ssh +passwdqc pwhistory pwquality securetty selinux +sha512 systemd yescrypt"
+IUSE="caps debug elogind gnome-keyring homed minimal mktemp +nullok pam_krb5 pam_ssh +passwdqc pwhistory pwquality securetty selinux sha512 sssd systemd +yescrypt"
 
 RESTRICT="binchecks"
 
@@ -54,37 +57,51 @@ RDEPEND="
 	homed? ( sys-apps/systemd[homed] )
 	systemd? ( sys-apps/systemd[pam] )
 	yescrypt? ( sys-libs/libxcrypt[system] )
+	sssd? ( sys-auth/sssd )
+"
+BDEPEND="
+	$(python_gen_any_dep '
+		dev-python/jinja2[${PYTHON_USEDEP}]
+	')
 "
 
-BDEPEND="$(python_gen_any_dep '
-		dev-python/jinja2[${PYTHON_USEDEP}]
-	')"
-
 python_check_deps() {
-	has_version -b "dev-python/jinja2[${PYTHON_USEDEP}]"
+	python_has_version "dev-python/jinja2[${PYTHON_USEDEP}]"
 }
 
 src_configure() {
-	${EPYTHON} ./${PN}.py \
-		$(usex caps '--caps' '') \
-		$(usex debug '--debug' '') \
-		$(usex elogind '--elogind' '') \
-		$(usex gnome-keyring '--gnome-keyring' '') \
-		$(usex homed '--homed' '') \
-		$(usex minimal '--minimal' '') \
-		$(usex mktemp '--mktemp' '') \
-		$(usex nullok '--nullok' '') \
-		$(usex pam_krb5 '--krb5' '') \
-		$(usex pam_ssh '--pam-ssh' '') \
-		$(usex passwdqc '--passwdqc' '') \
-		$(usex pwhistory '--pwhistory' '') \
-		$(usex pwquality '--pwquality' '') \
-		$(usex securetty '--securetty' '') \
-		$(usex selinux '--selinux' '') \
-		$(usex sha512 '--sha512' '') \
-		$(usex systemd '--systemd' '') \
-		$(usex yescrypt '--yescrypt' '') \
-	|| die
+	local crypt=md5
+	# TODO: sha256, blowfish, gost_yescrypt
+	use sha512 && crypt=sha512
+	use yescrypt && crypt=yescrypt
+
+	local pamargs=(
+		# Not all 'upstream' options are (currently) wired up
+		# in the ebuild.
+		#
+		# TODO: pam_shells
+		$(usev caps '--caps')
+		$(usev debug '--debug')
+		$(usev elogind '--elogind')
+		$(usev gnome-keyring '--gnome-keyring')
+		$(usev homed '--homed')
+		$(usev minimal '--minimal')
+		$(usev mktemp '--mktemp')
+		$(usev nullok '--nullok')
+		$(usev pam_krb5 '--krb5')
+		$(usev pam_ssh '--pam-ssh')
+		$(usev passwdqc '--passwdqc')
+		$(usev pwhistory '--pwhistory')
+		$(usev pwquality '--pwquality')
+		$(usev securetty '--securetty')
+		$(usev selinux '--selinux')
+		$(usex systemd '--systemd' '--openrc')
+		$(usev sssd '--sssd')
+
+		--encrypt=${crypt}
+	)
+
+	edo ${EPYTHON} ./${PN}.py "${pamargs[@]}"
 }
 
 src_test() { :; }

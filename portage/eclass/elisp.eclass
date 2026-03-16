@@ -1,4 +1,4 @@
-# Copyright 2002-2021 Gentoo Authors
+# Copyright 2002-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: elisp.eclass
@@ -9,7 +9,8 @@
 # Jeremy Maitin-Shepard <jbms@attbi.com>
 # Christian Faulhammer <fauli@gentoo.org>
 # Ulrich Müller <ulm@gentoo.org>
-# @SUPPORTED_EAPIS: 6 7 8
+# Maciej Barć <xgqt@gentoo.org>
+# @SUPPORTED_EAPIS: 7 8 9
 # @PROVIDES: elisp-common
 # @BLURB: Eclass for Emacs Lisp packages
 # @DESCRIPTION:
@@ -27,15 +28,15 @@
 # file with the file name ${P}.el, then this eclass will move ${P}.el to
 # ${PN}.el in src_unpack().
 
-# @ECLASS-VARIABLE: NEED_EMACS
+# @ECLASS_VARIABLE: NEED_EMACS
 # @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# If you need anything different from Emacs 23, use the NEED_EMACS
-# variable before inheriting elisp.eclass.  Set it to the version your
-# package uses and the dependency will be adjusted.
+# If you need anything different from Emacs 25.3 (or newer), use the
+# NEED_EMACS variable before inheriting elisp.eclass.  Set it to the
+# version your package uses and the dependency will be adjusted.
 
-# @ECLASS-VARIABLE: ELISP_PATCHES
+# @ECLASS_VARIABLE: ELISP_PATCHES
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Space separated list of patches to apply after unpacking the sources.
@@ -43,12 +44,12 @@
 # FILESDIR.  This variable is semi-deprecated, preferably use the
 # PATCHES array instead.
 
-# @ECLASS-VARIABLE: ELISP_REMOVE
+# @ECLASS_VARIABLE: ELISP_REMOVE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Space separated list of files to remove after unpacking the sources.
 
-# @ECLASS-VARIABLE: SITEFILE
+# @ECLASS_VARIABLE: SITEFILE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Name of package's site-init file.  The filename must match the shell
@@ -56,27 +57,21 @@
 # reserved for internal use.  "50${PN}-gentoo.el" is a reasonable choice
 # in most cases.
 
-# @ECLASS-VARIABLE: ELISP_TEXINFO
+# @ECLASS_VARIABLE: ELISP_TEXINFO
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Space separated list of Texinfo sources.  Respective GNU Info files
 # will be generated in src_compile() and installed in src_install().
 
-inherit elisp-common
-
-case ${EAPI:-0} in
-	6|7|8) ;;
+case ${EAPI} in
+	7|8|9) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-EXPORT_FUNCTIONS src_{unpack,prepare,configure,compile,install} \
-	pkg_{setup,postinst,postrm}
+inherit elisp-common
 
 RDEPEND=">=app-editors/emacs-${NEED_EMACS}:*"
-case ${EAPI} in
-	6) DEPEND="${RDEPEND}" ;;
-	*) BDEPEND="${RDEPEND}" ;;
-esac
+BDEPEND="${RDEPEND}"
 
 # @FUNCTION: elisp_pkg_setup
 # @DESCRIPTION:
@@ -131,7 +126,7 @@ elisp_src_prepare() {
 
 # @FUNCTION: elisp_src_configure
 # @DESCRIPTION:
-# Do nothing, because Emacs packages seldomly bring a full build system.
+# Do nothing, because Emacs packages seldom bring a full build system.
 
 elisp_src_configure() { :; }
 
@@ -144,7 +139,20 @@ elisp_src_configure() { :; }
 elisp_src_compile() {
 	elisp-compile *.el
 	if [[ -n ${ELISP_TEXINFO} ]]; then
-		makeinfo ${ELISP_TEXINFO} || die
+		makeinfo --no-split ${ELISP_TEXINFO} || die
+	fi
+}
+
+# @FUNCTION: elisp_src_test
+# @DESCRIPTION:
+# Call "elisp-test" to test the package if "elisp-enable-tests" was called
+# beforehand, otherwise execute the default test function - "src_test".
+
+elisp_src_test() {
+	if [[ ${_ELISP_TEST_FUNCTION} ]]; then
+		elisp-test
+	else
+		default_src_test
 	fi
 }
 
@@ -158,7 +166,11 @@ elisp_src_compile() {
 elisp_src_install() {
 	elisp-install ${PN} *.el *.elc
 	if [[ -n ${SITEFILE} ]]; then
-		elisp-site-file-install "${FILESDIR}/${SITEFILE}"
+		if [[ -f "${FILESDIR}/${SITEFILE}" ]]; then
+			elisp-site-file-install "${FILESDIR}/${SITEFILE}"
+		else
+			elisp-make-site-file "${SITEFILE}"
+		fi
 	fi
 	if [[ -n ${ELISP_TEXINFO} ]]; then
 		set -- ${ELISP_TEXINFO}
@@ -192,3 +204,16 @@ elisp_pkg_postinst() {
 elisp_pkg_postrm() {
 	elisp-site-regen
 }
+
+# @FUNCTION: elisp_pkg_info
+# @DESCRIPTION:
+# Display the Emacs version that was used to build an installed package.
+
+elisp_pkg_info() {
+	if [[ -n ${_ELISP_EMACS_VERSION} ]]; then
+		echo "Built with Emacs version: ${_ELISP_EMACS_VERSION}"
+	fi
+}
+
+EXPORT_FUNCTIONS src_{unpack,prepare,configure,compile,test,install} \
+	pkg_{setup,postinst,postrm,info}

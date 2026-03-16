@@ -1,4 +1,4 @@
-# Copyright 2023 Gentoo Authors
+# Copyright 2023-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: linux-mod-r1.eclass
@@ -106,12 +106,12 @@ case ${EAPI} in
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ! ${_LINUX_MOD_R1_ECLASS} ]]; then
+if [[ -z ${_LINUX_MOD_R1_ECLASS} ]]; then
 _LINUX_MOD_R1_ECLASS=1
 
-inherit edo linux-info multiprocessing toolchain-funcs
+inherit dist-kernel-utils edo linux-info multiprocessing toolchain-funcs
 
-IUSE="dist-kernel modules-sign +strip ${MODULES_OPTIONAL_IUSE}"
+IUSE="dist-kernel modules-compress modules-sign +strip ${MODULES_OPTIONAL_IUSE}"
 
 RDEPEND="
 	sys-apps/kmod[tools]
@@ -121,6 +121,7 @@ DEPEND="
 	virtual/linux-sources
 "
 BDEPEND="
+	dev-util/pahole
 	sys-apps/kmod[tools]
 	modules-sign? (
 		dev-libs/openssl
@@ -130,6 +131,16 @@ BDEPEND="
 IDEPEND="
 	sys-apps/kmod[tools]
 "
+
+if [[ ${MODULES_INITRAMFS_IUSE} ]]; then
+	inherit mount-boot-utils
+	IUSE+=" ${MODULES_INITRAMFS_IUSE}"
+	IDEPEND+="
+		${MODULES_INITRAMFS_IUSE#+}? (
+			sys-kernel/installkernel
+		)
+	"
+fi
 
 if [[ -n ${MODULES_OPTIONAL_IUSE} ]]; then
 	: "${MODULES_OPTIONAL_IUSE#+}? ( | )"
@@ -179,18 +190,32 @@ fi
 #
 # May want to look at KERNEL_CHOST before considering this.
 
+# @ECLASS_VARIABLE: MODULES_INITRAMFS_IUSE
+# @DEFAULT_UNSET
+# @PRE_INHERIT
+# @DESCRIPTION:
+# If set, adds the specified USE flag. When this flag is enabled the
+# installed kernel modules are registered for inclusion in the dracut
+# initramfs. Additionally, if distribution kernels are used
+# (USE="dist-kernel") then these kernels are re-installed.
+#
+# The typical recommended value is "initramfs" or "+initramfs" (global
+# IUSE).
+#
+# If MODULES_INITRAMFS_IUSE is not set, or the specified flag is not
+# enabled, then the installed kernel modules are omitted from the
+# dracut initramfs.
+
 # @ECLASS_VARIABLE: MODULES_SIGN_HASH
 # @USER_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Used with USE=modules-sign.  Can be set to hash algorithm to use
-# during signature generation.
+# during signature generation (e.g. sha512).
 #
 # Rather than set this, it is recommended to select using the kernel's
 # configuration to ensure proper support (e.g. CONFIG_MODULE_SIG_SHA256),
 # and then it will be auto-detected here.
-#
-# Valid values: sha512,sha384,sha256,sha224,sha1
 #
 # Default if unset: kernel CONFIG_MODULE_SIG_HASH's value
 
@@ -302,10 +327,20 @@ fi
 #    (normally these should not be used directly, for custom builds)
 #  3. perform various sanity checks to fail early on issues
 linux-mod-r1_pkg_setup() {
-	debug-print-function ${FUNCNAME[0]} "${@}"
-	[[ ${MERGE_TYPE} != binary ]] || return 0
+	debug-print-function ${FUNCNAME} "$@"
 	_MODULES_GLOBAL[ran:pkg_setup]=1
 	_modules_check_function ${#} 0 0 || return 0
+
+	if [[ ${MODULES_INITRAMFS_IUSE} ]] &&
+		use dist-kernel && use ${MODULES_INITRAMFS_IUSE#+}
+	then
+		# Check, but don't die because we can fix the problem and then
+		# emerge --config ... to re-run installation.
+		nonfatal mount-boot_check_status
+	fi
+
+	[[ ${MERGE_TYPE} != binary ]] || return 0
+
 	_modules_check_migration
 
 	_modules_prepare_kernel
@@ -314,7 +349,10 @@ linux-mod-r1_pkg_setup() {
 
 	_modules_set_makeargs
 
+	_modules_prepare_cross
+
 	_modules_sanity_gccplugins
+	_modules_sanity_objtool
 }
 
 # @FUNCTION: linux-mod-r1_src_compile
@@ -349,8 +387,8 @@ linux-mod-r1_pkg_setup() {
 # > make-target: Almost always unneeded but, if defaults are not right,
 # then can specify the Makefile's target(s) to build the module/extras.
 # Multiple targets can be used with spaces, e.g. :"first second".
-#  -> Default: specially tries modules, module, <name>.ko, <name>,
-# default, all, empty target, and runs the first found usable
+#  -> Default: specially tries modules, module, <name>.ko, default,
+# all, empty target, and runs the first found usable
 #
 # Missing elements results in defaults being used, e.g. this is valid:
 #   modlist=( name1 name2=:source name3=install::build )
@@ -372,7 +410,7 @@ linux-mod-r1_pkg_setup() {
 # different make arguments per modules or intermediate steps -- albeit,
 # if atypical, may want to build manually (see eclass' example).
 linux-mod-r1_src_compile() {
-	debug-print-function ${FUNCNAME[0]} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 0 0 || return 0
 
 	[[ ${modlist@a} == *a* && ${#modlist[@]} -gt 0 ]] ||
@@ -406,7 +444,7 @@ linux-mod-r1_src_compile() {
 		if [[ -z ${mod[3]} ]]; then
 			# guess between commonly used targets if none given, fallback to
 			# an empty target without trying to see the error output
-			for target in module{s,} "${name}"{.ko,} default all; do
+			for target in module{s,} "${name}".ko default all; do
 				nonfatal emake "${emakeargs[@]}" -q "${target}" &>/dev/null
 				if [[ ${?} -eq 1 ]]; then
 					mod[3]=${target}
@@ -443,7 +481,7 @@ linux-mod-r1_src_compile() {
 # Installs modules built by linux-mod-r1_src_compile using
 # linux_domodule, then runs modules_post_process and einstalldocs.
 linux-mod-r1_src_install() {
-	debug-print-function ${FUNCNAME[0]} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 0 0 || return 0
 
 	(( ${#_MODULES_INSTALL[@]} )) ||
@@ -465,10 +503,24 @@ linux-mod-r1_src_install() {
 # @DESCRIPTION:
 # Updates module dependencies using depmod.
 linux-mod-r1_pkg_postinst() {
-	debug-print-function ${FUNCNAME[0]} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 0 0 || return 0
 
+	dist-kernel_compressed_module_cleanup "${EROOT}/lib/modules/${KV_FULL}"
 	_modules_update_depmod
+
+	if [[ ${MODULES_INITRAMFS_IUSE} ]] &&
+		use dist-kernel && use ${MODULES_INITRAMFS_IUSE#+}
+	then
+		dist-kernel_reinstall_initramfs "${KV_DIR}" "${KV_FULL}"
+	fi
+
+	if has_version virtual/dist-kernel && ! use dist-kernel; then
+		ewarn "virtual/dist-kernel is installed, but USE=\"dist-kernel\""
+		ewarn "is not enabled for ${CATEGORY}/${PN}."
+		ewarn "It's recommended to globally enable the dist-kernel USE flag"
+		ewarn "to automatically trigger initramfs rebuilds on kernel updates"
+	fi
 
 	# post_process ensures modules were installed and that the eclass' USE
 	# are likely not no-ops (unfortunately postinst itself may be missed)
@@ -483,7 +535,7 @@ linux-mod-r1_pkg_postinst() {
 #
 # See also linux_moduleinto.
 linux_domodule() {
-	debug-print-function ${FUNCNAME[0]} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 1 '' "<module>..." || return 0
 	(
 		# linux-mod-r0 formerly supported INSTALL_MOD_PATH (bug #642240), but
@@ -508,7 +560,7 @@ linux_domodule() {
 # this is like setting INSTALL_MOD_DIR which has the same default
 # for external modules.
 linux_moduleinto() {
-	debug-print-function ${FUNCNAME[0]} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 1 1 "<install-dir>" || return 0
 	_MODULES_GLOBAL[moduleinto]=${1}
 }
@@ -531,7 +583,7 @@ linux_moduleinto() {
 # if modules were unexpectedly pre-compressed possibly due to using
 # make install without passing MODULES_MAKEARGS to disable it.
 modules_post_process() {
-	debug-print-function ${FUNCNAME[0]} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 	_modules_check_function ${#} 0 1 '[<path>]' || return 0
 	[[ ${EBUILD_PHASE} == install ]] ||
 		die "${FUNCNAME[0]} can only be called in the src_install phase"
@@ -544,7 +596,13 @@ modules_post_process() {
 	(( ${#mods[@]} )) ||
 		die "${FUNCNAME[0]} was called with no installed modules under ${path}"
 
-	_modules_process_depmod.d "${mods[@]#"${path}/"}"
+	# TODO?: look into re-introducing after verifying it works as expected,
+	# formerly omitted because dracut's 90kernel-modules-extra parses depmod.d
+	# files directly and assumes should include its modules but we now create
+	# dracut omit files that *hopefully* prevent this
+#	_modules_process_depmod.d "${mods[@]##*/}"
+
+	_modules_process_dracut.conf.d "${mods[@]##*/}"
 	_modules_process_strip "${mods[@]}"
 	_modules_process_sign "${mods[@]}"
 	_modules_sanity_modversion "${mods[@]}" # after strip/sign in case broke it
@@ -611,12 +669,47 @@ _modules_check_migration() {
 	# - ECONF_PARAMS: documented but was a no-op in linux-mod too
 }
 
+# @FUNCTION: _modules_prepare_cross
+# @INTERNAL
+# @DESCRIPTION:
+# Checks whether modpost works locally as it might have been built for a
+# different architecture.  If it doesn't work, it is built in a new
+# environment and KV_OUT_DIR is repointed there.
+_modules_prepare_cross() {
+	# modpost should do nothing successfully when called without args.
+	if ! "${KV_OUT_DIR}"/scripts/mod/modpost &>/dev/null; then
+		# Try to run make modules_prepare in a new separate output directory.
+		# This cannot be done if the source directory is not clean. In that
+		# case, copy the whole source directory.
+		if [[ -e ${KV_DIR}/.config ]]; then
+			cp -rLT --reflink=auto -- "${KV_DIR}" "${WORKDIR}"/extmod-build || die
+			emake -C "${WORKDIR}"/extmod-build "${MODULES_MAKEARGS[@]}" modules_prepare \
+				KBUILD_OUTPUT=
+		else
+			mkdir -- "${WORKDIR}"/extmod-build || die
+			cp -- "${KV_OUT_DIR}"/{.config,Module.symvers} "${WORKDIR}"/extmod-build || die
+			# KV_OUT_DIR may have been prepared with install-extmod-build, which
+			# doesn't include all the files needed to call make modules_prepare,
+			# so use the Makefile from the full kernel sources.
+			emake -C "${WORKDIR}"/extmod-build "${MODULES_MAKEARGS[@]}" modules_prepare \
+				KBUILD_OUTPUT="${WORKDIR}"/extmod-build -f "${KERNEL_MAKEFILE}"
+		fi
+		KV_OUT_DIR=${WORKDIR}/extmod-build
+		KBUILD_OUTPUT=${KBUILD_OUTPUT+${KV_OUT_DIR}}
+	fi
+}
+
 # @FUNCTION: _modules_prepare_kernel
 # @INTERNAL
 # @DESCRIPTION:
 # Handles linux-info bits to provide usable sources, KV_ variables,
 # and CONFIG_CHECK use.
 _modules_prepare_kernel() {
+	# The modules we build are specific to each kernel version, we don't
+	# want to reset the environment to use the user selected kernel version.
+	# Bug 931213, 926063
+	SKIP_KERNEL_BINPKG_ENV_RESET=1
+
 	get_version
 
 	# linux-info allows skipping checks if SKIP_KERNEL_CHECK is set and
@@ -789,7 +882,7 @@ _modules_prepare_toolchain() {
 	# can work but raises concerns about breaking packages that may use these
 	if linux_chkconfig_present LTO_CLANG_THIN && tc-ld-is-lld; then
 		KERNEL_LD=${T}/linux-mod-r1_ld.lld
-		printf '#!/usr/bin/env sh\nexec %s "${@}" --thinlto-cache-dir=\n' \
+		printf '#!/usr/bin/env sh\nexec %q "${@}" --thinlto-cache-dir=\n' \
 			"${LD}" > "${KERNEL_LD}" || die
 		chmod +x -- "${KERNEL_LD}" || die
 	fi
@@ -831,9 +924,18 @@ _modules_prepare_toolchain() {
 # If enabled in the kernel configuration, this compresses the given
 # modules using the same format.
 _modules_process_compress() {
+	use modules-compress || return 0
+
 	local -a compress
 	if linux_chkconfig_present MODULE_COMPRESS_XZ; then
-		compress=(xz -qT"$(makeopts_jobs)" --memlimit-compress=50%)
+		compress=(
+			xz -q
+			--memlimit-compress=50%
+			--threads="$(makeopts_jobs)"
+			# match options from kernel's Makefile.modinst (bug #920837)
+			--check=crc32
+			--lzma2=dict=1MiB
+		)
 	elif linux_chkconfig_present MODULE_COMPRESS_GZIP; then
 		if type -P pigz &>/dev/null; then
 			compress=(pigz -p"$(makeopts_jobs)")
@@ -842,13 +944,13 @@ _modules_process_compress() {
 		fi
 	elif linux_chkconfig_present MODULE_COMPRESS_ZSTD; then
 		compress=(zstd -qT"$(makeopts_jobs)" --rm)
+	else
+		die "USE=modules-compress enabled but no MODULE_COMPRESS* configured"
 	fi
 
-	if [[ -v compress ]]; then
-		# could fail, assumes have commands that were needed for the kernel
-		einfo "Compressing modules (matching the kernel configuration) ..."
-		edob "${compress[@]}" -- "${@}"
-	fi
+	# could fail, assumes have commands that were needed for the kernel
+	einfo "Compressing modules (matching the kernel configuration) ..."
+	edob "${compress[@]}" -- "${@}"
 }
 
 # @FUNCTION: _modules_process_depmod.d
@@ -869,6 +971,21 @@ _modules_process_depmod.d() {
 					echo "override ${BASH_REMATCH[2]} ${KV_FULL} ${BASH_REMATCH[1]}"
 			done
 		)
+	)
+}
+
+# @FUNCTION: _modules_process_dracut.conf.d
+# @USAGE: <module>...
+# @INTERNAL
+# @DESCRIPTION:
+# Create dracut.conf.d snippet defining if module should be included in the
+# initramfs.
+_modules_process_dracut.conf.d() {
+	(
+		insinto /usr/lib/dracut/dracut.conf.d
+		[[ ${MODULES_INITRAMFS_IUSE} ]] && use ${MODULES_INITRAMFS_IUSE#+} &&
+			: add || : omit
+		newins - 10-${PN}.conf <<<"${_}_drivers+=\" ${*%.ko} \""
 	)
 }
 
@@ -1052,7 +1169,10 @@ _modules_sanity_kernelbuilt() {
 # @DESCRIPTION:
 # Prints a warning if the kernel version is greater than to
 # MODULES_KERNEL_MAX (while only considering same amount of version
-# components), or aborts if it is less than MODULES_KERNEL_MIN
+# components), or aborts if it is less than MODULES_KERNEL_MIN.
+#
+# With USE=dist-kernel, also warn if virtual/dist-kernel is of a
+# different version than the one being built against.
 _modules_sanity_kernelversion() {
 	local kv=${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}
 
@@ -1102,6 +1222,27 @@ _modules_sanity_kernelversion() {
 			ewarn
 		fi
 	fi
+
+	# wrt *, KV_EXTRA can have e.g. -p1 used by dist-kernel's version as
+	# _p1, ideally would check it too but this string can contain about
+	# anything so ignore it rather than try to figure out what it is
+	if use dist-kernel &&
+		! has_version "=virtual/dist-kernel-${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}*"
+	then
+		ewarn
+		ewarn "The kernel modules in ${CATEGORY}/${PN} are being built for"
+		ewarn "kernel version ${KV_FULL}. But this does not match the"
+		ewarn "installed version of virtual/dist-kernel."
+		ewarn
+		ewarn "If this is not intentional, the problem may be corrected by"
+		ewarn "using \"eselect kernel\" to set the default kernel version to"
+		ewarn "the same version as the installed version of virtual/dist-kernel."
+		ewarn
+		ewarn "If the distribution kernel is being downgraded, ensure that"
+		ewarn "virtual/dist-kernel is also downgraded to the same version"
+		ewarn "before rebuilding external kernel modules."
+		ewarn
+	fi
 }
 
 # @FUNCTION: _modules_sanity_modversion
@@ -1137,6 +1278,37 @@ _modules_sanity_modversion() {
 	done
 }
 
+# @FUNCTION: _modules_sanity_objtool
+# @INTERNAL
+# @DESCRIPTION:
+# Checks that the kernel's objtool is usable if it exists.  If not,
+# abort right away with an explanation rather than do so later with
+# a confusing error (bug #971092).
+#
+# Ever since it started to use binutils-libs in kernel >=6.19, it has
+# become likely to be broken whenever binutils-libs is upgraded.
+_modules_sanity_objtool() {
+	# ignore cross to keep this simple/safe without doing proper
+	# testing, albeit objtool should in theory be usable on CBUILD
+	tc-is-cross-compiler && return 0
+
+	local objtool=${KV_OUT_DIR}/tools/objtool/objtool
+	# if missing, assume this is a older kernel
+	if [[ -e ${objtool} ]]; then
+		"${objtool}" &>/dev/null
+
+		# without arguments objtool is likely to return 129 unless
+		# one of its libraries is missing which results in 127
+		if [[ ${?} -eq 127 ]]; then
+			eerror "Detected that '${objtool}' is not usable."
+			eerror "This is often because it uses old libraries that have been removed from"
+			eerror "the system. This can typically be fixed by rebuilding the kernel after"
+			eerror "doing \`make clean\` (or re-installing for distribution kernels)."
+			die "kernel ${KV_FULL} needs to be rebuilt"
+		fi
+	fi
+}
+
 # @FUNCTION: _modules_set_makeargs
 # @INTERNAL
 # @DESCRIPTION:
@@ -1152,13 +1324,15 @@ _modules_set_makeargs() {
 		# unrealistic when building modules that often have slow releases,
 		# but note that the kernel will still pass some -Werror=bad-thing
 		CONFIG_WERROR=
+		CONFIG_OBJTOOL_WERROR=
 
 		# these are only needed if using these arguments for installing, lets
 		# eclass handle strip, sign, compress, and depmod (CONFIG_ should
 		# have no impact on building, only used by Makefile.modinst)
-		CONFIG_MODULE_{SIG_ALL,COMPRESS_{GZIP,XZ,ZSTD}}=
-		DEPMOD=:
-		STRIP=:
+		# note: COMPRESS_ALL is enough for kernel >=6.12, rest is for compat
+		CONFIG_MODULE_{SIG_ALL,COMPRESS_{ALL,GZIP,XZ,ZSTD}}=
+		DEPMOD=true #916587
+		STRIP=true
 	)
 
 	if [[ ! ${MODULES_I_WANT_FULL_CONTROL} ]]; then
@@ -1228,7 +1402,7 @@ _modules_update_depmod() {
 
 				# EROOT from -b is not used when looking for configuration
 				# directories, so pass the whole list from kmod's tools/depmod.c
-				--config="${EROOT}"/{etc,run,usr/local/lib,lib}/depmod.d
+				--config="${EROOT}"/{etc,run,{usr/{local/,},}lib}/depmod.d
 			)
 
 		nonfatal edob depmod "${depmodargs[@]}" && return 0

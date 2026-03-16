@@ -1,10 +1,10 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: vim-plugin.eclass
 # @MAINTAINER:
 # vim@gentoo.org
-# @SUPPORTED_EAPIS: 6 7
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: used for installing vim plugins
 # @DESCRIPTION:
 # This eclass simplifies installation of app-vim plugins into
@@ -12,15 +12,22 @@
 # which is read automatically by vim.  The only exception is
 # documentation, for which we make a special case via vim-doc.eclass.
 
+if [[ -z ${_VIM_PLUGIN_ECLASS} ]]; then
+_VIM_PLUGIN_ECLASS=1
+
 case ${EAPI} in
-	5|6|7|8);;
-	*) die "EAPI ${EAPI:-0} unsupported (too old)";;
+	7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 inherit vim-doc
-EXPORT_FUNCTIONS src_install pkg_postinst pkg_postrm
 
-VIM_PLUGIN_VIM_VERSION="${VIM_PLUGIN_VIM_VERSION:-7.3}"
+[[ ${EAPI} != 7 ]] && _DEFINE_VIM_PLUGIN_SRC_PREPARE=true
+
+# @ECLASS_VARIABLE: VIM_PLUGIN_VIM_VERSION
+# @DESCRIPTION:
+# Minimum Vim version the plugin supports.
+: "${VIM_PLUGIN_VIM_VERSION:=7.3}"
 
 DEPEND="|| ( >=app-editors/vim-${VIM_PLUGIN_VIM_VERSION}
 	>=app-editors/gvim-${VIM_PLUGIN_VIM_VERSION} )"
@@ -31,14 +38,59 @@ if [[ ${PV} != 9999* ]] ; then
 fi
 SLOT="0"
 
+if [[ ${_DEFINE_VIM_PLUGIN_SRC_PREPARE} ]]; then
+# @FUNCTION: vim-plugin_src_prepare
+# @USAGE:
+# @DESCRIPTION:
+# Moves "after/syntax" plugins to directories to avoid file collisions with
+# other packages.
+# Note that this function is only defined and exported in EAPIs >= 8.
+vim-plugin_src_prepare() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	default_src_prepare
+
+	# return if there's nothing to do
+	[[ -d after/syntax ]] || return
+
+	pushd after/syntax >/dev/null || die
+	for file in *.vim; do
+		[[ -f "${file}" ]] || continue
+		mkdir "${file%.vim}" || die
+		mv "${file}" "${file%.vim}/${PN}.vim" || die
+	done
+	popd >/dev/null || die
+}
+fi
+
+# @ECLASS_VARIABLE: _VIM_PLUGIN_ALLOWED_DIRS
+# @INTERNAL
+# @DESCRIPTION:
+# Vanilla Vim dirs.
+# See /usr/share/vim/vim* for reference.
+_VIM_PLUGIN_ALLOWED_DIRS=(
+	after autoload colors compiler doc ftdetect ftplugin indent keymap
+	macros plugin spell syntax
+)
+
 # @FUNCTION: vim-plugin_src_install
+# @USAGE: [<dir>...]
 # @DESCRIPTION:
 # Overrides the default src_install phase. In order, this function:
-# * fixes file permission across all files in ${S}.
+#
 # * installs help and documentation files.
-# * installs all files in "${ED}"/usr/share/vim/vimfiles.
+#
+# * installs all files recognized by default Vim installation and directories
+#   passed to this function as arguments in "${ED}"/usr/share/vim/vimfiles.
+#
+# Example use:
+# @CODE
+# src_install() {
+# 	vim-plugin_src_install syntax_checkers
+# }
+# @CODE
 vim-plugin_src_install() {
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && ED="${D}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	# Install non-vim-help-docs
 	einstalldocs
@@ -46,21 +98,35 @@ vim-plugin_src_install() {
 	# Install remainder of plugin
 	insinto /usr/share/vim/vimfiles/
 	local d
-	for d in *; do
-		[[ -d "${d}" ]] || continue
-		doins -r "${d}"
-	done
+	case ${EAPI} in
+		7)
+			for d in *; do
+				[[ -d "${d}" ]] || continue
+				doins -r "${d}"
+			done ;;
+		*)
+			for d in "${_VIM_PLUGIN_ALLOWED_DIRS[@]}" "${@}"; do
+				[[ -d "${d}" ]] || continue
+				doins -r "${d}"
+			done ;;
+	esac
 }
 
 # @FUNCTION: vim-plugin_pkg_postinst
+# @USAGE:
 # @DESCRIPTION:
 # Overrides the pkg_postinst phase for this eclass.
 # The following functions are called:
+#
 # * update_vim_helptags
+#
 # * update_vim_afterscripts
+#
 # * display_vim_plugin_help
 vim-plugin_pkg_postinst() {
-	update_vim_helptags		# from vim-doc
+	debug-print-function ${FUNCNAME} "$@"
+
+	update_vim_helptags # from vim-doc
 	update_vim_afterscripts	# see below
 	display_vim_plugin_help	# see below
 }
@@ -71,8 +137,9 @@ vim-plugin_pkg_postinst() {
 # This function calls the update_vim_helptags and update_vim_afterscripts
 # functions and eventually removes a bunch of empty directories.
 vim-plugin_pkg_postrm() {
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
-	update_vim_helptags		# from vim-doc
+	debug-print-function ${FUNCNAME} "$@"
+
+	update_vim_helptags # from vim-doc
 	update_vim_afterscripts	# see below
 
 	# Remove empty dirs; this allows
@@ -82,25 +149,26 @@ vim-plugin_pkg_postrm() {
 }
 
 # @FUNCTION: update_vim_afterscripts
+# @USAGE:
 # @DESCRIPTION:
 # Creates scripts in /usr/share/vim/vimfiles/after/*
 # comprised of the snippets in /usr/share/vim/vimfiles/after/*/*.d
 update_vim_afterscripts() {
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && EROOT="${ROOT}"
-	has "${EAPI:-0}" 0 1 2 && ! use prefix && EPREFIX=
+	debug-print-function ${FUNCNAME} "$@"
+
 	local d f afterdir="${EROOT}"/usr/share/vim/vimfiles/after
 
 	# Nothing to do if the dir isn't there
-	[ -d "${afterdir}" ] || return 0
+	[[ -d "${afterdir}" ]] || return 0
 
-	einfo "Updating scripts in ${EPREFIX}/usr/share/vim/vimfiles/after"
+	einfo "Updating scripts in ${afterdir}"
 	find "${afterdir}" -type d -name \*.vim.d | while read d; do
 		echo '" Generated by update_vim_afterscripts' > "${d%.d}" || die
 		find "${d}" -name \*.vim -type f -maxdepth 1 -print0 | sort -z | \
 			xargs -0 cat >> "${d%.d}" || die "update_vim_afterscripts failed"
 	done
 
-	einfo "Removing dead scripts in ${EPREFIX}/usr/share/vim/vimfiles/after"
+	einfo "Removing dead scripts in ${afterdir}"
 	find "${afterdir}" -type f -name \*.vim | \
 	while read f; do
 		[[ "$(head -n 1 ${f})" == '" Generated by update_vim_afterscripts' ]] \
@@ -115,6 +183,7 @@ update_vim_afterscripts() {
 }
 
 # @FUNCTION: display_vim_plugin_help
+# @USAGE:
 # @DESCRIPTION:
 # Displays a message with the plugin's help file if one is available. Uses the
 # VIM_PLUGIN_HELPFILES env var. If multiple help files are available, they
@@ -124,33 +193,35 @@ update_vim_afterscripts() {
 # extra message regarding enabling filetype plugins is displayed if
 # VIM_PLUGIN_MESSAGES includes the word "filetype".
 display_vim_plugin_help() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	local h
 
-	if ! has_version ${CATEGORY}/${PN} ; then
-		if [[ -n "${VIM_PLUGIN_HELPFILES}" ]] ; then
+	if [[ -z ${REPLACING_VERSIONS} ]]; then
+		if [[ -n ${VIM_PLUGIN_HELPFILES} ]]; then
 			elog " "
 			elog "This plugin provides documentation via vim's help system. To"
 			elog "view it, use:"
-			for h in ${VIM_PLUGIN_HELPFILES} ; do
+			for h in ${VIM_PLUGIN_HELPFILES}; do
 				elog "    :help ${h}"
 			done
 			elog " "
 
-		elif [[ -n "${VIM_PLUGIN_HELPTEXT}" ]] ; then
+		elif [[ -n ${VIM_PLUGIN_HELPTEXT} ]]; then
 			elog " "
 			while read h ; do
 				elog "$h"
 			done <<<"${VIM_PLUGIN_HELPTEXT}"
 			elog " "
 
-		elif [[ -n "${VIM_PLUGIN_HELPURI}" ]] ; then
+		elif [[ -n ${VIM_PLUGIN_HELPURI} ]]; then
 			elog " "
 			elog "Documentation for this plugin is available online at:"
 			elog "    ${VIM_PLUGIN_HELPURI}"
 			elog " "
 		fi
 
-		if has "filetype" "${VIM_PLUGIN_MESSAGES}" ; then
+		if has filetype ${VIM_PLUGIN_MESSAGES}; then
 			elog "This plugin makes use of filetype settings. To enable these,"
 			elog "add lines like:"
 			elog "    filetype plugin on"
@@ -160,3 +231,10 @@ display_vim_plugin_help() {
 		fi
 	fi
 }
+
+fi
+
+# src_prepare is only exported in EAPI >= 8
+[[ ${_DEFINE_VIM_PLUGIN_SRC_PREPARE} ]] && EXPORT_FUNCTIONS src_prepare
+
+EXPORT_FUNCTIONS src_install pkg_postinst pkg_postrm

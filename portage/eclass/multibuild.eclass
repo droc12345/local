@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: multibuild.eclass
@@ -6,27 +6,25 @@
 # Michał Górny <mgorny@gentoo.org>
 # @AUTHOR:
 # Author: Michał Górny <mgorny@gentoo.org>
-# @SUPPORTED_EAPIS: 4 5 6 7
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: A generic eclass for building multiple variants of packages.
 # @DESCRIPTION:
 # The multibuild eclass aims to provide a generic framework for building
 # multiple 'variants' of a package (e.g. multilib, Python
 # implementations).
 
-case "${EAPI:-0}" in
-	0|1|2|3)
-		die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}"
+if [[ -z ${_MULTIBUILD_ECLASS} ]]; then
+_MULTIBUILD_ECLASS=1
+
+case ${EAPI} in
+	7|8|9)
+		# backwards compatibility for run_in_build_dir
+		inherit out-of-source-utils
 		;;
-	4|5|6|7|8)
-		;;
-	*)
-		die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}"
-		;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-if [[ ! ${_MULTIBUILD} ]]; then
-
-# @ECLASS-VARIABLE: MULTIBUILD_VARIANTS
+# @ECLASS_VARIABLE: MULTIBUILD_VARIANTS
 # @REQUIRED
 # @DESCRIPTION:
 # An array specifying all enabled variants which multibuild_foreach*
@@ -43,7 +41,7 @@ if [[ ! ${_MULTIBUILD} ]]; then
 # }
 # @CODE
 
-# @ECLASS-VARIABLE: MULTIBUILD_VARIANT
+# @ECLASS_VARIABLE: MULTIBUILD_VARIANT
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # The current variant which the function was executed for.
@@ -53,7 +51,7 @@ if [[ ! ${_MULTIBUILD} ]]; then
 # python2_6
 # @CODE
 
-# @ECLASS-VARIABLE: MULTIBUILD_ID
+# @ECLASS_VARIABLE: MULTIBUILD_ID
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # The unique identifier for a multibuild run. In a simple run, it is
@@ -67,7 +65,7 @@ if [[ ! ${_MULTIBUILD} ]]; then
 # amd64-double
 # @CODE
 
-# @ECLASS-VARIABLE: BUILD_DIR
+# @ECLASS_VARIABLE: BUILD_DIR
 # @OUTPUT_VARIABLE
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -97,7 +95,7 @@ if [[ ! ${_MULTIBUILD} ]]; then
 # nevertheless. It is preferred to call 'die' inside of the passed
 # function.
 multibuild_foreach_variant() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ ${MULTIBUILD_VARIANTS} ]] \
 		|| die "MULTIBUILD_VARIANTS need to be set"
@@ -131,29 +129,10 @@ multibuild_foreach_variant() {
 		_multibuild_run "${@}" \
 			> >(exec tee -a "${T}/build-${MULTIBUILD_ID}.log") 2>&1
 		lret=${?}
+		[[ ${ret} -eq 0 && ${lret} -ne 0 ]] && ret=${lret}
 	done
-	[[ ${ret} -eq 0 && ${lret} -ne 0 ]] && ret=${lret}
 
 	return ${ret}
-}
-
-# @FUNCTION: multibuild_parallel_foreach_variant
-# @USAGE: [<argv>...]
-# @DESCRIPTION:
-# Run the passed command repeatedly for each of the enabled package
-# variants. This used to run the commands in parallel but now it's
-# just a deprecated alias to multibuild_foreach_variant.
-#
-# The function returns 0 if all commands return 0, or the first non-zero
-# exit status otherwise. However, it performs all the invocations
-# nevertheless. It is preferred to call 'die' inside of the passed
-# function.
-multibuild_parallel_foreach_variant() {
-	debug-print-function ${FUNCNAME} "${@}"
-
-	[[ ${EAPI} == [45] ]] || die "${FUNCNAME} is banned in EAPI ${EAPI}"
-
-	multibuild_foreach_variant "${@}"
 }
 
 # @FUNCTION: multibuild_for_best_variant
@@ -167,15 +146,12 @@ multibuild_parallel_foreach_variant() {
 #
 # The function returns command exit status.
 multibuild_for_best_variant() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	[[ ${MULTIBUILD_VARIANTS} ]] \
 		|| die "MULTIBUILD_VARIANTS need to be set"
 
-	# bash-4.1 can't handle negative subscripts
-	local MULTIBUILD_VARIANTS=(
-		"${MULTIBUILD_VARIANTS[$(( ${#MULTIBUILD_VARIANTS[@]} - 1 ))]}"
-	)
+	local MULTIBUILD_VARIANTS=( "${MULTIBUILD_VARIANTS[-1]}" )
 	multibuild_foreach_variant "${@}"
 }
 
@@ -186,45 +162,19 @@ multibuild_for_best_variant() {
 # be placed in directories matching BUILD_DIRs used by
 # multibuild_foreach().
 multibuild_copy_sources() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	local _MULTIBUILD_INITIAL_BUILD_DIR=${BUILD_DIR:-${S}}
 
 	einfo "Will copy sources from ${_MULTIBUILD_INITIAL_BUILD_DIR}"
 
-	local cp_args=()
-	if cp --reflink=auto --version &>/dev/null; then
-		# enable reflinking if possible to make this faster
-		cp_args+=( --reflink=auto )
-	fi
-
 	_multibuild_create_source_copy() {
 		einfo "${MULTIBUILD_VARIANT}: copying to ${BUILD_DIR}"
-		cp -p -R "${cp_args[@]}" \
+		cp -p -R \
 			"${_MULTIBUILD_INITIAL_BUILD_DIR}" "${BUILD_DIR}" || die
 	}
 
 	multibuild_foreach_variant _multibuild_create_source_copy
-}
-
-# @FUNCTION: run_in_build_dir
-# @USAGE: <argv>...
-# @DESCRIPTION:
-# Run the given command in the directory pointed by BUILD_DIR.
-run_in_build_dir() {
-	debug-print-function ${FUNCNAME} "${@}"
-	local ret
-
-	[[ ${#} -ne 0 ]] || die "${FUNCNAME}: no command specified."
-	[[ ${BUILD_DIR} ]] || die "${FUNCNAME}: BUILD_DIR not set."
-
-	mkdir -p "${BUILD_DIR}" || die
-	pushd "${BUILD_DIR}" >/dev/null || die
-	"${@}"
-	ret=${?}
-	popd >/dev/null || die
-
-	return ${ret}
 }
 
 # @FUNCTION: multibuild_merge_root
@@ -234,43 +184,13 @@ run_in_build_dir() {
 # (the real root). Both directories have to be real, absolute paths
 # (i.e. including ${D}). Source root will be removed.
 multibuild_merge_root() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	local src=${1}
 	local dest=${2}
 
-	local ret
-
-	if use userland_BSD; then
-		# Most of BSD variants fail to copy broken symlinks, #447370
-		# also, they do not support --version
-
-		tar -C "${src}" -f - -c . \
-			| tar -x -f - -C "${dest}"
-		[[ ${PIPESTATUS[*]} == '0 0' ]]
-		ret=${?}
-	else
-		local cp_args=()
-
-		if cp -a --version &>/dev/null; then
-			cp_args+=( -a )
-		else
-			cp_args+=( -P -R -p )
-		fi
-
-		if cp --reflink=auto --version &>/dev/null; then
-			# enable reflinking if possible to make this faster
-			cp_args+=( --reflink=auto )
-		fi
-
-		cp "${cp_args[@]}" "${src}"/. "${dest}"/
-		ret=${?}
-	fi
-
-	if [[ ${ret} -ne 0 ]]; then
-		die "${MULTIBUILD_VARIANT:-(unknown)}: merging image failed."
-	fi
-
-	rm -rf "${src}"
+	cp -a "${src}"/. "${dest}"/ || die "${MULTIBUILD_VARIANT:-(unknown)}: merging image failed"
+	rm -rf "${src}" || die
 }
 
-_MULTIBUILD=1
 fi

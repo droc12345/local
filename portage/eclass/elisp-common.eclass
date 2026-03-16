@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: elisp-common.eclass
@@ -10,7 +10,8 @@
 # Mamoru Komachi <usata@gentoo.org>
 # Christian Faulhammer <fauli@gentoo.org>
 # Ulrich Müller <ulm@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7 8
+# Maciej Barć <xgqt@gentoo.org>
+# @SUPPORTED_EAPIS: 7 8 9
 # @BLURB: Emacs-related installation utilities
 # @DESCRIPTION:
 #
@@ -24,21 +25,21 @@
 # When relying on the emacs USE flag, you need to add
 #
 # @CODE
-# 	emacs? ( >=app-editors/emacs-23.1:* )
+# emacs? ( >=app-editors/emacs-26.3:* )
 # @CODE
 #
 # to your DEPEND/RDEPEND line and use the functions provided here to
 # bring the files to the correct locations.
 #
-# If your package requires a minimum Emacs version, e.g. Emacs 26.1,
-# then the dependency should be on >=app-editors/emacs-26.1:* instead.
+# If your package requires a minimum Emacs version, e.g. Emacs 30.1,
+# then the dependency should be on >=app-editors/emacs-30.1:* instead.
 # Because the user can select the Emacs executable with eselect, you
 # should also make sure that the active Emacs version is sufficient.
 # The eclass will automatically ensure this if you assign variable
 # NEED_EMACS with the Emacs version, as in the following example:
 #
 # @CODE
-# 	NEED_EMACS=26.1
+# NEED_EMACS=30.1
 # @CODE
 #
 # Please note that this should be done only for packages that are known
@@ -53,7 +54,7 @@
 # are loadable.
 #
 # @CODE
-# 	elisp-compile *.el
+# elisp-compile *.el
 # @CODE
 #
 # Function elisp-make-autoload-file() can be used to generate a file
@@ -74,7 +75,7 @@
 # (see below) the change, as it defaults to ${PN}.
 #
 # @CODE
-# 	elisp-install ${PN} *.el *.elc
+# elisp-install ${PN} *.el *.elc
 # @CODE
 #
 # To let the Emacs support be activated by Emacs on startup, you need
@@ -83,9 +84,9 @@
 # Normally this would look like this:
 #
 # @CODE
-# 	(add-to-list 'load-path "@SITELISP@")
-# 	(add-to-list 'auto-mode-alist '("\\.csv\\'" . csv-mode))
-# 	(autoload 'csv-mode "csv-mode" "Major mode for csv files." t)
+# (add-to-list 'load-path "@SITELISP@")
+# (add-to-list 'auto-mode-alist '("\\.csv\\'" . csv-mode))
+# (autoload 'csv-mode "csv-mode" "Major mode for csv files." t)
 # @CODE
 #
 # If your Emacs support files are installed in a subdirectory of
@@ -116,13 +117,13 @@
 # your ebuild (e.g., right after S or RDEPEND):
 #
 # @CODE
-# 	SITEFILE="50${PN}-gentoo.el"
+# SITEFILE="50${PN}-gentoo.el"
 # @CODE
 #
 # Which is then installed by
 #
 # @CODE
-# 	elisp-site-file-install "${FILESDIR}/${SITEFILE}"
+# elisp-site-file-install "${FILESDIR}/${SITEFILE}"
 # @CODE
 #
 # in src_install().  Any characters after the "-gentoo" part and before
@@ -130,6 +131,17 @@
 # For example, a file "50${PN}-gentoo-${PV}.el" will be installed as
 # "50${PN}-gentoo.el".  If your subdirectory is not named ${PN}, give
 # the differing name as second argument.
+#
+# For the simple case that only the package's subdirectory needs to be
+# added to the load-path, function elisp-make-site-file() will create
+# and install a site-init file that does just that:
+#
+# @CODE
+# elisp-make-site-file "${SITEFILE}"
+# @CODE
+#
+# Again, this must be called in src_install().  See the function's
+# documentation for more details on its usage.
 #
 # @SUBSECTION pkg_setup() usage:
 #
@@ -141,7 +153,7 @@
 # version.  In this case, you can add an explicit check in pkg_setup:
 #
 # @CODE
-# 	elisp-check-emacs-version
+# elisp-check-emacs-version
 # @CODE
 #
 # When having optional Emacs support, you should prepend "use emacs &&"
@@ -153,62 +165,61 @@
 # emerging and unmerging by using
 #
 # @CODE
-# 	pkg_postinst() {
-# 		elisp-site-regen
-# 	}
+# pkg_postinst() {
+# 	elisp-site-regen
+# }
 #
-# 	pkg_postrm() {
-# 		elisp-site-regen
-# 	}
+# pkg_postrm() {
+# 	elisp-site-regen
+# }
 # @CODE
 #
 # Again, with optional Emacs support, you should prepend "use emacs &&"
 # to above calls of elisp-site-regen().
 
-case ${EAPI:-0} in
-	5|6) inherit eapi7-ver ;;
-	7|8) ;;
+case ${EAPI} in
+	7|8|9) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
-# @ECLASS-VARIABLE: SITELISP
+# @ECLASS_VARIABLE: SITELISP
 # @DESCRIPTION:
 # Directory where packages install Emacs Lisp files.
 SITELISP=/usr/share/emacs/site-lisp
 
-# @ECLASS-VARIABLE: SITEETC
+# @ECLASS_VARIABLE: SITEETC
 # @DESCRIPTION:
 # Directory where packages install miscellaneous (not Lisp) files.
 SITEETC=/usr/share/emacs/etc
 
-# @ECLASS-VARIABLE: EMACSMODULES
+# @ECLASS_VARIABLE: EMACSMODULES
 # @DESCRIPTION:
 # Directory where packages install dynamically loaded modules.
 # May contain a @libdir@ token which will be replaced by $(get_libdir).
 EMACSMODULES=/usr/@libdir@/emacs/modules
 
-# @ECLASS-VARIABLE: EMACS
+# @ECLASS_VARIABLE: EMACS
 # @DESCRIPTION:
 # Path of Emacs executable.
 EMACS=${EPREFIX}/usr/bin/emacs
 
-# @ECLASS-VARIABLE: EMACSFLAGS
+# @ECLASS_VARIABLE: EMACSFLAGS
 # @DESCRIPTION:
 # Flags for executing Emacs in batch mode.
-# These work for Emacs versions 18-24, so don't change them.
+# These work for Emacs versions 18 to 30, so don't change them.
 EMACSFLAGS="-batch -q --no-site-file"
 
-# @ECLASS-VARIABLE: BYTECOMPFLAGS
+# @ECLASS_VARIABLE: BYTECOMPFLAGS
 # @DESCRIPTION:
 # Emacs flags used for byte-compilation in elisp-compile().
 BYTECOMPFLAGS="-L ."
 
-# @ECLASS-VARIABLE: NEED_EMACS
+# @ECLASS_VARIABLE: NEED_EMACS
 # @DESCRIPTION:
 # The minimum Emacs version required for the package.
-: ${NEED_EMACS:=23.1}
+: "${NEED_EMACS:=26.3}"
 
-# @ECLASS-VARIABLE: _ELISP_EMACS_VERSION
+# @ECLASS_VARIABLE: _ELISP_EMACS_VERSION
 # @INTERNAL
 # @DESCRIPTION:
 # Cached value of Emacs version detected in elisp-check-emacs-version().
@@ -223,7 +234,7 @@ elisp-emacs-version() {
 	local version ret tmout="timeout -k 5 55"
 	# Run without timeout if the command is not available
 	${tmout} true &>/dev/null || tmout=""
-	# The following will work for at least versions 18-24.
+	# The following will work for at least versions 18 to 30.
 	echo "(princ emacs-version)" >"${T}"/emacs-version.el
 	version=$(
 		# EMACS could be a microemacs variant that ignores the -batch
@@ -249,7 +260,6 @@ elisp-emacs-version() {
 }
 
 # @FUNCTION: elisp-check-emacs-version
-# @USAGE: [version]
 # @DESCRIPTION:
 # Test if the eselected Emacs version is at least the version of
 # GNU Emacs specified in the NEED_EMACS variable, or die otherwise.
@@ -311,7 +321,7 @@ elisp-make-autoload-file() {
 	ebegin "Generating autoload file for GNU Emacs"
 
 	cat >"${f}" <<-EOF
-	;;; ${f##*/} --- autoloads for ${PN}
+	;;; ${f##*/} --- autoloads for ${PN}  -*-lexical-binding:t-*-
 
 	;;; Commentary:
 	;; Automatically generated by elisp-common.eclass
@@ -329,11 +339,248 @@ elisp-make-autoload-file() {
 	EOF
 
 	${EMACS} ${EMACSFLAGS} \
+		--eval "(require 'autoload)" \
 		--eval "(setq make-backup-files nil)" \
 		--eval "(setq generated-autoload-file (expand-file-name \"${f}\"))" \
 		-f batch-update-autoloads "${@-.}"
 
 	eend $? "elisp-make-autoload-file: batch-update-autoloads failed" || die
+}
+
+# @FUNCTION: elisp-org-export-to
+# @USAGE: <export file type> <Org file path>
+# @DESCRIPTION:
+# Use Emacs Org "export-to" functions to convert a given Org file to a
+# picked format.
+#
+# Example:
+# @CODE
+# elisp-org-export-to texinfo README.org
+# mv README.texi ${PN}.texi || die
+# @CODE
+
+elisp-org-export-to() {
+	local export_format="${1}"
+	local org_file_path="${2}"
+
+	local export_group
+	case ${export_format} in
+		info) export_group=texinfo ;;  # Straight to ".info".
+		markdown) export_group=md ;;
+		pdf) export_group=latex ;;
+		*) export_group=${export_format} ;;
+	esac
+
+	# export_format = texinfo    =>  org-texinfo-export-to-texinfo
+	# export_format = pdf        =>  org-latex-export-to-pdf
+
+	local export_function=org-${export_group}-export-to-${export_format}
+
+	${EMACS} ${EMACSFLAGS} "${org_file_path}" -f "${export_function}" \
+		|| die "Org export to ${export_format} failed"
+}
+
+# @FUNCTION: elisp-test-buttercup
+# @USAGE: [test-subdirectory] [test-runner-opts] ...
+# @DESCRIPTION:
+# Run ELisp package tests using the "buttercup" test runner.
+#
+# The option "test-subdirectory" may be given any number of times,
+# it should be given as though it was passed to Emacs or the test tool,
+# not as a string.
+#
+# The options "test-subdirectory" and "test-runner-opts" are optional,
+# but if "test-runner-opts" needs to be provided also "test-subdirectory"
+# has to be specified.
+
+elisp-test-buttercup() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	local test_dir="${1:-$(pwd)}"
+	shift
+
+	local -a myopts=(
+		${BYTECOMPFLAGS}
+		-L "${test_dir}"
+		--traceback full
+		"$@"
+	)
+	ebegin "Running buttercup tests"
+	buttercup "${myopts[@]}" "${test_dir}"
+	eend $? "${FUNCNAME}: tests failed" || die
+}
+
+# @FUNCTION: elisp-test-ert-runner
+# @USAGE: [test-subdirectory] [test-runner-opts] ...
+# @DESCRIPTION:
+# Run ELisp package tests using the "ert-runner" test runner.
+#
+# The option "test-subdirectory" may be given any number of times,
+# it should be given as though it was passed to Emacs or the test tool,
+# not as a string.
+#
+# The options "test-subdirectory" and "test-runner-opts" are optional,
+# but if "test-runner-opts" needs to be provided also "test-subdirectory"
+# has to be specified.
+
+elisp-test-ert-runner() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	local test_dir="${1:-$(pwd)}"
+	shift
+
+	local -a myopts=(
+		${BYTECOMPFLAGS}
+		--reporter ert+duration
+		--script
+		-L "${test_dir}"
+		"$@"
+	)
+	ebegin "Running ert-runner tests"
+	ert-runner "${myopts[@]}" "${test_dir}"
+	eend $? "${FUNCNAME}: tests failed" || die
+}
+
+# @FUNCTION: elisp-test-ert
+# @USAGE: [test-subdirectory] [test-runner-opts] ...
+# @DESCRIPTION:
+# Run ELisp package tests using "ert", the Emacs's built-in test runner.
+#
+# The option "test-subdirectory" may be given any number of times,
+# it should be given as though it was passed to Emacs or the test tool,
+# not as a string.
+#
+# The options "test-subdirectory" and "test-runner-opts" are optional,
+# but if "test-runner-opts" needs to be provided also "test-subdirectory"
+# has to be specified.
+
+elisp-test-ert() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	local test_dir="${1:-$(pwd)}"
+	shift
+
+	local -a extra_load=()
+	local extra_load_file
+	for extra_load_file in "${test_dir}"/?*-test.el; do
+		if [[ -f "${extra_load_file}" ]]; then
+			extra_load+=( -l "${extra_load_file}" )
+		fi
+	done
+
+	local -a myopts=(
+		${EMACSFLAGS}
+		${BYTECOMPFLAGS}
+		-L "${test_dir}"
+		"${extra_load[@]}"
+		"$@"
+		-f ert-run-tests-batch-and-exit
+	)
+	ebegin "Running ert tests"
+	${EMACS} "${myopts[@]}"
+	eend $? "${FUNCNAME}: tests failed" || die
+}
+
+# @FUNCTION: elisp-enable-tests
+# @USAGE: [--optional] <test-runner> [test-runner-options] ...
+# @DESCRIPTION:
+# Set up IUSE, RESTRICT, BDEPEND and test runner function for running
+# tests with the specified test runner.
+#
+# The test-runner argument must be one of:
+#
+# - buttercup: for "buttercup" provided via "app-emacs/buttercup"
+#
+# - ert-runner: for "ert-runner" provided via "app-emacs/ert-runner"
+#
+# - ert: for built-in GNU Emacs test utility
+#
+# If the "--optional" flag is passed (before specifying the test
+# runner), then it is assumed that the ELisp package is a part of some
+# some project that optionally enables GNU Emacs support.  This will
+# correctly set up the test and Emacs dependencies.
+#
+# Notice that the first option passed to the "test-runner" is the
+# directory and the rest are miscellaneous options applicable to that
+# given runner.
+#
+# This function has to be called post inherit, specifically after
+# "IUSE", "RESTRICT" and "BDEPEND" variables are assigned.
+# It is advised to place this call right before (re)defining a given
+# ebuild's phases.
+#
+# Example:
+# @CODE
+# inherit elisp-common
+#
+# ...
+#
+# elisp-enable-tests --optional ert-runner "${S}"/elisp -t "!org"
+#
+# src_test() {
+# 	emake -C tests test
+# 	elisp-test
+# }
+# @CODE
+
+elisp-enable-tests() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	local optional
+	if [[ ${1} = "--optional" ]] ; then
+		optional=YES
+		shift
+	fi
+
+	local test_pkg
+	local test_runner=${1}
+	shift
+
+	_ELISP_TEST_OPTS=( "$@" )
+
+	case ${test_runner} in
+		buttercup )
+			test_pkg="app-emacs/buttercup"
+			_ELISP_TEST_FUNCTION=elisp-test-buttercup
+			;;
+		ert-runner )
+			test_pkg="app-emacs/ert-runner"
+			_ELISP_TEST_FUNCTION=elisp-test-ert-runner
+			;;
+		ert )
+			_ELISP_TEST_FUNCTION=elisp-test-ert
+			;;
+		* )
+			die "${FUNCNAME}: unknown test runner, given ${test_runner}"
+			;;
+	esac
+
+	if [[ ${test_pkg} ]]; then
+		IUSE+=" test "
+		RESTRICT+=" !test? ( test ) "
+		if [[ ${optional} ]]; then
+			IUSE+=" emacs "
+			BDEPEND+=" test? ( emacs? ( ${test_pkg} ) ) "
+		else
+			BDEPEND+=" test? ( ${test_pkg} ) "
+		fi
+	fi
+
+	return 0
+}
+
+# @FUNCTION: elisp-test
+# @DESCRIPTION:
+# Test the package using a ELisp test runner.
+#
+# If called without executing "elisp-enable-tests" beforehand, then
+# does nothing, otherwise a test runner is called with given
+# "test-runner-options".
+
+elisp-test() {
+	if [[ ${_ELISP_TEST_FUNCTION} ]]; then
+		${_ELISP_TEST_FUNCTION} "${_ELISP_TEST_OPTS[@]}"
+	fi
 }
 
 # @FUNCTION: elisp-install
@@ -360,10 +607,6 @@ elisp-install() {
 elisp-modules-install() {
 	local subdir="$1"
 	shift
-	# Don't bother inheriting multilib.eclass for get_libdir(), but
-	# error out in old EAPIs that don't support it natively.
-	[[ ${EAPI} == 5 ]] \
-		&& die "${ECLASS}: Dynamic modules not supported in EAPI ${EAPI}"
 	ebegin "Installing dynamic modules for GNU Emacs support"
 	( # subshell to avoid pollution of calling environment
 		exeinto "${EMACSMODULES//@libdir@/$(get_libdir)}/${subdir}"
@@ -383,7 +626,13 @@ elisp-modules-install() {
 
 elisp-site-file-install() {
 	local sf="${1##*/}" my_pn="${2:-${PN}}" modules ret
-	local header=";;; ${PN} site-lisp configuration"
+	local add_header="0,/\S/ {
+		# Delete any leading blank lines
+		/\S/! d
+		# Insert a header, unless we are already looking at one
+		/^;.*${PN}/I! \
+			i ;;; ${PN} site-lisp configuration  -*-lexical-binding:t-*-\n
+	}"
 
 	[[ ${sf} == [0-9][0-9]*-gentoo*.el ]] \
 		|| ewarn "elisp-site-file-install: bad name of site-init file"
@@ -391,13 +640,8 @@ elisp-site-file-install() {
 	sf="${T}/${sf}"
 	ebegin "Installing site initialisation file for GNU Emacs"
 	[[ $1 == "${sf}" ]] || cp "$1" "${sf}"
-	if [[ ${EAPI} == 5 ]]; then
-		grep -q "@EMACSMODULES@" "${sf}" \
-			&& die "${ECLASS}: Dynamic modules not supported in EAPI ${EAPI}"
-	else
-		modules=${EMACSMODULES//@libdir@/$(get_libdir)}
-	fi
-	sed -i -e "1{:x;/^\$/{n;bx;};/^;.*${PN}/I!s:^:${header}\n\n:;1s:^:\n:;}" \
+	modules=${EMACSMODULES//@libdir@/$(get_libdir)}
+	sed -i -e "${add_header}" \
 		-e "s:@SITELISP@:${EPREFIX}${SITELISP}/${my_pn}:g" \
 		-e "s:@SITEETC@:${EPREFIX}${SITEETC}/${my_pn}:g" \
 		-e "s:@EMACSMODULES@:${EPREFIX}${modules}/${my_pn}:g;\$q" "${sf}"
@@ -410,6 +654,30 @@ elisp-site-file-install() {
 	eend ${ret} "elisp-site-file-install: doins failed" || die
 }
 
+# @FUNCTION: elisp-make-site-file
+# @USAGE: <filename> [subdirectory] [line]...
+# @DESCRIPTION:
+# Create and install a site-init file for the package.  By default,
+# this will add the package's SITELISP subdirectory to Emacs' load-path:
+#
+# @CODE
+# (add-to-list 'load-path "@SITELISP@")
+# @CODE
+#
+# Additional arguments are appended as lines to the destination file.
+# Any @SITELISP@, @SITEETC@, and @EMACSMODULES@ tokens in these
+# arguments are replaced, as described for elisp-site-file-install.
+
+elisp-make-site-file() {
+	[[ $1 == [0-9][0-9]*-gentoo.el ]] \
+		|| die "elisp-make-site-file: bad name of site-init file"
+
+	local f="${T}/$1" my_pn="${2:-${PN}}"
+	shift; shift
+	printf "%s\n" "(add-to-list 'load-path \"@SITELISP@\")" "$@" >"${f}" || die
+	elisp-site-file-install "${f}" "${my_pn}"
+}
+
 # @FUNCTION: elisp-site-regen
 # @DESCRIPTION:
 # Regenerate the site-gentoo.el file, based on packages' site
@@ -417,7 +685,7 @@ elisp-site-file-install() {
 # directory.
 
 elisp-site-regen() {
-	local sitelisp=${ROOT%/}${EPREFIX}${SITELISP}
+	local sitelisp=${EROOT}${SITELISP}
 	local sf i ret=0 null="" page=$'\f'
 	local -a sflist
 
@@ -429,9 +697,6 @@ elisp-site-regen() {
 	[[ -d ${sitelisp} ]] \
 		|| die "elisp-site-regen: Directory ${sitelisp} does not exist"
 
-	[[ -d ${T} ]] \
-		|| die "elisp-site-regen: Temporary directory ${T} does not exist"
-
 	ebegin "Regenerating site-gentoo.el for GNU Emacs (${EBUILD_PHASE})"
 
 	for sf in "${sitelisp}"/site-gentoo.d/[0-9][0-9]*.el; do
@@ -439,18 +704,22 @@ elisp-site-regen() {
 	done
 
 	cat <<-EOF >"${T}"/site-gentoo.el || ret=$?
-	;;; site-gentoo.el --- site initialisation for Gentoo-installed packages
+	;;; site-gentoo.el --- Gentoo site initialisation  -*-lexical-binding:t-*-
 
 	;;; Commentary:
 	;; Automatically generated by elisp-common.eclass
 	;; DO NOT EDIT THIS FILE
 
 	;;; Code:
-	EOF
-	# Use sed instead of cat here, since files may miss a trailing newline.
-	sed '$q' "${sflist[@]}" </dev/null >>"${T}"/site-gentoo.el || ret=$?
-	cat <<-EOF >>"${T}"/site-gentoo.el || ret=$?
 
+	EOF
+	# Concatenate all site initialisation files.
+	# 1{/^;/s/\s*-\*-.*-\*-//} deletes file-local-var cookies from line 1.
+	# /\S/,$!d deletes any leading blank lines.
+	# $G inserts a blank line after each file.
+	sed -s '1{/^;/s/\s*-\*-.*-\*-//};/\S/,$!d;$G' "${sflist[@]}" \
+		</dev/null >>"${T}"/site-gentoo.el || ret=$?
+	cat <<-EOF >>"${T}"/site-gentoo.el || ret=$?
 	${page}
 	(provide 'site-gentoo)
 

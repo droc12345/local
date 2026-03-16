@@ -1,10 +1,10 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 2012-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: udev.eclass
 # @MAINTAINER:
 # systemd@gentoo.org
-# @SUPPORTED_EAPIS: 5 6 7 8
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: Default eclass for determining udev directories.
 # @DESCRIPTION:
 # Default eclass for determining udev directories.
@@ -26,23 +26,27 @@
 #	# udev_dorules contrib/99-foomatic
 #	# udev_newrules contrib/98-foomatic 99-foomatic
 # }
+#
+# pkg_postinst() {
+#	udev_reload
+# }
+#
+# pkg_postrm() {
+#	udev_reload
+# }
 # @CODE
-
-case ${EAPI} in
-	5|6|7|8) ;;
-	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
-esac
 
 if [[ -z ${_UDEV_ECLASS} ]]; then
 _UDEV_ECLASS=1
 
+case ${EAPI} in
+	7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
+esac
+
 inherit toolchain-funcs
 
-if [[ ${EAPI} == [56] ]]; then
-	DEPEND="virtual/pkgconfig"
-else
-	BDEPEND="virtual/pkgconfig"
-fi
+BDEPEND="virtual/pkgconfig"
 
 # @FUNCTION: _udev_get_udevdir
 # @INTERNAL
@@ -53,9 +57,9 @@ _udev_get_udevdir() {
 	local -x PKG_CONFIG_FDO_SYSROOT_RULES=1
 	if $($(tc-getPKG_CONFIG) --exists udev); then
 		local udevdir="$($(tc-getPKG_CONFIG) --variable=udevdir udev)"
-		echo "${udevdir#${EPREFIX%/}}"
+		echo "${udevdir#"${EPREFIX}"}"
 	else
-		echo /lib/udev
+		echo /usr/lib/udev
 	fi
 }
 
@@ -63,7 +67,7 @@ _udev_get_udevdir() {
 # @DESCRIPTION:
 # Use the short version $(get_udevdir) instead!
 udev_get_udevdir() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	eerror "This ebuild should be using the get_udevdir() function instead of the deprecated udev_get_udevdir()"
 	die "Deprecated function call: udev_get_udevdir(), please report to (overlay) maintainers."
@@ -75,7 +79,7 @@ udev_get_udevdir() {
 # This function always succeeds, even if udev is not installed.
 # The fallback value is set to /lib/udev
 get_udevdir() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	echo "$(_udev_get_udevdir)"
 }
@@ -85,7 +89,7 @@ get_udevdir() {
 # @DESCRIPTION:
 # Install udev rule(s). Uses doins, thus it is fatal.
 udev_dorules() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	(
 		insopts -m 0644
@@ -99,7 +103,7 @@ udev_dorules() {
 # @DESCRIPTION:
 # Install udev rule with a new name. Uses newins, thus it is fatal.
 udev_newrules() {
-	debug-print-function ${FUNCNAME} "${@}"
+	debug-print-function ${FUNCNAME} "$@"
 
 	(
 		insopts -m 0644
@@ -110,9 +114,11 @@ udev_newrules() {
 
 # @FUNCTION: udev_reload
 # @DESCRIPTION:
-# Run udevadm control --reload to refresh rules and databases
+# Run "udevadm control --reload" to refresh rules and databases.
+# Should be called from pkg_postinst and pkg_postrm in packages which install
+# udev rules or hwdb data.
 udev_reload() {
-	if [[ -n ${ROOT%/} ]]; then
+	if [[ -n ${ROOT} ]]; then
 		return 0
 	fi
 
