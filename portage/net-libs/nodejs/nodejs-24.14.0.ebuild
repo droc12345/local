@@ -1,13 +1,14 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 CONFIG_CHECK="~ADVISE_SYSCALLS"
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 PYTHON_REQ_USE="threads(+)"
 
-inherit bash-completion-r1 check-reqs flag-o-matic linux-info ninja-utils pax-utils python-any-r1 toolchain-funcs xdg-utils
+inherit bash-completion-r1 check-reqs flag-o-matic linux-info
+inherit ninja-utils pax-utils python-any-r1 toolchain-funcs xdg-utils
 
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
@@ -20,11 +21,11 @@ if [[ ${PV} == *9999 ]]; then
 else
 	SRC_URI="https://nodejs.org/dist/v${PV}/node-v${PV}.tar.xz"
 	SLOT="0/$(ver_cut 1)"
-	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc64 ~riscv ~x86 ~x64-macos"
+	KEYWORDS="amd64 ~arm arm64 ~loong ~ppc64 ~riscv ~x86 ~x64-macos"
 	S="${WORKDIR}/node-v${PV}"
 fi
 
-IUSE="corepack cpu_flags_x86_sse2 debug doc +icu +inspector lto npm pax-kernel +snapshot +ssl +system-icu +system-ssl test"
+IUSE="corepack cpu_flags_x86_sse2 debug doc +icu +inspector lto +npm pax-kernel +snapshot +ssl +system-icu +system-ssl test"
 REQUIRED_USE="inspector? ( icu ssl )
 	npm? ( ssl )
 	system-icu? ( icu )
@@ -33,21 +34,23 @@ REQUIRED_USE="inspector? ( icu ssl )
 
 RESTRICT="!test? ( test )"
 
-RDEPEND=">=app-arch/brotli-1.1.0:=
+COMMON_DEPEND=">=app-arch/brotli-1.1.0:=
 	dev-db/sqlite:3
+	>=dev-cpp/ada-3.3.0:=
+	>=dev-cpp/simdutf-7.3.4:=
 	>=dev-libs/libuv-1.51.0:=
-	>=dev-libs/simdjson-3.10.1:=
-	>=net-dns/c-ares-1.34.4:=
-	>=net-libs/nghttp2-1.64.0:=
+	>=dev-libs/simdjson-4.0.7:=
+	>=net-dns/c-ares-1.34.5:=
+	>=net-libs/nghttp2-1.67.1:=
 	>=net-libs/nghttp3-1.7.0:=
 	virtual/zlib:=
 	corepack? ( !sys-apps/yarn )
 	system-icu? ( >=dev-libs/icu-73:= )
 	system-ssl? (
-		>=net-libs/ngtcp2-1.9.1:=
-		>=dev-libs/openssl-1.1.1:0=
+		>=net-libs/ngtcp2-1.11.0:=
+		>=dev-libs/openssl-3.5.4:0=
 	)
-	!system-ssl? ( >=net-libs/ngtcp2-1.9.1:=[-gnutls] )
+	!system-ssl? ( >=net-libs/ngtcp2-1.11.0:=[-gnutls] )
 	|| (
 		sys-devel/gcc:*
 		llvm-runtimes/libatomic-stub
@@ -58,7 +61,8 @@ BDEPEND="${PYTHON_DEPS}
 	virtual/pkgconfig
 	test? ( net-misc/curl )
 	pax-kernel? ( sys-apps/elfix )"
-DEPEND="${RDEPEND}"
+DEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}"
 
 # These are measured on a loong machine with -ggdb on, and only checked
 # if debugging flags are present in CFLAGS.
@@ -110,7 +114,11 @@ src_prepare() {
 	fi
 
 	# We need to disable mprotect on two files when it builds Bug 694100.
-	use pax-kernel && PATCHES+=( "${FILESDIR}"/${PN}-24.1.0-paxmarking.patch )
+	use pax-kernel &&
+		PATCHES+=( "${FILESDIR}"/${PN}-24.1.0-paxmarking.patch )
+
+	use ppc64 &&
+		PATCHES+=(	"${FILESDIR}/${PN}-24.11.1-restore-ppc64be.patch" )
 
 	default
 }
@@ -127,9 +135,7 @@ src_configure() {
 
 	local myconf=(
 		--ninja
-		# ada is not packaged yet
-		# https://github.com/ada-url/ada
-		# --shared-ada
+		--shared-ada
 		--shared-brotli
 		--shared-cares
 		--shared-libuv
@@ -137,9 +143,7 @@ src_configure() {
 		--shared-nghttp3
 		--shared-ngtcp2
 		--shared-simdjson
-		# sindutf is not packaged yet
-		# https://github.com/simdutf/simdutf
-		# --shared-simdutf
+		--shared-simdutf
 		--shared-sqlite
 		--shared-zlib
 	)
@@ -267,7 +271,22 @@ src_test() {
 		test/parallel/test-strace-openat-openssl.js
 		test/sequential/test-tls-session-timeout.js
 		test/sequential/test-util-debug.js
+		# Breaking change in nghttp2 1.67.1, see
+		# https://github.com/nodejs/node/issues/60661
+		# https://github.com/nodejs/node/commit/b426a47c05e6b039ed65798d0ad3b3698b35fd97
+		# https://github.com/nghttp2/nghttp2/issues/2604
+		test/parallel/test-http2-client-unescaped-path.js
+		test/parallel/test-http2-multi-content-length.js
+		test/parallel/test-http2-reset-flood.js
+		test/parallel/test-http2-max-invalid-frames.js
+		test/parallel/test-http2-misbehaving-flow-control.js
+		test/parallel/test-http2-misbehaving-flow-control-paused.js
 	)
+	# https://bugs.gentoo.org/963649
+	has_version '>=dev-libs/openssl-3.6' &&
+		drop_tests+=(
+			test/parallel/test-tls-ocsp-callback
+		)
 	use inspector ||
 		drop_tests+=(
 			test/parallel/test-inspector-emit-protocol-event.js
