@@ -1,0 +1,7 @@
+EGIT_OVERRIDE_COMMIT__N_DON_GIT_WLROOTS="a00a9178aef83e656524c05c98cd9ef48ec18a1d"
+EGIT_OVERRIDE_COMMIT__N_DON_GIT_WLROOTS="0.20.1"
+
+or whatever tag/commit we want
+
+git tag -l to see all local tags
+
