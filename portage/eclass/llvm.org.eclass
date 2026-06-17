@@ -1,4 +1,4 @@
-# Copyright 2019-2025 Gentoo Authors
+# Copyright 2019-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: llvm.org.eclass
@@ -57,7 +57,7 @@ LLVM_VERSION=$(ver_cut 1-3)
 # @DESCRIPTION:
 # The major version of current LLVM trunk.  Used to determine
 # the correct branch to use.
-_LLVM_MAIN_MAJOR=21
+_LLVM_MAIN_MAJOR=23
 
 # @ECLASS_VARIABLE: _LLVM_SOURCE_TYPE
 # @INTERNAL
@@ -72,14 +72,14 @@ if [[ -z ${_LLVM_SOURCE_TYPE+1} ]]; then
 			_LLVM_SOURCE_TYPE=snapshot
 
 			case ${PV} in
-				21.0.0_pre20250503)
-					EGIT_COMMIT=d1e38eab95b07b422194427474521623916bbf29
+				23.0.0_pre20260605)
+					EGIT_COMMIT=6d4cd34d861baec5a761d15b81395fbe88f4391b
 					;;
-				21.0.0_pre20250426)
-					EGIT_COMMIT=b9e32749d273a957e60170d6e7ef205fd1fb1834
+				23.0.0_pre20260512)
+					EGIT_COMMIT=8789401c6f0b2c53ba348860c1b0c5df1fa40c8c
 					;;
-				21.0.0_pre20250420)
-					EGIT_COMMIT=ac8fc09688e10e983b99224b5dc5cbbeeedb1879
+				23.0.0_pre20260507)
+					EGIT_COMMIT=0f3ca6bb9ca514518c55fc02855a6083312ddfe2
 					;;
 				*)
 					die "Unknown snapshot: ${PV}"
@@ -146,6 +146,10 @@ fi
 #   on matching llvm-core/llvm versions with requested flags will
 #   be added.
 #
+# - llvm+eq - this package automagically uses targets from LLVM by using
+#   a function like InitializeAllTargets.  Same behavior as =llvm, but
+#   with matching use= deps for targets.
+#
 # Note that you still need to pass enabled targets to the build system,
 # usually grabbing them from ${LLVM_TARGETS} (via USE_EXPAND).
 
@@ -171,43 +175,25 @@ fi
 # version.  The value depends on ${PV}.
 
 case ${LLVM_MAJOR} in
-	14)
-		ALL_LLVM_EXPERIMENTAL_TARGETS=( ARC CSKY M68k )
-		ALL_LLVM_PRODUCTION_TARGETS=(
-			AArch64 AMDGPU ARM AVR BPF Hexagon Lanai Mips MSP430 NVPTX
-			PowerPC RISCV Sparc SystemZ VE WebAssembly X86 XCore
-		)
-		;;
-	15)
+	1*)
 		ALL_LLVM_EXPERIMENTAL_TARGETS=(
-			ARC CSKY DirectX LoongArch M68k SPIRV
+			ARC CSKY DirectX M68k SPIRV Xtensa
 		)
 		ALL_LLVM_PRODUCTION_TARGETS=(
-			AArch64 AMDGPU ARM AVR BPF Hexagon Lanai Mips MSP430 NVPTX
-			PowerPC RISCV Sparc SystemZ VE WebAssembly X86 XCore
+			AArch64 AMDGPU ARM AVR BPF Hexagon Lanai LoongArch Mips
+			MSP430 NVPTX PowerPC RISCV Sparc SystemZ VE WebAssembly X86
+			XCore
 		)
 		;;
 	*)
-		# TODO: limit to < 20 when we remove old snapshots
-		if ver_test ${PV} -lt 20.0.0_pre20250122; then
-			ALL_LLVM_EXPERIMENTAL_TARGETS=(
-				ARC CSKY DirectX M68k SPIRV Xtensa
-			)
-			ALL_LLVM_PRODUCTION_TARGETS=(
-				AArch64 AMDGPU ARM AVR BPF Hexagon Lanai LoongArch Mips
-				MSP430 NVPTX PowerPC RISCV Sparc SystemZ VE WebAssembly X86
-				XCore
-			)
-		else
-			ALL_LLVM_EXPERIMENTAL_TARGETS=(
-				ARC CSKY DirectX M68k Xtensa
-			)
-			ALL_LLVM_PRODUCTION_TARGETS=(
-				AArch64 AMDGPU ARM AVR BPF Hexagon Lanai LoongArch Mips
-				MSP430 NVPTX PowerPC RISCV Sparc SPIRV SystemZ VE
-				WebAssembly X86 XCore
-			)
-		fi
+		ALL_LLVM_EXPERIMENTAL_TARGETS=(
+			ARC CSKY DirectX M68k Xtensa
+		)
+		ALL_LLVM_PRODUCTION_TARGETS=(
+			AArch64 AMDGPU ARM AVR BPF Hexagon Lanai LoongArch Mips
+			MSP430 NVPTX PowerPC RISCV Sparc SPIRV SystemZ VE
+			WebAssembly X86 XCore
+		)
 		;;
 esac
 
@@ -270,7 +256,7 @@ llvm.org_set_globals() {
 			fi
 			BDEPEND+="
 				verify-sig? (
-					>=sec-keys/openpgp-keys-llvm-18.1.6
+					>=sec-keys/openpgp-keys-llvm-21.1.4
 				)
 			"
 			VERIFY_SIG_OPENPGP_KEY_PATH=/usr/share/openpgp-keys/llvm.asc
@@ -300,23 +286,20 @@ llvm.org_set_globals() {
 		LLVM_MANPAGE_DIST=
 		if [[ ${_LLVM_SOURCE_TYPE} == tar && ${PV} != *_rc* ]]; then
 			case ${PV} in
-				14*|15*|16.0.[0-3])
-					LLVM_MANPAGE_DIST="llvm-${PV}-manpages.tar.bz2"
-					;;
 				16*)
 					LLVM_MANPAGE_DIST="llvm-16.0.4-manpages.tar.bz2"
 					;;
 				17*)
 					LLVM_MANPAGE_DIST="llvm-17.0.1-manpages.tar.bz2"
 					;;
-				18*)
-					LLVM_MANPAGE_DIST="llvm-18.1.0-manpages.tar.bz2"
+				1[89]*)
+					LLVM_MANPAGE_DIST="llvm-${LLVM_MAJOR}.1.0-manpages.tar.bz2"
 					;;
-				19*)
-					LLVM_MANPAGE_DIST="llvm-19.1.0-manpages.tar.bz2"
+				2[0-1]*)
+					LLVM_MANPAGE_DIST="llvm-${LLVM_MAJOR}.1.0-manpages.tar.xz"
 					;;
-				20*)
-					LLVM_MANPAGE_DIST="llvm-20.1.0-manpages.tar.xz"
+				22*)
+					LLVM_MANPAGE_DIST="llvm-${LLVM_MAJOR}.1.0-r2-manpages.tar.xz"
 					;;
 			esac
 		fi
@@ -325,7 +308,7 @@ llvm.org_set_globals() {
 		if [[ -n ${LLVM_MANPAGE_DIST} ]]; then
 			SRC_URI+="
 				!doc? (
-					https://dev.gentoo.org/~mgorny/dist/llvm/${LLVM_MANPAGE_DIST}
+					https://distfiles.gentoo.org/pub/proj/llvm/manpages/${LLVM_MANPAGE_DIST}
 				)
 			"
 		fi
@@ -333,22 +316,34 @@ llvm.org_set_globals() {
 
 	if [[ -n ${LLVM_PATCHSET} ]]; then
 		SRC_URI+="
-			https://dev.gentoo.org/~mgorny/dist/llvm/llvm-gentoo-patchset-${LLVM_PATCHSET}.tar.xz"
+			https://distfiles.gentoo.org/pub/proj/llvm/patchsets/${LLVM_MAJOR}/llvm-gentoo-patchset-${LLVM_PATCHSET}.tar.xz
+		"
 	fi
 
 	local x
 	case ${LLVM_USE_TARGETS:-__unset__} in
 		__unset__)
 			;;
-		provide|llvm)
+		provide|llvm|llvm+eq)
 			IUSE+=" ${ALL_LLVM_TARGET_FLAGS[*]}"
 			REQUIRED_USE+=" || ( ${ALL_LLVM_TARGET_FLAGS[*]} )"
 			;;&
 		llvm)
+			# We do x? ( ... ) instead of [x?,y?,...] to workaround
+			# a pkgcheck bug: https://github.com/pkgcore/pkgcheck/pull/423
 			local dep=
 			for x in "${ALL_LLVM_TARGET_FLAGS[@]}"; do
 				dep+="
 					${x}? ( ~llvm-core/llvm-${PV}[${x}] )"
+			done
+			RDEPEND+=" ${dep}"
+			DEPEND+=" ${dep}"
+			;;
+		llvm+eq)
+			local dep=
+			for x in "${ALL_LLVM_TARGET_FLAGS[@]}"; do
+				dep+="
+					${x}? ( ~llvm-core/llvm-${PV}[${x}=] )"
 			done
 			RDEPEND+=" ${dep}"
 			DEPEND+=" ${dep}"

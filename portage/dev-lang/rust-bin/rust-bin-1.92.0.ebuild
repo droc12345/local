@@ -21,7 +21,7 @@ elif [[ ${PV} == *beta* ]]; then
 	"
 else
 	# curl -Ls static.rust-lang.org/dist/channel-rust-${PV}.toml | grep "xz_url.*rust-src"
-	SRC_URI="$(rust_arch_uri x86_64-unknown-linux-gnu "rust-${PV}")
+	SRC_URI="$(rust_all_arch_uris "rust-${PV}")
 		rust-src? ( ${RUST_TOOLCHAIN_BASEURL%/}/2025-12-11/rust-src-${PV}.tar.xz )
 		ppc64? ( elibc_musl? ( !big-endian? (
 			$(rust_arch_uri powerpc64le-unknown-linux-musl rust-${PV})
@@ -35,26 +35,26 @@ GENTOO_BIN_BASEURI="https://github.com/projg2/rust-bootstrap/releases/download/$
 DESCRIPTION="Systems programming language from Mozilla"
 HOMEPAGE="https://www.rust-lang.org/"
 
-#if [[ ${PV} != *9999* && ${PV} != *beta* ]]; then
-#	# Keep this separate to allow easy commenting out if not yet built
-#	SRC_URI+=" sparc? ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-sparc64-unknown-linux-gnu.tar.xz ) "
-#	SRC_URI+=" mips? (
-#		abi_mips_o32? (
-#			big-endian?  ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-mips-unknown-linux-gnu.tar.xz )
-#			!big-endian? ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-mipsel-unknown-linux-gnu.tar.xz )
-#		)
-#		abi_mips_n64? (
-#			big-endian?  ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-mips64-unknown-linux-gnuabi64.tar.xz )
-#			!big-endian? ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-mips64el-unknown-linux-gnuabi64.tar.xz )
-#		)
-#	)"
-#	SRC_URI+=" riscv? (
-#		elibc_musl? ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-riscv64gc-unknown-linux-musl.tar.xz )
-#	)"
-#	SRC_URI+=" ppc64? ( elibc_musl? (
-#		big-endian?  ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-powerpc64-unknown-linux-musl.tar.xz )
-#	) )"
-#fi
+if [[ ${PV} != *9999* && ${PV} != *beta* ]]; then
+	# Keep this separate to allow easy commenting out if not yet built
+	SRC_URI+=" sparc? ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-sparc64-unknown-linux-gnu.tar.xz ) "
+	SRC_URI+=" mips? (
+		abi_mips_o32? (
+			big-endian?  ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-mips-unknown-linux-gnu.tar.xz )
+			!big-endian? ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-mipsel-unknown-linux-gnu.tar.xz )
+		)
+		abi_mips_n64? (
+			big-endian?  ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-mips64-unknown-linux-gnuabi64.tar.xz )
+			!big-endian? ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-mips64el-unknown-linux-gnuabi64.tar.xz )
+		)
+	)"
+	SRC_URI+=" riscv? (
+		elibc_musl? ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-riscv64gc-unknown-linux-musl.tar.xz )
+	)"
+	SRC_URI+=" ppc64? ( elibc_musl? (
+		big-endian?  ( ${GENTOO_BIN_BASEURI}/rust-${PVR}-powerpc64-unknown-linux-musl.tar.xz )
+	) )"
+fi
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD BSD-1 BSD-2 BSD-4"
 SLOT="${PV%%_*}" # Beta releases get to share the same SLOT as the eventual stable

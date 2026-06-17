@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -21,7 +21,7 @@ HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Loader"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="layers wayland X"
+IUSE="wayland X"
 
 DEPEND="
 	~dev-util/vulkan-headers-${PV}
@@ -32,7 +32,6 @@ DEPEND="
 		x11-libs/libXrandr:=[${MULTILIB_USEDEP}]
 	)
 "
-PDEPEND="layers? ( media-libs/vulkan-layers[${MULTILIB_USEDEP}] )"
 
 multilib_src_configure() {
 	# Integrated clang assembler doesn't work with x86 - Bug #698164
@@ -49,7 +48,14 @@ multilib_src_configure() {
 		-DBUILD_WSI_XCB_SUPPORT=$(usex X)
 		-DBUILD_WSI_XLIB_SUPPORT=$(usex X)
 		-DVULKAN_HEADERS_INSTALL_DIR="${ESYSROOT}/usr"
+		-DGIT_EXECUTABLE="${BROOT}/usr/bin/git"
 	)
+
+	if tc-is-cross-compiler; then
+		# Python only needed when cross-compiling so don't bother with eclass.
+		mycmakeargs+=( -DPython3_EXECUTABLE="${BROOT}/usr/bin/python3" )
+	fi
+
 	cmake_src_configure
 }
 
