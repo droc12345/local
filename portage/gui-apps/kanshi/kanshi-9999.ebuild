@@ -35,6 +35,7 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
+		--wrap-mode=default
 		$(meson_feature man man-pages)
 		$(meson_feature ipc)
 	)

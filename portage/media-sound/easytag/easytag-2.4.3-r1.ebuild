@@ -56,7 +56,12 @@ DEPEND="${RDEPEND}
 	)
 "
 
-PATCHES=( "${FILESDIR}/${P}-ogg-corruption.patch" )
+PATCHES=(
+	"${FILESDIR}"/${P}-ogg-corruption.patch
+	"${FILESDIR}"/${P}-fix-build-taglib2.patch
+	"${FILESDIR}"/${P}-fix-check-id3.patch
+	"${FILESDIR}"/${P}-fix-appdata.patch
+)
 
 src_configure() {
 	gnome2_src_configure \
