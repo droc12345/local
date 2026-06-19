@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-PYTHON_COMPAT=( python3_{8..11} )
+PYTHON_COMPAT=( python3_{8..14} )
 
 inherit autotools linux-info python-single-r1 readme.gentoo-r1 systemd udev multilib-minimal
 
@@ -71,7 +71,7 @@ PATCHES=(
 	# https://bugs.gentoo.org/539844
 	# https://github.com/bluez/bluez/issues/268
 	"${FILESDIR}"/${PN}-udevadm-path-r1.patch
-	"${FILESDIR}"/bluez-5.73-configure-cups.patch
+	#"${FILESDIR}"/bluez-5.73-configure-cups.patch
 
 	#"${FILESDIR}"/${PN}-5.66-power-state-adapter-property.patch
 

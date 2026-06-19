@@ -83,9 +83,9 @@ elibc_Cygwin
 elibc_Darwin
 elibc_musl
 elibc_SunOS
-elibc_Winnt
 
 kernel_Darwin
+kernel_Hurd
 kernel_SunOS
 kernel_Winnt
 
