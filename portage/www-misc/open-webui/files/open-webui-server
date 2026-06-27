@@ -1,4 +1,0 @@
-#!/bin/bash
-cd /opt/open-webui/backend
-source venv/bin/activate
-bash start.sh
