@@ -4,6 +4,8 @@
 # This file is only for generic masks. For arch-specific masks (i.e.
 # mask everywhere, unmask on arch/*) use arch/base.
 
+llvm_slot_23
+
 # Sam James <sam@gentoo.org> (2022-01-12)
 # PCH has proven itself to be unreliable and lead to spurious build
 # failures. Masking so users aren't exposed to such failures without opting-in.
