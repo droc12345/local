@@ -9,7 +9,7 @@ inherit cmake python-any-r1 linux-info
 DESCRIPTION="Runtime for AIE and FPGA based platforms"
 HOMEPAGE="https://github.com/amd/xdna-driver"
 
-if [[ ${PV} == 9999 ]] ; then
+if [[ ${PV} == 999999 ]] ; then
 	EGIT_REPO_URI="https://github.com/amd/xdna-driver.git"
 	EGIT_SUBMODULES=(
 		xrt
@@ -75,6 +75,10 @@ BDEPEND+="
 	")
 "
 
+PATCHES=(
+	"${FILESDIR}"/${PN}-0_p20251025-fix-clang.patch
+)
+
 CONFIG_CHECK="~AMD_IOMMU ~DRM_ACCEL"
 
 python_check_deps() {
@@ -134,8 +138,6 @@ src_prepare() {
 	sed -e "/Unknown Linux package flavor/ s/FATAL_ERROR/MESSAGE/" -i "CMake/pkg.cmake" || die
 
 	sed -e "s/set (XRT_UPSTREAM 0)/set (XRT_UPSTREAM 1)/" -i xrt/src/CMake/settings.cmake || die
-
-	sed -e 's/"-Werror"//' -i src/shim/CMakeLists.txt || die
 
 	cmake_src_prepare
 }
